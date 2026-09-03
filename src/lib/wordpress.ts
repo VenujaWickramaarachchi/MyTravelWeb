@@ -2,6 +2,7 @@ import { transformAccommodation } from './transformers/accommodation'
 import { transformDestination } from './transformers/destination'
 import { transformExperience } from './transformers/experience'
 import { transformTour } from './transformers/tour'
+import { transformAttraction } from './transformers/attraction'
 
 import { DestinationPage } from '@/types/pages/destination-page'
 
@@ -67,21 +68,32 @@ export async function getDestination(
 
   const experienceIds = destination.acf?.experiences || []
 
-  const [accommodations, nearbyDestinations, relatedTours, experiences] =
-    await Promise.all([
-      fetchByIds('accommodation', accommodationIds).then((items) =>
-        items.map(transformAccommodation),
-      ),
+  const mainAttractionsId = destination.acf?.main_attractions || []
 
-      fetchByIds('destination', nearbyIds).then((destinations) =>
-        destinations.map(transformDestination),
-      ),
+  const [
+    accommodations,
+    nearbyDestinations,
+    relatedTours,
+    experiences,
+    mainAttractions,
+  ] = await Promise.all([
+    fetchByIds('accommodation', accommodationIds).then((items) =>
+      items.map(transformAccommodation),
+    ),
 
-      fetchByIds('tour', tourIds).then((items) => items.map(transformTour)),
-      fetchByIds('experience', experienceIds).then((items) =>
-        items.map(transformExperience),
-      ),
-    ])
+    fetchByIds('destination', nearbyIds).then((destinations) =>
+      destinations.map(transformDestination),
+    ),
+
+    fetchByIds('tour', tourIds).then((items) => items.map(transformTour)),
+
+    fetchByIds('experience', experienceIds).then((items) =>
+      items.map(transformExperience),
+    ),
+    fetchByIds('attraction', mainAttractionsId).then((items) =>
+      items.map(transformAttraction),
+    ),
+  ])
 
   return {
     ...transformDestination(destination),
@@ -94,6 +106,7 @@ export async function getDestination(
       relatedTours,
 
       experiences,
+      mainAttractions,
     },
   }
 }

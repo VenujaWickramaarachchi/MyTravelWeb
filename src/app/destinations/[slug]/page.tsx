@@ -10,6 +10,7 @@ import RelatedTours from '@/components/Destination/RelatedTours'
 import DestinationExperiences from '@/components/Destination/DestinationExperiences'
 import MapSection from '@/components/content/Map/MapSection'
 import FAQSection from '@/components/content/FAQ/FAQSection'
+import AttractionList from '@/components/Destination/AttractionList'
 
 export default async function DestinationPage({
   params,
@@ -32,6 +33,7 @@ export default async function DestinationPage({
       <DestinationOverview destination={destination} />
       <TravelInfo destination={destination} />
       <WeatherSection destination={destination} />
+      <AttractionList attractions={destination.relationships.mainAttractions} />
       <AccommodationList
         accommodations={destination.relationships.accommodations}
       />

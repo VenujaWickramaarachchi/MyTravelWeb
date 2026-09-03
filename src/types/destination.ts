@@ -31,8 +31,6 @@ export interface Destination {
 
   destinationType: any[]
 
-  mainAttractions: string
-
   thingsToDo: string
 
   travelTips: string
@@ -60,6 +58,8 @@ export interface Destination {
   featuredAccommodations: number[]
 
   nearbyDestinations: number[]
+
+  mainAttractions: number[]
 
   featuredDestination: boolean
 
