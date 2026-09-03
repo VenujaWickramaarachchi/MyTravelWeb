@@ -3,12 +3,14 @@ interface Props {
   longitude?: number
   title?: string
   google_maps_embed?: string
+  locationAddress?: string
 }
 
 export default function MapSection({
   latitude,
   longitude,
   google_maps_embed,
+  locationAddress,
   title = 'Location',
 }: Props) {
   const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&output=embed`
@@ -33,6 +35,8 @@ export default function MapSection({
           allowFullScreen
         />
       )}
+      <h2 style={{ color: 'green' }}>Location Address</h2>
+      <p>{locationAddress}</p>
     </section>
   )
 }

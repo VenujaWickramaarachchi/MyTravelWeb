@@ -1,5 +1,7 @@
+import { Destination } from '@/types/destination'
+
 interface Props {
-  destination: any
+  destination: Destination
 }
 
 export default function DestinationHero({ destination }: Props) {
@@ -7,7 +9,7 @@ export default function DestinationHero({ destination }: Props) {
     <section>
       <h1>{destination.heroTitle}</h1>
 
-      <p>{destination.heroSubtitle}</p>
+      <p>{destination.heroSubTitle}</p>
     </section>
   )
 }

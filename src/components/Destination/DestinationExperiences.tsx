@@ -1,14 +1,16 @@
 import ExperienceCard from '@/components/entities/Experience/ExperienceCard'
 
+import { Experience } from '@/types/experience'
+
 interface Props {
-  experiences: any[]
+  experiences: Experience[]
 }
 
 export default function DestinationExperiences({ experiences }: Props) {
   console.log('Experiences received:', experiences)
   return (
     <section>
-      <h2>Experiences</h2>
+      <h2 style={{ color: 'red' }}>Experiences</h2>
 
       <div>
         {experiences.map((experience: any) => (

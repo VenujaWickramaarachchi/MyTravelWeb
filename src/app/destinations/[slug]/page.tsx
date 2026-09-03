@@ -42,8 +42,11 @@ export default async function DestinationPage({
       <DestinationExperiences
         experiences={destination.relationships.experiences}
       />
-      <MapSection google_maps_embed={destination.mapsEmbed} />
-      <FAQSection content={destination.FaqContent} />
+      <MapSection
+        google_maps_embed={destination.mapsEmbed}
+        locationAddress={destination.locationAddress}
+      />
+      <FAQSection content={destination.faqContent} />
     </div>
   )
 }

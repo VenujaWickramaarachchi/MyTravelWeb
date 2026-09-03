@@ -1,27 +1,101 @@
 export interface Destination {
   id: number
 
-  title: {
-    rendered: string
-  }
+  title: string
 
   slug: string
 
-  content: {
-    rendered: string
-  }
+  // Taxonomy
 
-  acf: {
-    short_description?: string
+  region: number[]
 
-    how_to_get_there?: string
+  // Hero
 
-    weather_by_season?: string
+  heroTitle: string
 
-    google_maps_embed?: string
+  heroSubTitle: string
 
-    featured_accommodations?: number[]
+  heroImage: any | null
 
-    nearby_destinations?: number[]
-  }
+  // Content
+
+  description: string
+
+  overview: string
+
+  location: string
+
+  bestTimetoVisit: string
+
+  recommendedDuration: string
+
+  destinationType: any[]
+
+  mainAttractions: string
+
+  thingsToDo: string
+
+  travelTips: string
+
+  faqContent: string
+
+  howtoGetThere: string
+
+  Weather: string
+
+  // Map
+
+  mapsEmbed: string
+
+  mapsCoordinates: string
+
+  locationAddress: string
+
+  // Relationships
+
+  experiences: number[]
+
+  relatedTours: number[]
+
+  featuredAccommodations: number[]
+
+  nearbyDestinations: number[]
+
+  featuredDestination: boolean
+
+  // SEO
+
+  seoTitle: string
+
+  metaDescription: string
+
+  canonicalUrl: string
+
+  noIndex: boolean
+
+  ogTitle: string
+
+  ogDescription: string
+
+  socialImage: any | null
+
+  primarySearchTopic: string
+
+  secondarySearchTopics: string
+
+  searchIntent: string
+
+  // AEO
+
+  aeoPrimaryQuestion: string
+
+  aeoDirectAnswer: string
+
+  aeoSupportingQuestions: string
+
+  featuredAnswer: string
+
+  // Breadcrumb
+
+  breadcrumbLabel: string
 }

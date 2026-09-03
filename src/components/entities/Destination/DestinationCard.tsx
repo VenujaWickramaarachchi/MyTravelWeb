@@ -1,11 +1,13 @@
+import { Destination } from '@/types/destination'
+
 interface Props {
-  destination: any
+  destination: Destination
 }
 
 export default function DestinationCard({ destination }: Props) {
   return (
     <article>
-      {destination.heroImage && (
+      {destination.heroImage?.url && (
         <img
           src={destination.heroImage.url}
           alt={destination.heroImage.alt || destination.title}

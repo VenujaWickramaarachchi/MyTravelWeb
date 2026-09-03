@@ -20,7 +20,7 @@ export function transformDestination(destination: any) {
     mainAttractions: destination.acf?.main_attractions || '',
     thingsToDo: destination.acf?.things_to_do || '',
     travelTips: destination.acf?.travel_tips || '',
-    FaqContent: destination.acf?.faq_content || '',
+    faqContent: destination.acf?.faq_content || '',
     howtoGetThere: destination.acf?.how_to_get_there || '',
     Weather: destination.acf?.weather_by_season || '',
 

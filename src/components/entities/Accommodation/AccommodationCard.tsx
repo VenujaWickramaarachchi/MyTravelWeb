@@ -1,5 +1,7 @@
+import { Accommodation } from '@/types/accommodation'
+
 interface Props {
-  accommodation: any
+  accommodation: Accommodation
 }
 
 export default function AccommodationCard({ accommodation }: Props) {

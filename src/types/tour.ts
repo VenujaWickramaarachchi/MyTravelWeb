@@ -1,27 +1,97 @@
 export interface Tour {
   id: number
 
-  title: {
-    rendered: string
-  }
+  title: string
 
   slug: string
 
-  acf: {
-    short_description?: string
+  // Taxonomies
 
-    duration_days?: number
+  tourType: number[]
 
-    duration_nights?: number
+  region: number[]
 
-    price_from?: number
+  // Hero
 
-    currency?: string
+  heroTitle: string
 
-    hero_title?: string
+  heroSubtitle: string
 
-    hero_subtitle?: string
+  heroImage: any | null
 
-    hero_image?: string
-  }
+  // Core Details
+
+  shortDescription: string
+
+  durationDays: number | null
+
+  durationNights: number | null
+
+  priceFrom: string
+
+  currency: string
+
+  priceDescription: string
+
+  groupSize: string
+
+  tourStyle: string
+
+  bestTimeToTravel: string
+
+  // Content
+
+  tourOverview: string
+
+  tourHighlights: string
+
+  inclusions: string
+
+  exclusions: string
+
+  faqContent: string
+
+  // Relationships
+
+  destinations: number[]
+
+  experiences: number[]
+
+  itinerary: any[]
+
+  featuredTour: boolean
+
+  // SEO
+
+  seoTitle: string
+
+  metaDescription: string
+
+  canonicalUrl: string
+
+  noIndex: boolean
+
+  ogTitle: string
+
+  ogDescription: string
+
+  socialImage: any | null
+
+  primarySearchTopic: string
+
+  secondarySearchTopics: string
+
+  searchIntent: string
+
+  // AEO
+
+  aeoPrimaryQuestion: string
+
+  aeoDirectAnswer: string
+
+  aeoSupportingQuestions: string
+
+  featuredAnswer: string
+
+  breadcrumbLabel: string
 }

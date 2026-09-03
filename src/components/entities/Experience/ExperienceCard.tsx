@@ -1,11 +1,13 @@
+import { Experience } from '@/types/experience'
+
 interface Props {
-  experience: any
+  experience: Experience
 }
 
 export default function ExperienceCard({ experience }: Props) {
   return (
     <article>
-      {experience.heroImage && (
+      {experience.heroImage?.url && (
         <img
           src={experience.heroImage.url}
           alt={experience.heroImage.alt || experience.title}

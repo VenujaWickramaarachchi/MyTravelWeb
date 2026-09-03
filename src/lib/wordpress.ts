@@ -3,6 +3,8 @@ import { transformDestination } from './transformers/destination'
 import { transformExperience } from './transformers/experience'
 import { transformTour } from './transformers/tour'
 
+import { DestinationPage } from '@/types/pages/destination-page'
+
 const WORDPRESS_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL
 
 // Generic fetch function
@@ -36,7 +38,9 @@ export async function getDestinations() {
 }
 // Single Destination
 
-export async function getDestination(slug: string) {
+export async function getDestination(
+  slug: string,
+): Promise<DestinationPage | null> {
   const url = `${WORDPRESS_URL}/wp-json/wp/v2/destination?slug=${slug}&_embed`
 
   const res = await fetch(url, {

@@ -1,11 +1,13 @@
+import { Tour } from '@/types/tour'
+
 interface Props {
-  tour: any
+  tour: Tour
 }
 
 export default function TourCard({ tour }: Props) {
   return (
     <article>
-      {tour.heroImage && (
+      {tour.heroImage?.url && (
         <img
           src={tour.heroImage.url}
           alt={tour.heroImage.alt || tour.title}
