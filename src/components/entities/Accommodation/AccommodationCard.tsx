@@ -3,12 +3,15 @@ interface Props {
 }
 
 export default function AccommodationCard({ accommodation }: Props) {
+  console.log('Image url', accommodation.gallery?.url)
+  console.log('stars', accommodation.stars)
+
   return (
     <article>
-      {accommodation.acf?.gallery?.url && (
+      {accommodation.gallery?.url && (
         <img
-          src={accommodation.acf.gallery.url}
-          alt={accommodation.acf.gallery.alt || accommodation.title.rendered}
+          src={accommodation.gallery?.url}
+          alt={accommodation.gallery?.alt || accommodation.title}
           style={{
             width: '300px',
             height: '250px',
@@ -16,17 +19,13 @@ export default function AccommodationCard({ accommodation }: Props) {
         />
       )}
 
-      <h3>{accommodation.title.rendered}</h3>
+      <h3>{accommodation.title}</h3>
 
-      {accommodation.acf?.short_description && (
-        <p>{accommodation.acf.short_description}</p>
-      )}
+      <p>{accommodation.description}</p>
 
-      {accommodation.acf?.star_rating && (
-        <p>⭐ {accommodation.acf.star_rating}</p>
-      )}
+      <p>⭐ {accommodation.stars}</p>
 
-      {accommodation.acf?.location && <p>📍 {accommodation.acf.location}</p>}
+      <p>📍 {accommodation.location}</p>
     </article>
   )
 }

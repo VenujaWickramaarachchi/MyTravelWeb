@@ -5,10 +5,10 @@ interface Props {
 export default function DestinationCard({ destination }: Props) {
   return (
     <article>
-      {destination.acf?.hero_image && (
+      {destination.heroImage && (
         <img
-          src={destination.acf.hero_image.url}
-          alt={destination.acf.hero_image.alt || destination.title.rendered}
+          src={destination.heroImage.url}
+          alt={destination.heroImage.alt || destination.title}
           style={{
             width: '300px',
             height: '250px',
@@ -16,11 +16,9 @@ export default function DestinationCard({ destination }: Props) {
         />
       )}
 
-      <h3>{destination.title.rendered}</h3>
+      <h3>{destination.title}</h3>
 
-      {destination.acf?.short_description && (
-        <p>{destination.acf.short_description}</p>
-      )}
+      {destination.description && <p>{destination.description}</p>}
 
       <a href={`/destinations/${destination.slug}`}>Explore Destination</a>
     </article>

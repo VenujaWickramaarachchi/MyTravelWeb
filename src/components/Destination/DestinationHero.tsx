@@ -5,9 +5,9 @@ interface Props {
 export default function DestinationHero({ destination }: Props) {
   return (
     <section>
-      <h1>{destination.acf.hero_title}</h1>
+      <h1>{destination.heroTitle}</h1>
 
-      <p>{destination.acf.hero_subtitle}</p>
+      <p>{destination.heroSubtitle}</p>
     </section>
   )
 }

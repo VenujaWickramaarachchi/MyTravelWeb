@@ -5,10 +5,10 @@ interface Props {
 export default function TourCard({ tour }: Props) {
   return (
     <article>
-      {tour.acf?.hero_image && (
+      {tour.heroImage && (
         <img
-          src={tour.acf.hero_image.url}
-          alt={tour.acf.hero_image.alt || tour.title.rendered}
+          src={tour.heroImage.url}
+          alt={tour.heroImage.alt || tour.title}
           style={{
             width: '300px',
             height: '200px',
@@ -17,11 +17,12 @@ export default function TourCard({ tour }: Props) {
         />
       )}
 
-      <h3>{tour.title.rendered}</h3>
+      <h3>{tour.title}</h3>
 
-      {tour.acf?.short_description && <p>{tour.acf.short_description}</p>}
+      <p>{tour.shortDescription}</p>
 
-      {tour.acf?.duration && <p>⏱ {tour.acf.duration}</p>}
+      <p>⏱ {tour.durationDays}</p>
+      <p>⏱ {tour.durationNights}</p>
 
       <a href={`/tours/${tour.slug}`}>View Tour</a>
     </article>

@@ -5,10 +5,10 @@ interface Props {
 export default function ExperienceCard({ experience }: Props) {
   return (
     <article>
-      {experience.acf?.hero_image && (
+      {experience.heroImage && (
         <img
-          src={experience.acf.hero_image.url}
-          alt={experience.acf.hero_image.alt || experience.title.rendered}
+          src={experience.heroImage.url}
+          alt={experience.heroImage.alt || experience.title}
           style={{
             width: '300px',
             height: '250px',
@@ -16,11 +16,9 @@ export default function ExperienceCard({ experience }: Props) {
         />
       )}
 
-      <h3>{experience.title.rendered}</h3>
+      <h3>{experience.title}</h3>
 
-      {experience.acf?.short_description && (
-        <p>{experience.acf.short_description}</p>
-      )}
+      {experience.shortDescription && <p>{experience.shortDescription}</p>}
 
       <a href={`/experiences/${experience.slug}`}>Explore Experience</a>
     </article>

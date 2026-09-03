@@ -1,3 +1,8 @@
+import { transformAccommodation } from './transformers/accommodation'
+import { transformDestination } from './transformers/destination'
+import { transformExperience } from './transformers/experience'
+import { transformTour } from './transformers/tour'
+
 const WORDPRESS_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL
 
 // Generic fetch function
@@ -60,17 +65,22 @@ export async function getDestination(slug: string) {
 
   const [accommodations, nearbyDestinations, relatedTours, experiences] =
     await Promise.all([
-      fetchByIds('accommodation', accommodationIds),
+      fetchByIds('accommodation', accommodationIds).then((items) =>
+        items.map(transformAccommodation),
+      ),
 
-      fetchByIds('destination', nearbyIds),
+      fetchByIds('destination', nearbyIds).then((destinations) =>
+        destinations.map(transformDestination),
+      ),
 
-      fetchByIds('tour', tourIds),
-
-      fetchByIds('experience', experienceIds),
+      fetchByIds('tour', tourIds).then((items) => items.map(transformTour)),
+      fetchByIds('experience', experienceIds).then((items) =>
+        items.map(transformExperience),
+      ),
     ])
 
   return {
-    ...destination,
+    ...transformDestination(destination),
 
     relationships: {
       accommodations,

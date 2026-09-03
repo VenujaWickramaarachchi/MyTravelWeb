@@ -9,7 +9,7 @@ export default function TravelInfo({ destination }: Props) {
 
       <div
         dangerouslySetInnerHTML={{
-          __html: destination.acf.how_to_get_there,
+          __html: destination.howtoGetThere,
         }}
       />
     </section>

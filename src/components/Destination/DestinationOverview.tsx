@@ -5,13 +5,13 @@ interface Props {
 export default function DestinationOverview({ destination }: Props) {
   return (
     <section>
-      <h2>About {destination.title.rendered}</h2>
+      <h2>About {destination.title}</h2>
 
-      <p>{destination.acf.short_description}</p>
+      <p>{destination.description}</p>
 
       <div
         dangerouslySetInnerHTML={{
-          __html: destination.acf.destination_overview,
+          __html: destination.overview,
         }}
       />
     </section>

@@ -8,6 +8,8 @@ import AccommodationList from '@/components/Destination/AccommodationList'
 import NearbyDestinations from '@/components/Destination/NearbyDestinations'
 import RelatedTours from '@/components/Destination/RelatedTours'
 import DestinationExperiences from '@/components/Destination/DestinationExperiences'
+import MapSection from '@/components/content/Map/MapSection'
+import FAQSection from '@/components/content/FAQ/FAQSection'
 
 export default async function DestinationPage({
   params,
@@ -40,6 +42,8 @@ export default async function DestinationPage({
       <DestinationExperiences
         experiences={destination.relationships.experiences}
       />
+      <MapSection google_maps_embed={destination.mapsEmbed} />
+      <FAQSection content={destination.FaqContent} />
     </div>
   )
 }
