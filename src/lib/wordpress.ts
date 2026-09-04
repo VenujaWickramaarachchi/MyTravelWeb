@@ -7,6 +7,10 @@ import { transformItinerary } from './transformers/itinerary'
 import { transformItineraryDay } from './transformers/itinerary-day'
 import { transformTravelGuide } from './transformers/travel-guide'
 import { transformFAQ } from './transformers/faq'
+import { transformPartner } from './transformers/partner'
+import { transformTeamMember } from './transformers/team-member'
+import { transformTestimonial } from './transformers/testimonials'
+import { transformTrustAward } from './transformers/trust-award'
 
 import { ItineraryDay } from '@/types/itinerary-day'
 import { Accommodation } from '@/types/accommodation'
@@ -14,6 +18,10 @@ import { Experience } from '@/types/experience'
 import { Attraction } from '@/types/attraction'
 import { TravelGuide } from '@/types/travel-guide'
 import { FAQ } from '@/types/faq'
+import { Partner } from '@/types/partner'
+import { TeamMember } from '@/types/team-member'
+import { Testimonial } from '@/types/testimonials'
+import { TrustAward } from '@/types/trust-award'
 
 import { DestinationPage } from '@/types/pages/destination-page'
 import { TourPage } from '@/types/pages/tour-page'
@@ -526,3 +534,109 @@ export async function getTravelGuide(
   }
 }
 // --------------------------------------------------------------
+// ---------------------------------------------------------
+// Partner
+// ================================================================
+export async function getPartners(): Promise<Partner[]> {
+  const partners = await fetchAPI('partner?_embed')
+
+  return partners
+    .map(transformPartner)
+    .sort(
+      (a: Partner, b: Partner) =>
+        (a.displayOrder ?? 999) - (b.displayOrder ?? 999),
+    )
+}
+
+export async function getPartner(slug: string): Promise<Partner | null> {
+  const url = `${WORDPRESS_URL}/wp-json/wp/v2/partner?slug=${slug}&_embed`
+
+  const res = await fetch(url, {
+    next: { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed fetching partner: ${slug}`)
+  }
+
+  const data = await res.json()
+  const partner = data[0]
+
+  if (!partner) {
+    return null
+  }
+
+  return transformPartner(partner)
+}
+// ---------------------------------------------------------------
+
+// ---------------------------------------------------------
+// TeamMember
+// ================================================================
+export async function getTeamMembers(): Promise<TeamMember[]> {
+  const teamMembers = await fetchAPI('team-member?_embed')
+
+  return teamMembers
+    .map(transformTeamMember)
+    .sort(
+      (a: TeamMember, b: TeamMember) =>
+        (a.displayOrder ?? 999) - (b.displayOrder ?? 999),
+    )
+}
+export async function getTeamMember(slug: string): Promise<TeamMember | null> {
+  const url = `${WORDPRESS_URL}/wp-json/wp/v2/team-member?slug=${slug}&_embed`
+
+  const res = await fetch(url, {
+    next: { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed fetching team member: ${slug}`)
+  }
+
+  const data = await res.json()
+  const teamMember = data[0]
+
+  if (!teamMember) {
+    return null
+  }
+
+  return transformTeamMember(teamMember)
+}
+// ---------------------------------------------------------------
+
+// ---------------------------------------------------------
+// Testimonials
+// ================================================================
+export async function getTestimonials(): Promise<Testimonial[]> {
+  const testimonials = await fetchAPI('testimonials?_embed')
+
+  return testimonials.map(transformTestimonial)
+}
+
+export async function getTestimonialsForTour(
+  tourId: number,
+): Promise<Testimonial[]> {
+  const testimonials = await getTestimonials()
+
+  return testimonials.filter(
+    (testimonial) => testimonial.relatedTour === tourId,
+  )
+}
+// ---------------------------------------------------------------
+
+// ---------------------------------------------------------
+// Trust Awards
+
+// ================================================================
+export async function getTrustAwards(): Promise<TrustAward[]> {
+  const trustAwards = await fetchAPI('trust_award?_embed')
+
+  return trustAwards
+    .map(transformTrustAward)
+    .sort(
+      (a: TrustAward, b: TrustAward) =>
+        (a.displayOrder ?? 999) - (b.displayOrder ?? 999),
+    )
+}
+// ---------------------------------------------------------------
