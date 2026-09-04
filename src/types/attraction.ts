@@ -3,33 +3,29 @@ export interface Attraction {
   title: string
   slug: string
 
-  // Taxonomies (Arrays of term IDs)
+  // Taxonomies
   attractionType: number[]
   region: number[]
 
-  // Hero Section
+  // Attraction Information
+  shortDescription: string
   heroTitle: string
   heroSubtitle: string
-  heroImage: {
-    id: number
-    url: string
-    alt: string
-  } | null
-
-  // Core Details
-  shortDescription: string
+  heroImage: any | null
   attractionOverview: string
   location: string
   whatToSee: string
   attractionHighlights: string
   typicalVisitDuration: string
   bestTime: string
-  importantInformation: string
-  faqContent: string
 
-  // Relationships & Connections (Arrays of post IDs)
+  // Relationships
   destination: number[]
   relatedExperiences: number[]
   nearbyAttractions: number[]
   relatedTours: number[]
+
+  // Additional information
+  importantInformation: string
+  faqContent: string
 }

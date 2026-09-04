@@ -1,75 +1,44 @@
 export interface Accommodation {
   id: number
-
   title: string
-
   slug: string
 
   // Taxonomies
-
   accommodationType: number[]
-
   region: number[]
 
+  // Relationships
   destination: number | null
 
-  // Hero
-
+  // Accommodation information
   heroTitle: string
-
   heroSubTitle: string
-
   heroImage: any | null
 
-  // Content
-
   description: string
-
   whyStayHere: string
-
   gallery: any | null
-
-  stars: string | number | null
-
-  amenities: any[]
-
+  stars: number | null
+  amenities: string[]
   price: string
 
   overview: string
 
-  // Location
-
   location: string
-
   address: string
-
   latitude: number | null
-
   longitude: number | null
-
   googleMapsUrl: string
 
-  // Contact
-
   officialWebsite: string
-
   bookingUrl: string
-
   contactPhone: string
-
   email: string
 
-  // SEO
-
+  // SEO / AEO
   seoTitle: string
-
   seoDescription: string
-
   seoKeywords: string
-
-  // AEO
-
   aeoQuestion: string
-
   aeoAnswer: string
 }

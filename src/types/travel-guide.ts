@@ -1,36 +1,33 @@
-export interface Experience {
+export interface TravelGuide {
   id: number
   title: string
   slug: string
 
-  // Taxonomies
-  experienceType: number[]
-  region: number[]
+  // Taxonomy
+  travelGuideTopic: number[]
 
-  // Experience Information
+  // Guide Information
   shortDescription: string
   heroTitle: string
   heroSubtitle: string
   heroImage: any | null
-  experienceOverview: string
-  typicalDuration: string
-  bestTime: string
-  location: string
-  whatToExpect: string
-  whoIsItFor: string
-  activityLevel: string
-  experienceHighlights: string
+  guideIntroduction: string
+  quickAnswer: string
+  keyInformation: string
+  mainContent: string
 
   // Relationships
-  destinations: number[]
+  relatedDestinations: number[]
+  relatedExperiences: number[]
   relatedTours: number[]
+  relatedItineraries: number[]
 
-  // Additional information
-  importantInformation: string
+  // Additional Information
   faqContent: string
-  featuredExperience: boolean
+  authorExpert: string
+  lastReviewed: string
 
-  // SEO / AEO
+  // SEO
   seoTitle: string
   metaDescription: string
   canonicalUrl: string
@@ -39,10 +36,10 @@ export interface Experience {
   ogDescription: string
   socialImage: any | null
 
+  // Search / AEO
   primarySearchTopic: string
   secondarySearchTopics: string
   searchIntent: string
-
   aeoPrimaryQuestion: string
   aeoDirectAnswer: string
   aeoSupportingQuestions: string

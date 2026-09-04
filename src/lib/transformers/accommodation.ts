@@ -1,8 +1,8 @@
 export function transformAccommodation(accommodation: any) {
   return {
     id: accommodation.id,
-    title: accommodation.title?.rendered,
-    slug: accommodation.slug,
+    title: accommodation.title?.rendered || '',
+    slug: accommodation.slug || '',
 
     accommodationType: accommodation['accommodation-type'] || [],
     region: accommodation.region || [],
@@ -24,7 +24,11 @@ export function transformAccommodation(accommodation: any) {
     location: accommodation.acf?.location || '',
     address: accommodation.acf?.address || '',
     latitude: accommodation.acf?.latitude || null,
-    longitude: accommodation.acf?.longitude || null,
+    longitude:
+      accommodation.acf?.longitude !== '' &&
+      accommodation.acf?.longitude !== undefined
+        ? accommodation.acf.longitude
+        : null,
     googleMapsUrl: accommodation.acf?.google_maps_url || '',
 
     officialWebsite: accommodation.acf?.official_website || '',

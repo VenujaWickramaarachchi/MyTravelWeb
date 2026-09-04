@@ -1,11 +1,17 @@
 export interface FAQ {
   id: number
+  title: string
+  slug: string
 
-  title: {
-    rendered: string
-  }
+  // Taxonomy
+  faqCategory: number[]
 
-  acf: {
-    answer?: string
-  }
+  // FAQ Information
+  question: string
+  answer: string
+
+  // Relationships
+  relatedTour: number | null
+  relatedDestination: number | null
+  relatedExperience: number | null
 }
