@@ -11,6 +11,7 @@ import { transformPartner } from './transformers/partner'
 import { transformTeamMember } from './transformers/team-member'
 import { transformTestimonial } from './transformers/testimonials'
 import { transformTrustAward } from './transformers/trust-award'
+import { transformSiteSettings } from './transformers/site-settings'
 
 import { ItineraryDay } from '@/types/itinerary-day'
 import { Accommodation } from '@/types/accommodation'
@@ -22,6 +23,7 @@ import { Partner } from '@/types/partner'
 import { TeamMember } from '@/types/team-member'
 import { Testimonial } from '@/types/testimonials'
 import { TrustAward } from '@/types/trust-award'
+import { SiteSettings } from '@/types/site-settings'
 
 import { DestinationPage } from '@/types/pages/destination-page'
 import { TourPage } from '@/types/pages/tour-page'
@@ -638,5 +640,32 @@ export async function getTrustAwards(): Promise<TrustAward[]> {
       (a: TrustAward, b: TrustAward) =>
         (a.displayOrder ?? 999) - (b.displayOrder ?? 999),
     )
+}
+// ---------------------------------------------------------------
+
+// ---------------------------------------------------------
+// Site Settings
+
+// ================================================================
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const url = `${WORDPRESS_URL}/wp-json/wp/v2/pages?slug=site-settings&_embed`
+
+  const res = await fetch(url, {
+    next: { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed fetching site settings')
+  }
+
+  const data = await res.json()
+  const settings = data[0]
+
+  if (!settings) {
+    throw new Error('Site Settings page not found')
+  }
+
+  return transformSiteSettings(settings)
 }
 // ---------------------------------------------------------------
