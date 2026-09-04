@@ -1,4 +1,32 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeGalleryImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  return {
+    id: image.ID ?? image.id ?? 0,
+    url: image.url ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? null,
+    height: image.height ?? null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformDestination(destination: any) {
+  const galleryImages = [
+    destination.acf?.gallery_image_1,
+    destination.acf?.gallery_image_2,
+    destination.acf?.gallery_image_3,
+    destination.acf?.gallery_image_4,
+    destination.acf?.gallery_image_5,
+    destination.acf?.gallery_image_6,
+  ]
+    .map(normalizeGalleryImage)
+    .filter((image): image is MediaImage => image !== null && image.url !== '')
+
   return {
     id: destination.id,
     title: destination.title?.rendered,
@@ -9,6 +37,7 @@ export function transformDestination(destination: any) {
     heroTitle: destination.acf?.hero_title || '',
     heroSubTitle: destination.acf?.hero_subtitle || '',
     heroImage: destination.acf?.hero_image || null,
+    galleryImages,
 
     description: destination.acf?.short_description || '',
     overview: destination.acf?.destination_overview || '',

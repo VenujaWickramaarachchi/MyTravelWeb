@@ -1,3 +1,5 @@
+import { MediaImage } from '@/types/media-image'
+
 export interface Accommodation {
   id: number
   title: string
@@ -18,6 +20,7 @@ export interface Accommodation {
   description: string
   whyStayHere: string
   gallery: any | null
+  galleryImages: MediaImage[]
   stars: number | null
   amenities: string[]
   price: string

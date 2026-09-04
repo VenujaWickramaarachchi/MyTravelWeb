@@ -1,5 +1,16 @@
-import { notFound } from 'next/navigation'
 import { getAttraction } from '@/lib/wordpress'
+
+import AttractionHero from '@/components/Attractions/AttractionHero'
+import AttractionOverview from '@/components/Attractions/AttractionOverview'
+import AttractionDetails from '@/components/Attractions/AttractionDetails'
+import AttractionHighlights from '@/components/Attractions/AttractionHighlights'
+import AttractionRelatedExperiences from '@/components/Attractions/AttractionRelatedExperiences'
+import AttractionNearbyAttractions from '@/components/Attractions/AttractionNearbyAttractions'
+import AttractionRelatedTours from '@/components/Attractions/AttractionRelatedTours'
+import AttractionImportantInformation from '@/components/Attractions/AttractionImportantInformation'
+import AttractionFAQ from '@/components/Attractions/AttractionFAQ'
+
+import GallerySection from '@/components/content/Gallery/GallerySection'
 
 interface AttractionPageProps {
   params: Promise<{
@@ -13,66 +24,37 @@ export default async function AttractionPage({ params }: AttractionPageProps) {
   const attraction = await getAttraction(slug)
 
   if (!attraction) {
-    notFound()
+    return <div>Attraction not found</div>
   }
 
   return (
     <main>
-      <h1>{attraction.title}</h1>
+      <AttractionHero attraction={attraction} />
 
-      <p>{attraction.shortDescription}</p>
+      <AttractionOverview attraction={attraction} />
 
-      <p>Location: {attraction.location || 'Not available'}</p>
+      <AttractionDetails attraction={attraction} />
 
-      <p>
-        Visit Duration: {attraction.typicalVisitDuration || 'Not available'}
-      </p>
+      <AttractionHighlights attraction={attraction} />
 
-      <p>Best Time: {attraction.bestTime || 'Not available'}</p>
+      <AttractionRelatedExperiences
+        experiences={attraction.relationships.relatedExperiences}
+      />
 
-      <h2>Destination</h2>
+      <AttractionNearbyAttractions
+        attractions={attraction.relationships.nearbyAttractions}
+      />
 
-      <p>
-        {attraction.relationships.destination?.title || 'No destination linked'}
-      </p>
+      <AttractionRelatedTours tours={attraction.relationships.relatedTours} />
 
-      <h2>Related Experiences</h2>
+      <AttractionImportantInformation attraction={attraction} />
 
-      {attraction.relationships.relatedExperiences.length > 0 ? (
-        <ul>
-          {attraction.relationships.relatedExperiences.map((experience) => (
-            <li key={experience.id}>{experience.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related experiences linked.</p>
-      )}
+      <GallerySection
+        images={attraction.galleryImages}
+        title='Attraction Gallery'
+      />
 
-      <h2>Nearby Attractions</h2>
-
-      {attraction.relationships.nearbyAttractions.length > 0 ? (
-        <ul>
-          {attraction.relationships.nearbyAttractions.map(
-            (nearbyAttraction) => (
-              <li key={nearbyAttraction.id}>{nearbyAttraction.title}</li>
-            ),
-          )}
-        </ul>
-      ) : (
-        <p>No nearby attractions linked.</p>
-      )}
-
-      <h2>Related Tours</h2>
-
-      {attraction.relationships.relatedTours.length > 0 ? (
-        <ul>
-          {attraction.relationships.relatedTours.map((tour) => (
-            <li key={tour.id}>{tour.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related tours linked.</p>
-      )}
+      <AttractionFAQ attraction={attraction} />
     </main>
   )
 }

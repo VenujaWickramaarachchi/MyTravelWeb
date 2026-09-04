@@ -12,6 +12,8 @@ import TourInclusions from '@/components/Tours/TourInclusions'
 import TourInfo from '@/components/Tours/TourInfo'
 import TourCTA from '@/components/Tours/TourCTA'
 
+import GallerySection from '@/components/content/Gallery/GallerySection'
+
 interface TourPageProps {
   params: Promise<{
     slug: string
@@ -33,6 +35,7 @@ export default async function TourPage({ params }: TourPageProps) {
       <TourQuickDetails tour={tour} />
       <TourOverview tour={tour} />
       <TourHighlights tour={tour} />
+      <GallerySection images={tour.galleryImages} title='Tour Gallery' />
       <TourDestinations tour={tour} />
       <TourExperiences tour={tour} />
       <TourItinerary tour={tour} />

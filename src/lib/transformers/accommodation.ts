@@ -1,4 +1,31 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeGalleryImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+  return {
+    id: image.ID ?? image.id ?? 0,
+    url: image.url ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? null,
+    height: image.height ?? null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformAccommodation(accommodation: any) {
+  const galleryImages = [
+    accommodation.acf?.gallery_image_1,
+    accommodation.acf?.gallery_image_2,
+    accommodation.acf?.gallery_image_3,
+    accommodation.acf?.gallery_image_4,
+    accommodation.acf?.gallery_image_5,
+    accommodation.acf?.gallery_image_6,
+  ]
+    .map(normalizeGalleryImage)
+    .filter((image): image is MediaImage => image !== null && image.url !== '')
+
   return {
     id: accommodation.id,
     title: accommodation.title?.rendered || '',
@@ -14,7 +41,10 @@ export function transformAccommodation(accommodation: any) {
 
     description: accommodation.acf?.short_description || '',
     whyStayHere: accommodation.acf?.why_stay_here || '',
+
     gallery: accommodation.acf?.gallery || null,
+    galleryImages,
+
     stars: accommodation.acf?.star_rating || null,
     amenities: accommodation.acf?.amenities || [],
     price: accommodation.acf?.price_range || '',

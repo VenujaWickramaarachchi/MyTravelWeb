@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface Tour {
   id: number
   title: string
@@ -11,6 +13,7 @@ export interface Tour {
   heroTitle: string
   heroSubtitle: string
   heroImage: any | null
+  galleryImages: MediaImage[]
 
   // Core Details
   shortDescription: string

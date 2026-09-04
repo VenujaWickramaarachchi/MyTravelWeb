@@ -1,4 +1,31 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeGalleryImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  return {
+    id: image.ID ?? image.id ?? 0,
+    url: image.url ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? null,
+    height: image.height ?? null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformTour(tour: any) {
+  const galleryImages = [
+    tour.acf?.gallery_image_1,
+    tour.acf?.gallery_image_2,
+    tour.acf?.gallery_image_3,
+    tour.acf?.gallery_image_4,
+    tour.acf?.gallery_image_5,
+    tour.acf?.gallery_image_6,
+  ]
+    .map(normalizeGalleryImage)
+    .filter((image): image is MediaImage => image !== null && image.url !== '')
   return {
     id: tour.id,
     title: tour.title?.rendered || '',
@@ -12,6 +39,7 @@ export function transformTour(tour: any) {
     heroTitle: tour.acf?.hero_title || '',
     heroSubtitle: tour.acf?.hero_subtitle || '',
     heroImage: tour.acf?.hero_image || null,
+    galleryImages,
 
     // Core Details
     shortDescription: tour.acf?.short_description || '',

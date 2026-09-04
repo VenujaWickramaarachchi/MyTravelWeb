@@ -1,6 +1,16 @@
 import { notFound } from 'next/navigation'
 import { getAccommodation } from '@/lib/wordpress'
 
+import AccommodationHero from '@/components/Accommodations/AccommodationHero'
+import AccommodationOverview from '@/components/Accommodations/AccommodationOverview'
+import AccommodationDetails from '@/components/Accommodations/AccommodationDetails'
+import AccommodationAmenities from '@/components/Accommodations/AccommodationAmenities'
+import AccommodationPrice from '@/components/Accommodations/AccommodationPrice'
+import AccommodationDestination from '@/components/Accommodations/AccommodationDestination'
+import AccommodationContact from '@/components/Accommodations/AccommodationContact'
+
+import GallerySection from '@/components/content/Gallery/GallerySection'
+
 interface AccommodationPageProps {
   params: Promise<{
     slug: string
@@ -20,18 +30,24 @@ export default async function AccommodationPage({
 
   return (
     <main>
-      <h1>{accommodation.title}</h1>
+      <AccommodationHero accommodation={accommodation} />
 
-      <p>{accommodation.description}</p>
+      <AccommodationOverview accommodation={accommodation} />
 
-      <p>
-        Destination:{' '}
-        {accommodation.relationships.destination?.title || 'Not available'}
-      </p>
+      <AccommodationDetails accommodation={accommodation} />
 
-      <p>Rating: {accommodation.stars || 'Not available'}</p>
+      <AccommodationAmenities accommodation={accommodation} />
 
-      <p>Price Range: {accommodation.price || 'Not available'}</p>
+      <AccommodationPrice accommodation={accommodation} />
+
+      <GallerySection
+        images={accommodation.galleryImages}
+        title='Accommodation Gallery'
+      />
+
+      <AccommodationDestination accommodation={accommodation} />
+
+      <AccommodationContact accommodation={accommodation} />
     </main>
   )
 }

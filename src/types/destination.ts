@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface Destination {
   id: number
 
@@ -16,6 +18,8 @@ export interface Destination {
   heroSubTitle: string
 
   heroImage: any | null
+
+  galleryImages: MediaImage[]
 
   // Content
 

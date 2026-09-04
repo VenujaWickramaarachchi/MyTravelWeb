@@ -1,4 +1,32 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeGalleryImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  return {
+    id: image.ID ?? image.id ?? 0,
+    url: image.url ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? null,
+    height: image.height ?? null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformExperience(experience: any) {
+  const galleryImages = [
+    experience.acf?.gallery_image_1,
+    experience.acf?.gallery_image_2,
+    experience.acf?.gallery_image_3,
+    experience.acf?.gallery_image_4,
+    experience.acf?.gallery_image_5,
+    experience.acf?.gallery_image_6,
+  ]
+    .map(normalizeGalleryImage)
+    .filter((image): image is MediaImage => image !== null && image.url !== '')
+
   return {
     id: experience.id,
     title: experience.title?.rendered || '',
@@ -13,6 +41,7 @@ export function transformExperience(experience: any) {
     heroTitle: experience.acf?.hero_title || '',
     heroSubtitle: experience.acf?.hero_subtitle || '',
     heroImage: experience.acf?.hero_image || null,
+    galleryImages,
     experienceOverview: experience.acf?.experience_overview || '',
     typicalDuration: experience.acf?.typical_duration || '',
     bestTime: experience.acf?.best_time || '',

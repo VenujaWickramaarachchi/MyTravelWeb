@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getExperience } from '@/lib/wordpress'
 
+import GallerySection from '@/components/content/Gallery/GallerySection'
+
 interface ExperiencePageProps {
   params: Promise<{
     slug: string
@@ -41,7 +43,10 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
       ) : (
         <p>No destinations linked.</p>
       )}
-
+      <GallerySection
+        images={experience.galleryImages}
+        title='Experience Gallery'
+      />
       <h2>Related Tours</h2>
 
       {experience.relationships.relatedTours.length > 0 ? (

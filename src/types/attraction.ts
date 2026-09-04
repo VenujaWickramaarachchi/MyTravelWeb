@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface Attraction {
   id: number
   title: string
@@ -24,6 +26,7 @@ export interface Attraction {
   relatedExperiences: number[]
   nearbyAttractions: number[]
   relatedTours: number[]
+  galleryImages: MediaImage[]
 
   // Additional information
   importantInformation: string

@@ -12,6 +12,8 @@ import MapSection from '@/components/content/Map/MapSection'
 import FAQSection from '@/components/content/FAQ/FAQSection'
 import AttractionList from '@/components/Destination/AttractionList'
 
+import GallerySection from '@/components/content/Gallery/GallerySection'
+
 export default async function DestinationPage({
   params,
 }: {
@@ -44,6 +46,11 @@ export default async function DestinationPage({
       <DestinationExperiences
         experiences={destination.relationships.experiences}
       />
+      <GallerySection
+        images={destination.galleryImages}
+        title='Destination Gallery'
+      />
+
       <MapSection
         google_maps_embed={destination.mapsEmbed}
         locationAddress={destination.locationAddress}

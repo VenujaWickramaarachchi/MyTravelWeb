@@ -22,7 +22,7 @@ export default function AttractionCard({ attraction }: Props) {
 
       {attraction.shortDescription && <p>{attraction.shortDescription}</p>}
 
-      <a href={`/destinations/${attraction.slug}`}>Explore Attraction</a>
+      <a href={`/attractions/${attraction.slug}`}>Explore Attraction</a>
     </article>
   )
 }

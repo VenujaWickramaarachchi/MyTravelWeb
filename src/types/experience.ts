@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface Experience {
   id: number
   title: string
@@ -12,6 +14,7 @@ export interface Experience {
   heroTitle: string
   heroSubtitle: string
   heroImage: any | null
+  galleryImages: MediaImage[]
   experienceOverview: string
   typicalDuration: string
   bestTime: string
