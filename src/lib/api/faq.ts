@@ -8,15 +8,13 @@ import { transformExperience } from '../transformers/experience'
 
 import { FAQ } from '@/types/faq'
 
-import { FAQPage } from '@/types/pages/faq-page'
-
 export async function getFAQs(): Promise<FAQ[]> {
   const faqs = await fetchAPI('faq?_embed')
 
   return faqs.map(transformFAQ)
 }
 
-export async function getFAQ(slug: string): Promise<FAQPage | null> {
+export async function getFAQ(slug: string) {
   const url =
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
     `/wp-json/wp/v2/faq?slug=${slug}&_embed`
@@ -46,25 +44,24 @@ export async function getFAQ(slug: string): Promise<FAQPage | null> {
         ? fetchByIds('tour', [faqData.relatedTour]).then((items) =>
             items.length > 0 ? transformTour(items[0]) : null,
           )
-        : Promise.resolve(null),
+        : null,
 
       faqData.relatedDestination
         ? fetchByIds('destination', [faqData.relatedDestination]).then(
             (items) =>
               items.length > 0 ? transformDestination(items[0]) : null,
           )
-        : Promise.resolve(null),
+        : null,
 
       faqData.relatedExperience
         ? fetchByIds('experience', [faqData.relatedExperience]).then((items) =>
             items.length > 0 ? transformExperience(items[0]) : null,
           )
-        : Promise.resolve(null),
+        : null,
     ])
 
   return {
     ...faqData,
-
     relationships: {
       relatedTour,
       relatedDestination,

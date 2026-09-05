@@ -14,7 +14,7 @@ export default function FAQRelatedContent({ faq }: Props) {
 
   return (
     <section>
-      <h2 style={{ color: 'green' }}>Related Content</h2>
+      <h2>Related Content</h2>
 
       {relatedTour && (
         <div>

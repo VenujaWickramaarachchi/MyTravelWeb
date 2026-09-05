@@ -7,7 +7,7 @@ interface Props {
 export default function FAQAnswer({ faq }: Props) {
   return (
     <section>
-      <h2 style={{ color: 'blue' }}>Answer</h2>
+      <h2>Answer</h2>
 
       <div
         dangerouslySetInnerHTML={{

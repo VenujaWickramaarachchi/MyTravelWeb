@@ -1,25 +1,22 @@
 import { Itinerary } from '@/types/itinerary'
+import ItineraryCard from '@/components/entities/Itinerary/ItineraryCard'
 
 interface Props {
   itineraries: Itinerary[]
 }
 
 export default function TravelGuideItineraries({ itineraries }: Props) {
-  if (!itineraries.length) {
+  if (itineraries.length === 0) {
     return null
   }
 
   return (
     <section>
-      <h2 style={{ color: 'brown' }}>Related Itineraries</h2>
+      <h2>Related Itineraries</h2>
 
       <div>
         {itineraries.map((itinerary) => (
-          <article key={itinerary.id}>
-            <h3>{itinerary.title}</h3>
-
-            {itinerary.shortDescription && <p>{itinerary.shortDescription}</p>}
-          </article>
+          <ItineraryCard key={itinerary.id} itinerary={itinerary} />
         ))}
       </div>
     </section>

@@ -11,7 +11,7 @@ export default function TravelGuideAuthor({ travelGuide }: Props) {
 
   return (
     <section>
-      <h2 style={{ color: 'green' }}>Author / Expert</h2>
+      <h2>Author / Expert</h2>
 
       <p>{travelGuide.authorExpert}</p>
 

@@ -1,8 +1,15 @@
 import { getItinerary } from '@/lib/wordpress'
 
-import ItineraryDayCard from '@/components/entities/ItineraryDay/ItineraryDayCard'
-
 import ItineraryHero from '@/components/Itineraries/ItineraryHero'
+import ItineraryQuickDetails from '@/components/Itineraries/ItineraryQuickDetails'
+import ItineraryOverview from '@/components/Itineraries/ItineraryOverview'
+import ItineraryRoute from '@/components/Itineraries/ItineraryRoute'
+import ItineraryDestinations from '@/components/Itineraries/ItineraryDestinations'
+import ItineraryExperiences from '@/components/Itineraries/ItineraryExperiences'
+import ItineraryDays from '@/components/Itineraries/ItineraryDays'
+import ItineraryAccommodations from '@/components/Itineraries/ItineraryAccommodations'
+import ItineraryRelatedTours from '@/components/Itineraries/ItineraryRelatedTours'
+import ItineraryCTA from '@/components/Itineraries/ItineraryCTA'
 
 interface Props {
   params: Promise<{
@@ -23,55 +30,23 @@ export default async function ItineraryPage({ params }: Props) {
     <main>
       <ItineraryHero itinerary={itinerary} />
 
-      <h2>Route</h2>
-      <p>{itinerary.route}</p>
+      <ItineraryQuickDetails itinerary={itinerary} />
 
-      <h2>Starting Location</h2>
-      <p>{itinerary.startingLocation}</p>
+      <ItineraryOverview itinerary={itinerary} />
 
-      <h2>Ending Location</h2>
-      <p>{itinerary.endingLocation}</p>
+      <ItineraryRoute itinerary={itinerary} />
 
-      <hr />
+      <ItineraryDestinations itinerary={itinerary} />
 
-      <h2>Destinations</h2>
+      <ItineraryExperiences itinerary={itinerary} />
 
-      {itinerary.relationships.destinations.map((destination) => (
-        <div key={destination.id}>
-          <h3>{destination.title}</h3>
-        </div>
-      ))}
+      <ItineraryDays itinerary={itinerary} />
 
-      <h2>Experiences</h2>
+      <ItineraryAccommodations itinerary={itinerary} />
 
-      {itinerary.relationships.experiences.map((experience) => (
-        <div key={experience.id}>
-          <h3>{experience.title}</h3>
-        </div>
-      ))}
+      <ItineraryRelatedTours itinerary={itinerary} />
 
-      <h2>Related Tours</h2>
-
-      {itinerary.relationships.relatedTours.map((tour) => (
-        <div key={tour.id}>
-          <h3>{tour.title}</h3>
-        </div>
-      ))}
-
-      <h2>Accommodation Suggestions</h2>
-
-      {itinerary.relationships.accommodationSuggestions.map((accommodation) => (
-        <div key={accommodation.id}>
-          <h3>{accommodation.title}</h3>
-        </div>
-      ))}
-      <hr />
-
-      <h2>Itinerary Days</h2>
-
-      {itinerary.relationships.itineraryDays.map((day) => (
-        <ItineraryDayCard key={day.id} day={day} />
-      ))}
+      <ItineraryCTA itinerary={itinerary} />
     </main>
   )
 }

@@ -38,3 +38,6 @@ export { getTrustAwards } from './api/trust-award'
 
 // Site Settings
 export { getSiteSettings } from './api/site-settings'
+
+// search settings
+export { searchContent } from './api/search'

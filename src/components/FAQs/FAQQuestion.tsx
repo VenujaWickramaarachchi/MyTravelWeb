@@ -7,7 +7,7 @@ interface Props {
 export default function FAQQuestion({ faq }: Props) {
   return (
     <section>
-      <h1 style={{ color: 'red' }}>{faq.question || faq.title}</h1>
+      <h1>{faq.question || faq.title}</h1>
     </section>
   )
 }
