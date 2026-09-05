@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface TravelGuide {
   id: number
   title: string
@@ -11,6 +13,7 @@ export interface TravelGuide {
   heroTitle: string
   heroSubtitle: string
   heroImage: any | null
+  galleryImages: MediaImage[]
   guideIntroduction: string
   quickAnswer: string
   keyInformation: string

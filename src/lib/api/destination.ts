@@ -9,6 +9,20 @@ import { transformAttraction } from '../transformers/attraction'
 
 import { DestinationPage } from '@/types/pages/destination-page'
 
+function getPostObjectIds(value: any): number[] {
+  if (!value) {
+    return []
+  }
+
+  const items = Array.isArray(value) ? value : [value]
+
+  return items
+    .map((item: any) =>
+      typeof item === 'number' ? item : (item?.ID ?? item?.id ?? null),
+    )
+    .filter((id: number | null): id is number => id !== null)
+}
+
 export async function getDestinations() {
   const destinations = await fetchAPI('destination?per_page=100&_embed')
 
@@ -41,16 +55,18 @@ export async function getDestination(
 
   const destinationData = transformDestination(destination)
 
-  // Relationship IDs from ACF
-  const accommodationIds = destination.acf?.featured_accommodations || []
+  // ACF Post Object relationships
+  const accommodationIds = getPostObjectIds(
+    destination.acf?.featured_accommodations,
+  )
 
-  const nearbyIds = destination.acf?.nearby_destinations || []
+  const nearbyIds = getPostObjectIds(destination.acf?.nearby_destinations)
 
-  const tourIds = destination.acf?.related_tours || []
+  const tourIds = getPostObjectIds(destination.acf?.related_tours)
 
-  const experienceIds = destination.acf?.experiences || []
+  const experienceIds = getPostObjectIds(destination.acf?.experiences)
 
-  const mainAttractionsIds = destination.acf?.main_attractions || []
+  const mainAttractionIds = getPostObjectIds(destination.acf?.main_attractions)
 
   // Fetch relationships
   const [
@@ -58,7 +74,7 @@ export async function getDestination(
     nearbyDestinations,
     relatedTours,
     experiences,
-    mainAttractions,
+    relatedAttractions,
   ] = await Promise.all([
     fetchByIds('accommodation', accommodationIds).then((items) =>
       items.map(transformAccommodation),
@@ -74,7 +90,7 @@ export async function getDestination(
       items.map(transformExperience),
     ),
 
-    fetchByIds('attraction', mainAttractionsIds).then((items) =>
+    fetchByIds('attraction', mainAttractionIds).then((items) =>
       items.map(transformAttraction),
     ),
   ])
@@ -87,7 +103,7 @@ export async function getDestination(
       nearbyDestinations,
       relatedTours,
       experiences,
-      mainAttractions,
+      mainAttractions: relatedAttractions,
     },
   }
 }

@@ -1,3 +1,27 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeDayImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  const id = Number(image.id ?? image.ID ?? 0)
+  const url = image.url ?? ''
+
+  if (!id || !url) {
+    return null
+  }
+
+  return {
+    id,
+    url,
+    alt: image.alt ?? '',
+    width: image.width ? Number(image.width) : null,
+    height: image.height ? Number(image.height) : null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformItineraryDay(day: any) {
   return {
     id: day.id,
@@ -38,7 +62,8 @@ export function transformItineraryDay(day: any) {
     accommodation: day.acf?.accommodation || null,
 
     // Images
-    dayImage1: day.acf?.day_image_1 || null,
-    dayImage2: day.acf?.day_image_2 || null,
+    dayImage1: normalizeDayImage(day.acf?.day_image_1),
+
+    dayImage2: normalizeDayImage(day.acf?.day_image_2),
   }
 }

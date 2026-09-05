@@ -1,3 +1,27 @@
+import { MediaImage } from '@/types/media-image'
+
+function normalizeGalleryImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  const id = Number(image.ID ?? image.id ?? 0)
+  const url = image.url ?? ''
+
+  if (!id || !url) {
+    return null
+  }
+
+  return {
+    id,
+    url,
+    alt: image.alt ?? '',
+    width: image.width ? Number(image.width) : null,
+    height: image.height ? Number(image.height) : null,
+    title: image.title ?? '',
+  }
+}
+
 export function transformTravelGuide(travelGuide: any) {
   return {
     id: travelGuide.id,
@@ -15,6 +39,19 @@ export function transformTravelGuide(travelGuide: any) {
     heroSubtitle: travelGuide.acf?.hero_subtitle || '',
 
     heroImage: travelGuide.acf?.hero_image || null,
+
+    galleryImages: [
+      travelGuide.acf?.gallery_image_1,
+      travelGuide.acf?.gallery_image_2,
+      travelGuide.acf?.gallery_image_3,
+      travelGuide.acf?.gallery_image_4,
+      travelGuide.acf?.gallery_image_5,
+      travelGuide.acf?.gallery_image_6,
+    ]
+      .map(normalizeGalleryImage)
+      .filter(
+        (image): image is MediaImage => image !== null && image.url !== '',
+      ),
 
     guideIntroduction: travelGuide.acf?.guide_introduction || '',
 

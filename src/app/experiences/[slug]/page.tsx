@@ -1,6 +1,17 @@
 import { notFound } from 'next/navigation'
 import { getExperience } from '@/lib/wordpress'
 
+import ExperienceHero from '@/components/Experiences/ExperienceHero'
+import ExperienceOverview from '@/components/Experiences/ExperienceOverview'
+import ExperienceDetails from '@/components/Experiences/ExperienceDetails'
+import ExperienceWhatToExpect from '@/components/Experiences/ExperienceWhatToExpect'
+import ExperienceWhoIsItFor from '@/components/Experiences/ExperienceWhoIsItFor'
+import ExperienceHighlights from '@/components/Experiences/ExperienceHighlights'
+import ExperienceDestinations from '@/components/Experiences/ExperienceDestinations'
+import ExperienceRelatedTours from '@/components/Experiences/ExperienceRelatedTours'
+import ExperienceImportantInformation from '@/components/Experiences/ExperienceImportantInformation'
+import ExperienceFAQ from '@/components/Experiences/ExperienceFAQ'
+
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
 interface ExperiencePageProps {
@@ -20,44 +31,32 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
 
   return (
     <main>
-      <h1>{experience.title}</h1>
+      <ExperienceHero experience={experience} />
 
-      <p>{experience.shortDescription}</p>
+      <ExperienceOverview experience={experience} />
 
-      <p>Location: {experience.location || 'Not available'}</p>
+      <ExperienceDetails experience={experience} />
 
-      <p>Duration: {experience.typicalDuration || 'Not available'}</p>
+      <ExperienceWhatToExpect experience={experience} />
 
-      <p>Best Time: {experience.bestTime || 'Not available'}</p>
+      <ExperienceWhoIsItFor experience={experience} />
 
-      <p>Activity Level: {experience.activityLevel || 'Not available'}</p>
+      <ExperienceHighlights experience={experience} />
 
-      <h2>Destinations</h2>
-
-      {experience.relationships.destinations.length > 0 ? (
-        <ul>
-          {experience.relationships.destinations.map((destination) => (
-            <li key={destination.id}>{destination.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No destinations linked.</p>
-      )}
       <GallerySection
         images={experience.galleryImages}
         title='Experience Gallery'
       />
-      <h2>Related Tours</h2>
 
-      {experience.relationships.relatedTours.length > 0 ? (
-        <ul>
-          {experience.relationships.relatedTours.map((tour) => (
-            <li key={tour.id}>{tour.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related tours linked.</p>
-      )}
+      <ExperienceDestinations
+        destinations={experience.relationships.destinations}
+      />
+
+      <ExperienceRelatedTours tours={experience.relationships.relatedTours} />
+
+      <ExperienceImportantInformation experience={experience} />
+
+      <ExperienceFAQ experience={experience} />
     </main>
   )
 }

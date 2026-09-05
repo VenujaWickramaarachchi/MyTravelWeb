@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation'
 import { getFAQ } from '@/lib/wordpress'
 
+import FAQQuestion from '@/components/FAQs/FAQQuestion'
+import FAQAnswer from '@/components/FAQs/FAQAnswer'
+import FAQRelatedContent from '@/components/FAQs/FAQRelatedContent'
+
 interface FAQPageProps {
   params: Promise<{
     slug: string
@@ -18,33 +22,11 @@ export default async function FAQPage({ params }: FAQPageProps) {
 
   return (
     <main>
-      <h1>{faq.title}</h1>
+      <FAQQuestion faq={faq} />
 
-      <h2>Question</h2>
+      <FAQAnswer faq={faq} />
 
-      <p>{faq.question || 'No question available'}</p>
-
-      <h2>Answer</h2>
-
-      <p>{faq.answer || 'No answer available'}</p>
-
-      <h2>Related Tour</h2>
-
-      <p>{faq.relationships.relatedTour?.title || 'No related tour linked'}</p>
-
-      <h2>Related Destination</h2>
-
-      <p>
-        {faq.relationships.relatedDestination?.title ||
-          'No related destination linked'}
-      </p>
-
-      <h2>Related Experience</h2>
-
-      <p>
-        {faq.relationships.relatedExperience?.title ||
-          'No related experience linked'}
-      </p>
+      <FAQRelatedContent faq={faq} />
     </main>
   )
 }

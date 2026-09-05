@@ -1,3 +1,5 @@
+import { MediaImage } from './media-image'
+
 export interface ItineraryDay {
   id: number
   title: string
@@ -37,6 +39,6 @@ export interface ItineraryDay {
   accommodation: number | null
 
   // Images
-  dayImage1: any | null
-  dayImage2: any | null
+  dayImage1: MediaImage | null
+  dayImage2: MediaImage | null
 }

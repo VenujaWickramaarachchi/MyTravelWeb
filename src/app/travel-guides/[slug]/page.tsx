@@ -1,6 +1,20 @@
 import { notFound } from 'next/navigation'
 import { getTravelGuide } from '@/lib/wordpress'
 
+import TravelGuideHero from '@/components/TravelGuides/TravelGuideHero'
+import TravelGuideOverview from '@/components/TravelGuides/TravelGuideOverview'
+import TravelGuideQuickAnswer from '@/components/TravelGuides/TravelGuideQuickAnswer'
+import TravelGuideKeyInformation from '@/components/TravelGuides/TravelGuideKeyInformation'
+import TravelGuideMainContent from '@/components/TravelGuides/TravelGuideMainContent'
+import TravelGuideDestinations from '@/components/TravelGuides/TravelGuideDestinations'
+import TravelGuideExperiences from '@/components/TravelGuides/TravelGuideExperiences'
+import TravelGuideTours from '@/components/TravelGuides/TravelGuideTours'
+import TravelGuideItineraries from '@/components/TravelGuides/TravelGuideItineraries'
+import TravelGuideAuthor from '@/components/TravelGuides/TravelGuideAuthor'
+import TravelGuideFAQ from '@/components/TravelGuides/TravelGuideFAQ'
+
+import GallerySection from '@/components/content/Gallery/GallerySection'
+
 interface TravelGuidePageProps {
   params: Promise<{
     slug: string
@@ -20,79 +34,38 @@ export default async function TravelGuidePage({
 
   return (
     <main>
-      <h1>{travelGuide.title}</h1>
+      <TravelGuideHero travelGuide={travelGuide} />
 
-      <p>{travelGuide.shortDescription}</p>
+      <TravelGuideOverview travelGuide={travelGuide} />
 
-      <h2>Hero</h2>
+      <TravelGuideQuickAnswer travelGuide={travelGuide} />
 
-      <p>{travelGuide.heroTitle || 'No hero title'}</p>
+      <TravelGuideKeyInformation travelGuide={travelGuide} />
 
-      <p>{travelGuide.heroSubtitle || 'No hero subtitle'}</p>
+      <TravelGuideMainContent travelGuide={travelGuide} />
 
-      <h2>Quick Answer</h2>
+      <GallerySection
+        images={travelGuide.galleryImages}
+        title='Travel Guide Gallery'
+      />
 
-      <p>{travelGuide.quickAnswer || 'No quick answer'}</p>
+      <TravelGuideDestinations
+        destinations={travelGuide.relationships.relatedDestinations}
+      />
 
-      <h2>Key Information</h2>
+      <TravelGuideExperiences
+        experiences={travelGuide.relationships.relatedExperiences}
+      />
 
-      <p>{travelGuide.keyInformation || 'No key information'}</p>
+      <TravelGuideTours tours={travelGuide.relationships.relatedTours} />
 
-      <h2>Related Destinations</h2>
+      <TravelGuideItineraries
+        itineraries={travelGuide.relationships.relatedItineraries}
+      />
 
-      {travelGuide.relationships.relatedDestinations.length > 0 ? (
-        <ul>
-          {travelGuide.relationships.relatedDestinations.map((destination) => (
-            <li key={destination.id}>{destination.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related destinations linked.</p>
-      )}
+      <TravelGuideAuthor travelGuide={travelGuide} />
 
-      <h2>Related Experiences</h2>
-
-      {travelGuide.relationships.relatedExperiences.length > 0 ? (
-        <ul>
-          {travelGuide.relationships.relatedExperiences.map((experience) => (
-            <li key={experience.id}>{experience.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related experiences linked.</p>
-      )}
-
-      <h2>Related Tours</h2>
-
-      {travelGuide.relationships.relatedTours.length > 0 ? (
-        <ul>
-          {travelGuide.relationships.relatedTours.map((tour) => (
-            <li key={tour.id}>{tour.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related tours linked.</p>
-      )}
-
-      <h2>Related Itineraries</h2>
-
-      {travelGuide.relationships.relatedItineraries.length > 0 ? (
-        <ul>
-          {travelGuide.relationships.relatedItineraries.map((itinerary) => (
-            <li key={itinerary.id}>{itinerary.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No related itineraries linked.</p>
-      )}
-
-      <h2>Author / Expert</h2>
-
-      <p>{travelGuide.authorExpert || 'Not available'}</p>
-
-      <h2>Last Reviewed</h2>
-
-      <p>{travelGuide.lastReviewed || 'Not available'}</p>
+      <TravelGuideFAQ travelGuide={travelGuide} />
     </main>
   )
 }

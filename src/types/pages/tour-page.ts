@@ -3,7 +3,7 @@ import { Destination } from '../destination'
 import { Accommodation } from '../accommodation'
 import { Experience } from '../experience'
 import { Itinerary } from '../itinerary'
-import { ItineraryDay } from '../itinerary-day'
+import { TourItineraryDay } from './tour-itinerary-day'
 
 export interface TourPage extends Tour {
   relationships: {
@@ -15,6 +15,6 @@ export interface TourPage extends Tour {
 
     itinerary: Itinerary | null
 
-    itineraryDays: ItineraryDay[]
+    itineraryDays: TourItineraryDay[]
   }
 }

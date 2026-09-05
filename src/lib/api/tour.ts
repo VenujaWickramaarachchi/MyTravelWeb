@@ -9,6 +9,8 @@ import { transformItineraryDay } from '../transformers/itinerary-day'
 import { transformTour } from '../transformers/tour'
 
 import { ItineraryDay } from '@/types/itinerary-day'
+
+import { TourItineraryDay } from '@/types/pages/tour-itinerary-day'
 import { TourPage } from '@/types/pages/tour-page'
 
 export async function getTours() {
@@ -73,15 +75,47 @@ export async function getTour(slug: string): Promise<TourPage | null> {
           )
         : Promise.resolve(null),
 
-      fetchByIds('itinerary-days', itineraryDayIds).then((items) =>
-        items
+      fetchByIds('itinerary-days', itineraryDayIds).then(async (items) => {
+        const days: ItineraryDay[] = items
           .map(transformItineraryDay)
           .sort(
             (a: ItineraryDay, b: ItineraryDay) =>
               (a.dayNumber ?? Number.MAX_SAFE_INTEGER) -
               (b.dayNumber ?? Number.MAX_SAFE_INTEGER),
-          ),
-      ),
+          )
+
+        const connectedDays = await Promise.all(
+          days.map(async (day) => {
+            const placesVisited = await fetchByIds(
+              'destination',
+              day.placesVisited,
+            )
+
+            const experiences = await fetchByIds('experience', day.experiences)
+
+            const accommodation = day.accommodation
+              ? await fetchByIds('accommodation', [day.accommodation])
+              : []
+
+            return {
+              ...day,
+
+              relationships: {
+                placesVisited: placesVisited.map(transformDestination),
+
+                experiences: experiences.map(transformExperience),
+
+                accommodation:
+                  accommodation.length > 0
+                    ? transformAccommodation(accommodation[0])
+                    : null,
+              },
+            } satisfies TourItineraryDay
+          }),
+        )
+
+        return connectedDays
+      }),
     ])
 
   return {
