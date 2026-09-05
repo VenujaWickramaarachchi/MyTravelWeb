@@ -14,6 +14,24 @@ function normalizeGalleryImage(image: any): MediaImage | null {
     title: image.title ?? '',
   }
 }
+function normalizeSingleImage(image: any): MediaImage | null {
+  if (Array.isArray(image)) {
+    image = image[0]
+  }
+
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  return {
+    id: image.ID ?? image.id ?? 0,
+    url: image.url ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? null,
+    height: image.height ?? null,
+    title: image.title ?? '',
+  }
+}
 
 export function transformTour(tour: any) {
   const galleryImages = [
@@ -38,14 +56,14 @@ export function transformTour(tour: any) {
     // Hero
     heroTitle: tour.acf?.hero_title || '',
     heroSubtitle: tour.acf?.hero_subtitle || '',
-    heroImage: tour.acf?.hero_image || null,
+    heroImage: normalizeSingleImage(tour.acf?.hero_image),
     galleryImages,
 
     // Core Details
     shortDescription: tour.acf?.short_description || '',
     durationDays: tour.acf?.duration_days || null,
     durationNights: tour.acf?.duration_nights || null,
-    priceFrom: tour.acf?.price_from || '',
+    priceFrom: tour.acf?.price_from ?? null,
     currency: tour.acf?.currency || 'USD',
     priceDescription: tour.acf?.price_description || '',
     groupSize: tour.acf?.group_size || '',

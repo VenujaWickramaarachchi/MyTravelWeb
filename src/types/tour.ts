@@ -12,7 +12,7 @@ export interface Tour {
   // Hero
   heroTitle: string
   heroSubtitle: string
-  heroImage: any | null
+  heroImage: MediaImage | null
   galleryImages: MediaImage[]
 
   // Core Details

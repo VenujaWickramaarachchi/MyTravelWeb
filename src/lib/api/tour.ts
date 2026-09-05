@@ -7,8 +7,10 @@ import { transformAccommodation } from '../transformers/accommodation'
 import { transformItinerary } from '../transformers/itinerary'
 import { transformItineraryDay } from '../transformers/itinerary-day'
 import { transformTour } from '../transformers/tour'
+import { transformTestimonial } from '../transformers/testimonials'
 
 import { ItineraryDay } from '@/types/itinerary-day'
+import { Testimonial } from '@/types/testimonials'
 
 import { TourItineraryDay } from '@/types/pages/tour-itinerary-day'
 import { TourPage } from '@/types/pages/tour-page'
@@ -49,6 +51,12 @@ export async function getTour(slug: string): Promise<TourPage | null> {
   const experienceIds = tour.acf?.experiences || []
 
   const accommodationIds = tour.acf?.accommodations || []
+
+  const testimonialResponse = await fetchAPI('testimonials?_embed')
+
+  const testimonials: Testimonial[] = testimonialResponse
+    .map(transformTestimonial)
+    .filter((testimonial: Testimonial) => testimonial.relatedTour === tour.id)
 
   const itineraryId = tour.acf?.itinerary || null
 
@@ -127,6 +135,7 @@ export async function getTour(slug: string): Promise<TourPage | null> {
       accommodations,
       itinerary,
       itineraryDays,
+      testimonials,
     },
   }
 }

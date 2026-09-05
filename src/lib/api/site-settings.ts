@@ -1,5 +1,4 @@
 import { fetchAPI } from './core/fetch-api'
-
 import { transformSiteSettings } from '../transformers/site-settings'
 
 import { SiteSettings } from '@/types/site-settings'

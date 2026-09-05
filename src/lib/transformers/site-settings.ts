@@ -1,48 +1,74 @@
-export function transformSiteSettings(settings: any) {
-  const acf = settings.acf || settings
+import { MediaImage } from '@/types/media-image'
+
+function normalizeImage(image: any): MediaImage | null {
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  const id = Number(image.id ?? image.ID ?? 0)
+
+  const url = image.url ?? ''
+
+  if (!id || !url) {
+    return null
+  }
 
   return {
-    siteLogo: acf.site_logo || null,
-    footerLogo: acf.footer_logo || null,
-    favicon: acf.favicon || null,
+    id,
+    url,
+    alt: image.alt ?? '',
+    width: image.width ? Number(image.width) : null,
+    height: image.height ? Number(image.height) : null,
+    title: image.title ?? '',
+  }
+}
 
-    phone: acf.phone || '',
-    whatsapp: acf.whatsapp || '',
-    email: acf.email || '',
-    businessAddress: acf.business_address || '',
+export function transformSiteSettings(settings: any) {
+  return {
+    siteLogo: normalizeImage(settings.acf?.site_logo),
 
-    facebookUrl: Array.isArray(acf.facebook_url)
-      ? acf.facebook_url[0] || ''
-      : acf.facebook_url || '',
+    footerLogo: normalizeImage(settings.acf?.footer_logo),
 
-    instagramUrl: Array.isArray(acf.instagram_url)
-      ? acf.instagram_url[0] || ''
-      : acf.instagram_url || '',
+    favicon: normalizeImage(settings.acf?.favicon),
 
-    youtubeUrl: Array.isArray(acf.youtube_url)
-      ? acf.youtube_url[0] || ''
-      : acf.youtube_url || '',
+    phone: settings.acf?.phone || '',
 
-    tiktokUrl: Array.isArray(acf.tiktok_url)
-      ? acf.tiktok_url[0] || ''
-      : acf.tiktok_url || '',
+    whatsapp: settings.acf?.whatsapp || '',
 
-    globalCtaTitle: acf.global_cta_title || '',
-    globalCtaDescription: acf.global_cta_description || '',
-    globalCtaButton: acf.global_cta_button || '',
-    globalCtaUrl: Array.isArray(acf.global_cta_url)
-      ? acf.global_cta_url[0] || ''
-      : acf.global_cta_url || '',
+    email: settings.acf?.email || '',
 
-    defaultSeoTitle: acf.default_seo_title || '',
-    defaultMetaDescription: acf.default_meta_description || '',
-    defaultSocialImage: acf.default_social_image || null,
+    businessAddress: settings.acf?.business_address || '',
 
-    footerHeading: acf.footer_heading || '',
-    footerDescription: acf.footer_description || '',
-    copyrightText: acf.copyright_text || '',
+    facebookUrl: settings.acf?.facebook_url || '',
 
-    googleAnalyticsId: acf.google_analytics_id || '',
-    googleTagManagerId: acf.google_tag_manager_id || '',
+    instagramUrl: settings.acf?.instagram_url || '',
+
+    youtubeUrl: settings.acf?.youtube_url || '',
+
+    tiktokUrl: settings.acf?.tiktok_url || '',
+
+    globalCtaTitle: settings.acf?.global_cta_title || '',
+
+    globalCtaDescription: settings.acf?.global_cta_description || '',
+
+    globalCtaButton: settings.acf?.global_cta_button || '',
+
+    globalCtaUrl: settings.acf?.global_cta_url || '',
+
+    defaultSeoTitle: settings.acf?.default_seo_title || '',
+
+    defaultMetaDescription: settings.acf?.default_meta_description || '',
+
+    defaultSocialImage: normalizeImage(settings.acf?.default_social_image),
+
+    footerHeading: settings.acf?.footer_heading || '',
+
+    footerDescription: settings.acf?.footer_description || '',
+
+    copyrightText: settings.acf?.copyright_text || '',
+
+    googleAnalyticsId: settings.acf?.google_analytics_id || '',
+
+    googleTagManagerId: settings.acf?.google_tag_manager_id || '',
   }
 }

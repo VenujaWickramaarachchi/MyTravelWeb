@@ -11,6 +11,7 @@ import TourAccommodations from '@/components/Tours/TourAccommodations'
 import TourInclusions from '@/components/Tours/TourInclusions'
 import TourInfo from '@/components/Tours/TourInfo'
 import TourCTA from '@/components/Tours/TourCTA'
+import TourTestimonials from '@/components/Tours/TourTestimonials'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
@@ -42,6 +43,7 @@ export default async function TourPage({ params }: TourPageProps) {
       <TourAccommodations tour={tour} />
       <TourInclusions tour={tour} />
       <TourInfo tour={tour} />
+      <TourTestimonials tour={tour} />
       <TourCTA tour={tour} />
     </main>
   )

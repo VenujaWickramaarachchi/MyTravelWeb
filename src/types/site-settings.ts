@@ -1,7 +1,9 @@
+import { MediaImage } from './media-image'
+
 export interface SiteSettings {
-  siteLogo: any | null
-  footerLogo: any | null
-  favicon: any | null
+  siteLogo: MediaImage | null
+  footerLogo: MediaImage | null
+  favicon: MediaImage | null
 
   phone: string
   whatsapp: string
@@ -20,7 +22,7 @@ export interface SiteSettings {
 
   defaultSeoTitle: string
   defaultMetaDescription: string
-  defaultSocialImage: any | null
+  defaultSocialImage: MediaImage | null
 
   footerHeading: string
   footerDescription: string
