@@ -72,10 +72,11 @@ export function transformTour(tour: any) {
 
     // Content
     tourOverview: tour.acf?.tour_overview || '',
-    tourHighlights: tour.acf?.tour_highlights || [],
-    inclusions: tour.acf?.inclusions || [],
-    exclusions: tour.acf?.exclusions || [],
-    faqContent: tour.acf?.faq_content || [],
+    tourHighlights: tour.acf?.tour_highlights || '',
+    inclusions: tour.acf?.inclusions || '',
+    exclusions: tour.acf?.exclusions || '',
+
+    faqContent: tour.acf?.faq_content || '',
 
     // Relationships
     destinations: tour.acf?.destinations || [],

@@ -25,8 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
     icons: settings.favicon
       ? {
-          icon: settings.favicon.url,
-        }
+        icon: settings.favicon.url,
+      }
       : undefined,
   }
 }
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
   const settings = await getSiteSettings()
 
-  console.log('SITE SETTINGS FAVICON:', settings.favicon)
+
 
   return (
     <html

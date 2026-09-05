@@ -50,8 +50,8 @@ export function transformAttraction(attraction: any) {
     bestTime: attraction.acf?.best_time || '',
 
     // Relationships
-    destination: attraction.acf?.destination || [],
-    relatedExperiences: attraction.acf?.related_experiencs || [],
+    destination: attraction.acf?.destination || null,
+    relatedExperiences: attraction.acf?.related_experiences || [],
     nearbyAttractions: attraction.acf?.nearby_attractions || [],
     relatedTours: attraction.acf?.related_tours || [],
 

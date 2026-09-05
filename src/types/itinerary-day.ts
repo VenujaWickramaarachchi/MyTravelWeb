@@ -7,6 +7,7 @@ export interface ItineraryDay {
 
   // Relationship
   tour: number | null
+  itinerary: number | null
 
   // Day information
   dayNumber: number | null

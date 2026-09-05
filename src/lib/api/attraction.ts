@@ -42,13 +42,10 @@ export async function getAttraction(
   const attractionData = transformAttraction(attraction)
 
   // Destination
-  const destinationId = Array.isArray(attractionData.destination)
-    ? attractionData.destination[0]
-    : null
-
-  const destination = destinationId
-    ? await fetchByIds('destination', [destinationId]).then((items) =>
-        items.length > 0 ? transformDestination(items[0]) : null,
+  // Destination
+  const destination = attractionData.destination
+    ? await fetchByIds('destination', [attractionData.destination]).then(
+        (items) => (items.length > 0 ? transformDestination(items[0]) : null),
       )
     : null
 

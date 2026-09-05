@@ -22,7 +22,7 @@ export interface Attraction {
   bestTime: string
 
   // Relationships
-  destination: number[]
+  destination: number | null
   relatedExperiences: number[]
   nearbyAttractions: number[]
   relatedTours: number[]

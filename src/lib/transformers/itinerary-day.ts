@@ -30,6 +30,7 @@ export function transformItineraryDay(day: any) {
 
     // Relationship
     tour: day.acf?.tour || null,
+    itinerary: day.acf?.itinerary || null,
 
     // Day information
     dayNumber: day.acf?.day_number || null,

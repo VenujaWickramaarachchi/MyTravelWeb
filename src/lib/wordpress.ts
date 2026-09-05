@@ -14,8 +14,7 @@ export { getAttractions, getAttraction } from './api/attraction'
 export { getAccommodations, getAccommodation } from './api/accommodation'
 
 // Itineraries
-export { getItineraries } from './api/itinerary'
-
+export { getItineraries, getItinerary } from './api/itinerary'
 // Itinerary Days
 export { getItineraryDays } from './api/itinerary-day'
 

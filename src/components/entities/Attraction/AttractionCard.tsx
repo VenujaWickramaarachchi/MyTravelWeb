@@ -11,14 +11,10 @@ export default function AttractionCard({ attraction }: Props) {
         <img
           src={attraction.heroImage.url}
           alt={attraction.heroImage.alt || attraction.title}
-          style={{
-            width: '300px',
-            height: '250px',
-          }}
         />
       )}
 
-      <h3 style={{ color: 'purple' }}>{attraction.title}</h3>
+      <h3>{attraction.title}</h3>
 
       {attraction.shortDescription && <p>{attraction.shortDescription}</p>}
 
