@@ -15,10 +15,36 @@ import TravelGuideFAQ from '@/components/TravelGuides/TravelGuideFAQ'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
 interface TravelGuidePageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const travelGuide = await getTravelGuide(slug)
+
+  if (!travelGuide) {
+    return {}
+  }
+
+  return generateSEO({
+    title: travelGuide.seoTitle || travelGuide.title,
+    description: travelGuide.metaDescription,
+    canonicalUrl: travelGuide.canonicalUrl,
+    noIndex: travelGuide.noIndex,
+    ogTitle: travelGuide.ogTitle,
+    ogDescription: travelGuide.ogDescription,
+    socialImage: travelGuide.socialImage,
+  })
 }
 
 export default async function TravelGuidePage({

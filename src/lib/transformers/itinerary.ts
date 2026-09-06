@@ -29,5 +29,26 @@ export function transformItinerary(itinerary: any) {
     // Relationships
     relatedTours: itinerary.acf?.related_tours || [],
     accommodationSuggestions: itinerary.acf?.accommodation_suggestions || [],
+
+    // SEO, Meta & Search Intent Data
+    seoTitle: itinerary.acf?.seo_title || '',
+    metaDescription: itinerary.acf?.meta_description || '',
+    canonicalUrl: itinerary.acf?.canonical_url || '',
+    noIndex: itinerary.acf?.no_index || false,
+    ogTitle: itinerary.acf?.og_title || '',
+    ogDescription: itinerary.acf?.og_description || '',
+    socialImage: itinerary.acf?.social_image || null,
+    primarySearchTopic: itinerary.acf?.primary_search_topic || '',
+    secondarySearchTopics: itinerary.acf?.secondary_search_topics || '',
+    searchIntent: itinerary.acf?.search_intent || '',
+
+    // AEO
+    aeoPrimaryQuestion: itinerary.acf?.aeo_primary_question || '',
+    aeoDirectAnswer: itinerary.acf?.aeo_direct_answer || '',
+    aeoSupportingQuestions: itinerary.acf?.aeo_supporting_questions || '',
+    featuredAnswer: itinerary.acf?.featured_answer || '',
+
+    // Breadcrumb
+    breadcrumbLabel: itinerary.acf?.breadcrumb_label || '',
   }
 }

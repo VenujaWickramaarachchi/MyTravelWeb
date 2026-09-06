@@ -11,10 +11,36 @@ import ItineraryAccommodations from '@/components/Itineraries/ItineraryAccommoda
 import ItineraryRelatedTours from '@/components/Itineraries/ItineraryRelatedTours'
 import ItineraryCTA from '@/components/Itineraries/ItineraryCTA'
 
+import { generateSEO } from '@/lib/seo'
+
 interface Props {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const itinerary = await getItinerary(slug)
+
+  if (!itinerary) {
+    return {}
+  }
+
+  return generateSEO({
+    title: itinerary.seoTitle || itinerary.title,
+    description: itinerary.metaDescription,
+    canonicalUrl: itinerary.canonicalUrl,
+    noIndex: itinerary.noIndex,
+    ogTitle: itinerary.ogTitle,
+    ogDescription: itinerary.ogDescription,
+    socialImage: itinerary.socialImage,
+  })
 }
 
 export default async function ItineraryPage({ params }: Props) {

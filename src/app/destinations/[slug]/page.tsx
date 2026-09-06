@@ -14,6 +14,32 @@ import AttractionList from '@/components/Destination/AttractionList'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const destination = await getDestination(slug)
+
+  if (!destination) {
+    return {}
+  }
+
+  return generateSEO({
+    title: destination.seoTitle || destination.title,
+    description: destination.metaDescription,
+    canonicalUrl: destination.canonicalUrl,
+    noIndex: destination.noIndex,
+    ogTitle: destination.ogTitle,
+    ogDescription: destination.ogDescription,
+    socialImage: destination.socialImage,
+  })
+}
+
 export default async function DestinationPage({
   params,
 }: {

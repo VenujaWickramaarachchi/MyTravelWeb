@@ -7,6 +7,7 @@ import { transformDestination } from '../transformers/destination'
 import { transformExperience } from '../transformers/experience'
 
 import { FAQ } from '@/types/faq'
+import { FAQPage } from '@/types/pages/faq-page'
 
 export async function getFAQs(): Promise<FAQ[]> {
   const faqs = await fetchAPI('faq?_embed')
@@ -14,7 +15,7 @@ export async function getFAQs(): Promise<FAQ[]> {
   return faqs.map(transformFAQ)
 }
 
-export async function getFAQ(slug: string) {
+export async function getFAQ(slug: string): Promise<FAQPage | null> {
   const url =
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
     `/wp-json/wp/v2/faq?slug=${slug}&_embed`

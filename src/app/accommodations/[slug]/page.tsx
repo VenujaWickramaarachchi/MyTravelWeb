@@ -11,10 +11,31 @@ import AccommodationContact from '@/components/Accommodations/AccommodationConta
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
 interface AccommodationPageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const accommodation = await getAccommodation(slug)
+
+  if (!accommodation) {
+    return {}
+  }
+
+  return generateSEO({
+    title: accommodation.seoTitle || accommodation.title,
+    description: accommodation.seoDescription,
+  })
 }
 
 export default async function AccommodationPage({

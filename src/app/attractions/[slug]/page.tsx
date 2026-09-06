@@ -12,10 +12,36 @@ import AttractionFAQ from '@/components/Attractions/AttractionFAQ'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
 interface AttractionPageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const attraction = await getAttraction(slug)
+
+  if (!attraction) {
+    return {}
+  }
+
+  return generateSEO({
+    title: attraction.seoTitle || attraction.title,
+    description: attraction.metaDescription,
+    canonicalUrl: attraction.canonicalUrl,
+    noIndex: attraction.noIndex,
+    ogTitle: attraction.ogTitle,
+    ogDescription: attraction.ogDescription,
+    socialImage: attraction.socialImage,
+  })
 }
 
 export default async function AttractionPage({ params }: AttractionPageProps) {

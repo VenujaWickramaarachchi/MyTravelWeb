@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FAQ } from '@/types/faq'
 
 interface Props {
@@ -7,15 +8,11 @@ interface Props {
 export default function FAQItem({ faq }: Props) {
   return (
     <article>
-      <h3>{faq.question}</h3>
+      <h2>
+        <Link href={`/faqs/${faq.slug}`}>{faq.question || faq.title}</Link>
+      </h2>
 
-      {faq.answer && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: faq.answer,
-          }}
-        />
-      )}
+      {faq.featuredAnswer && <p>{faq.featuredAnswer}</p>}
     </article>
   )
 }

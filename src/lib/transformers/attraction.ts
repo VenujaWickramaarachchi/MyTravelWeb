@@ -58,5 +58,26 @@ export function transformAttraction(attraction: any) {
     // Additional information
     importantInformation: attraction.acf?.important_information || '',
     faqContent: attraction.acf?.faq_content || '',
+
+    // SEO, Meta & Search Intent Data
+    seoTitle: attraction.acf?.seo_title || '',
+    metaDescription: attraction.acf?.meta_description || '',
+    canonicalUrl: attraction.acf?.canonical_url || '',
+    noIndex: attraction.acf?.no_index || false,
+    ogTitle: attraction.acf?.og_title || '',
+    ogDescription: attraction.acf?.og_description || '',
+    socialImage: attraction.acf?.social_image || null,
+    primarySearchTopic: attraction.acf?.primary_search_topic || '',
+    secondarySearchTopics: attraction.acf?.secondary_search_topics || '',
+    searchIntent: attraction.acf?.search_intent || '',
+
+    // AEO (Answer Engine Optimization) Data
+    aeoPrimaryQuestion: attraction.acf?.aeo_primary_question || '',
+    aeoDirectAnswer: attraction.acf?.aeo_direct_answer || '',
+    aeoSupportingQuestions: attraction.acf?.aeo_supporting_questions || '',
+    featuredAnswer: attraction.acf?.featured_answer || '',
+
+    // Breadcrumb
+    breadcrumbLabel: attraction.acf?.breadcrumb_label || '',
   }
 }

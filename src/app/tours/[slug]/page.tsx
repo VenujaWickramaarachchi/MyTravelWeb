@@ -15,10 +15,36 @@ import TourTestimonials from '@/components/Tours/TourTestimonials'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
 interface TourPageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const tour = await getTour(slug)
+
+  if (!tour) {
+    return {}
+  }
+
+  return generateSEO({
+    title: tour.seoTitle || tour.title,
+    description: tour.metaDescription,
+    canonicalUrl: tour.canonicalUrl,
+    noIndex: tour.noIndex,
+    ogTitle: tour.ogTitle,
+    ogDescription: tour.ogDescription,
+    socialImage: tour.socialImage,
+  })
 }
 
 export default async function TourPage({ params }: TourPageProps) {

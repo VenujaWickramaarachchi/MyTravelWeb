@@ -14,10 +14,36 @@ import ExperienceFAQ from '@/components/Experiences/ExperienceFAQ'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import { generateSEO } from '@/lib/seo'
+
 interface ExperiencePageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const experience = await getExperience(slug)
+
+  if (!experience) {
+    return {}
+  }
+
+  return generateSEO({
+    title: experience.seoTitle || experience.title,
+    description: experience.metaDescription,
+    canonicalUrl: experience.canonicalUrl,
+    noIndex: experience.noIndex,
+    ogTitle: experience.ogTitle,
+    ogDescription: experience.ogDescription,
+    socialImage: experience.socialImage,
+  })
 }
 
 export default async function ExperiencePage({ params }: ExperiencePageProps) {
