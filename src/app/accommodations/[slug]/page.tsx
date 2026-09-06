@@ -13,6 +13,12 @@ import GallerySection from '@/components/content/Gallery/GallerySection'
 
 import { generateSEO } from '@/lib/seo'
 
+import AccommodationAEO from '@/components/SEO/AccommodationAEO'
+import AccommodationAEOAnswerSchema from '@/components/SEO/AccommodationAEOAnswerSchema'
+
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
 interface AccommodationPageProps {
   params: Promise<{
     slug: string
@@ -35,6 +41,7 @@ export async function generateMetadata({
   return generateSEO({
     title: accommodation.seoTitle || accommodation.title,
     description: accommodation.seoDescription,
+    canonicalUrl: `https://vioralanka.com/accommodations/${accommodation.slug}`,
   })
 }
 
@@ -51,9 +58,20 @@ export default async function AccommodationPage({
 
   return (
     <main>
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Accommodations',
+          'accommodations',
+          accommodation.title,
+        )}
+      />
+
+      <AccommodationAEOAnswerSchema data={accommodation} />
       <AccommodationHero accommodation={accommodation} />
 
       <AccommodationOverview accommodation={accommodation} />
+
+      <AccommodationAEO accommodation={accommodation} />
 
       <AccommodationDetails accommodation={accommodation} />
 

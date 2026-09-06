@@ -13,6 +13,11 @@ import ItineraryCTA from '@/components/Itineraries/ItineraryCTA'
 
 import { generateSEO } from '@/lib/seo'
 
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+import AEOContent from '@/components/SEO/AEOContent'
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
 interface Props {
   params: Promise<{
     slug: string
@@ -54,6 +59,15 @@ export default async function ItineraryPage({ params }: Props) {
 
   return (
     <main>
+      <AEOAnswerSchema data={itinerary} />
+
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Itineraries',
+          'itineraries',
+          itinerary.breadcrumbLabel || itinerary.title,
+        )}
+      />
       <ItineraryHero itinerary={itinerary} />
 
       <ItineraryQuickDetails itinerary={itinerary} />
@@ -71,6 +85,8 @@ export default async function ItineraryPage({ params }: Props) {
       <ItineraryAccommodations itinerary={itinerary} />
 
       <ItineraryRelatedTours itinerary={itinerary} />
+
+      <AEOContent data={itinerary} />
 
       <ItineraryCTA itinerary={itinerary} />
     </main>

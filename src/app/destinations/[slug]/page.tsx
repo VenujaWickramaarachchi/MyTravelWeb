@@ -16,6 +16,12 @@ import GallerySection from '@/components/content/Gallery/GallerySection'
 
 import { generateSEO } from '@/lib/seo'
 
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
+import AEOContent from '@/components/SEO/AEOContent'
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+
 export async function generateMetadata({
   params,
 }: {
@@ -57,6 +63,14 @@ export default async function DestinationPage({
 
   return (
     <div>
+      <AEOAnswerSchema data={destination} />
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Destinations',
+          'destinations',
+          destination.breadcrumbLabel || destination.title,
+        )}
+      />
       <DestinationHero destination={destination} />
       <DestinationOverview destination={destination} />
       <TravelInfo destination={destination} />
@@ -81,6 +95,7 @@ export default async function DestinationPage({
         google_maps_embed={destination.mapsEmbed}
         locationAddress={destination.locationAddress}
       />
+      <AEOContent data={destination} />
       <FAQSection content={destination.faqContent} />
     </div>
   )

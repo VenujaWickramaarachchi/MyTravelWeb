@@ -16,6 +16,11 @@ import GallerySection from '@/components/content/Gallery/GallerySection'
 
 import { generateSEO } from '@/lib/seo'
 
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+import AEOContent from '@/components/SEO/AEOContent'
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
 interface ExperiencePageProps {
   params: Promise<{
     slug: string
@@ -57,6 +62,15 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
 
   return (
     <main>
+      <AEOAnswerSchema data={experience} />
+
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Experiences',
+          'experiences',
+          experience.breadcrumbLabel || experience.title,
+        )}
+      />
       <ExperienceHero experience={experience} />
 
       <ExperienceOverview experience={experience} />
@@ -81,6 +95,8 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
       <ExperienceRelatedTours tours={experience.relationships.relatedTours} />
 
       <ExperienceImportantInformation experience={experience} />
+
+      <AEOContent data={experience} />
 
       <ExperienceFAQ experience={experience} />
     </main>

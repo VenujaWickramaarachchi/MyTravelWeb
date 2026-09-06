@@ -17,6 +17,11 @@ import GallerySection from '@/components/content/Gallery/GallerySection'
 
 import { generateSEO } from '@/lib/seo'
 
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+import AEOContent from '@/components/SEO/AEOContent'
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
 interface TravelGuidePageProps {
   params: Promise<{
     slug: string
@@ -60,6 +65,15 @@ export default async function TravelGuidePage({
 
   return (
     <main>
+      <AEOAnswerSchema data={travelGuide} />
+
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Travel Guides',
+          'travel-guides',
+          travelGuide.breadcrumbLabel || travelGuide.title,
+        )}
+      />
       <TravelGuideHero travelGuide={travelGuide} />
 
       <TravelGuideOverview travelGuide={travelGuide} />
@@ -90,6 +104,8 @@ export default async function TravelGuidePage({
       />
 
       <TravelGuideAuthor travelGuide={travelGuide} />
+
+      <AEOContent data={travelGuide} />
 
       <TravelGuideFAQ travelGuide={travelGuide} />
     </main>

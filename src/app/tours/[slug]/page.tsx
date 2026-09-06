@@ -15,6 +15,11 @@ import TourTestimonials from '@/components/Tours/TourTestimonials'
 
 import GallerySection from '@/components/content/Gallery/GallerySection'
 
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+import AEOContent from '@/components/SEO/AEOContent'
+
 import { generateSEO } from '@/lib/seo'
 
 interface TourPageProps {
@@ -58,6 +63,14 @@ export default async function TourPage({ params }: TourPageProps) {
 
   return (
     <main>
+      <AEOAnswerSchema data={tour} />
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Tours',
+          'tours',
+          tour.breadcrumbLabel || tour.title,
+        )}
+      />
       <TourHero tour={tour} />
       <TourQuickDetails tour={tour} />
       <TourOverview tour={tour} />
@@ -70,6 +83,7 @@ export default async function TourPage({ params }: TourPageProps) {
       <TourInclusions tour={tour} />
       <TourInfo tour={tour} />
       <TourTestimonials tour={tour} />
+      <AEOContent data={tour} />
       <TourCTA tour={tour} />
     </main>
   )

@@ -14,6 +14,11 @@ import GallerySection from '@/components/content/Gallery/GallerySection'
 
 import { generateSEO } from '@/lib/seo'
 
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+import AEOContent from '@/components/SEO/AEOContent'
+import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
+import { createBreadcrumbs } from '@/lib/breadcrumbs'
+
 interface AttractionPageProps {
   params: Promise<{
     slug: string
@@ -55,6 +60,15 @@ export default async function AttractionPage({ params }: AttractionPageProps) {
 
   return (
     <main>
+      <AEOAnswerSchema data={attraction} />
+
+      <BreadcrumbSchema
+        items={createBreadcrumbs(
+          'Attractions',
+          'attractions',
+          attraction.breadcrumbLabel || attraction.title,
+        )}
+      />
       <AttractionHero attraction={attraction} />
 
       <AttractionOverview attraction={attraction} />
@@ -79,6 +93,7 @@ export default async function AttractionPage({ params }: AttractionPageProps) {
         images={attraction.galleryImages}
         title='Attraction Gallery'
       />
+      <AEOContent data={attraction} />
 
       <AttractionFAQ attraction={attraction} />
     </main>
