@@ -25,6 +25,8 @@ export interface Itinerary {
   transportation: string
   meals: string
 
+  featuredItinerary: boolean
+
   // Relationships
   relatedTours: number[]
   accommodationSuggestions: number[]

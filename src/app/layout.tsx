@@ -5,6 +5,9 @@ import './globals.css'
 
 import { getSiteSettings } from '@/lib/wordpress'
 
+import Navbar from '@/components/Navbar/Navbar'
+import Footer from '@/components/Footer/Footer'
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -25,8 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
     icons: settings.favicon
       ? {
-        icon: settings.favicon.url,
-      }
+          icon: settings.favicon.url,
+        }
       : undefined,
   }
 }
@@ -34,14 +37,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
   const settings = await getSiteSettings()
 
-
-
   return (
     <html
       lang='en'
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className='min-h-full flex flex-col'>{children}</body>
+      <body className='min-h-full flex flex-col'>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   )
 }

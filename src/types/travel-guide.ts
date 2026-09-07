@@ -25,6 +25,8 @@ export interface TravelGuide {
   relatedTours: number[]
   relatedItineraries: number[]
 
+  featuredTravelGuide: boolean
+
   // Additional Information
   faqContent: string
   authorExpert: string

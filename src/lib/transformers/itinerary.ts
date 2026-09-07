@@ -26,6 +26,8 @@ export function transformItinerary(itinerary: any) {
     transportation: itinerary.acf?.transportation || '',
     meals: itinerary.acf?.meals || '',
 
+    featuredItinerary: itinerary.acf?.featured_itinerary || false,
+
     // Relationships
     relatedTours: itinerary.acf?.related_tours || [],
     accommodationSuggestions: itinerary.acf?.accommodation_suggestions || [],

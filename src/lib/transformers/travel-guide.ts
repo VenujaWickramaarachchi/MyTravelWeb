@@ -74,6 +74,8 @@ export function transformTravelGuide(travelGuide: any) {
 
     relatedItineraries: travelGuide.acf?.related_itineraries || [],
 
+    featuredTravelGuide: travelGuide.acf?.featured_travel_guide || false,
+
     // Additional Information
     faqContent: travelGuide.acf?.faq_content || '',
 
