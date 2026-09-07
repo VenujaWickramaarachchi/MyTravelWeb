@@ -7,8 +7,8 @@ import { generateSEO } from '@/lib/seo'
 
 export async function generateMetadata() {
   return generateSEO({
-    title: 'Frequently Asked Questions | Viora Lanka',
-    description:
+    seoTitle: 'Frequently Asked Questions | Viora Lanka',
+    metaDescription:
       'Find answers to common questions about travelling to Sri Lanka, including the best time to visit, destinations, tours and travel planning.',
     canonicalUrl: 'https://vioralanka.com/faqs',
   })

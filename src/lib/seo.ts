@@ -1,20 +1,10 @@
 import type { Metadata } from 'next'
 
-interface SEOData {
-  title?: string | null
-  description?: string | null
-  canonicalUrl?: string | null
-  noIndex?: boolean
-  ogTitle?: string | null
-  ogDescription?: string | null
-  socialImage?: {
-    url?: string | null
-  } | null
-}
+import type { SEOData } from '@/types/seo'
 
 export function generateSEO(data: SEOData): Metadata {
-  const title = data.title || ''
-  const description = data.description || ''
+  const title = data.seoTitle || ''
+  const description = data.metaDescription || ''
 
   return {
     title,

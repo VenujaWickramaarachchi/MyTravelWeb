@@ -39,8 +39,8 @@ export async function generateMetadata({
   }
 
   return generateSEO({
-    title: attraction.seoTitle || attraction.title,
-    description: attraction.metaDescription,
+    seoTitle: attraction.seoTitle || attraction.title,
+    metaDescription: attraction.metaDescription,
     canonicalUrl: attraction.canonicalUrl,
     noIndex: attraction.noIndex,
     ogTitle: attraction.ogTitle,

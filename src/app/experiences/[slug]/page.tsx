@@ -41,8 +41,8 @@ export async function generateMetadata({
   }
 
   return generateSEO({
-    title: experience.seoTitle || experience.title,
-    description: experience.metaDescription,
+    seoTitle: experience.seoTitle || experience.title,
+    metaDescription: experience.metaDescription,
     canonicalUrl: experience.canonicalUrl,
     noIndex: experience.noIndex,
     ogTitle: experience.ogTitle,

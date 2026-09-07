@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: FAQPageProps) {
   }
 
   return generateSEO({
-    title: faq.seoTitle || faq.title,
-    description: faq.metaDescription,
+    seoTitle: faq.seoTitle || faq.title,
+    metaDescription: faq.metaDescription,
     canonicalUrl: faq.canonicalUrl,
     noIndex: faq.noIndex,
     ogTitle: faq.ogTitle,
