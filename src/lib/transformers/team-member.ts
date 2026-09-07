@@ -23,6 +23,6 @@ export function transformTeamMember(teamMember: any) {
 
     languages: teamMember.acf?.languages || [],
 
-    experienceYears: teamMember.acf?.experience_yearas || '',
+    experienceYears: teamMember.acf?.experience_years || '',
   }
 }

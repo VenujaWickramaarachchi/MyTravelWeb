@@ -39,8 +39,8 @@ export async function generateMetadata({
   }
 
   return generateSEO({
-    title: accommodation.seoTitle || accommodation.title,
-    description: accommodation.seoDescription,
+    seoTitle: accommodation.seoTitle || accommodation.title,
+    metaDescription: accommodation.metaDescription,
     canonicalUrl: `https://vioralanka.com/accommodations/${accommodation.slug}`,
   })
 }

@@ -15,6 +15,6 @@ export function transformTrustAward(trustAward: any) {
     logo: trustAward.acf?.logo || null,
     websiteUrl,
     displayOrder: trustAward.acf?.display_order ?? null,
-    issuingOrganization: trustAward.acf?.issuingorganization || '',
+    issuingOrganization: trustAward.acf?.issuing_organization || '',
   }
 }

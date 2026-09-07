@@ -38,8 +38,8 @@ export async function generateMetadata({
   }
 
   return generateSEO({
-    title: itinerary.seoTitle || itinerary.title,
-    description: itinerary.metaDescription,
+    seoTitle: itinerary.seoTitle || itinerary.title,
+    metaDescription: itinerary.metaDescription,
     canonicalUrl: itinerary.canonicalUrl,
     noIndex: itinerary.noIndex,
     ogTitle: itinerary.ogTitle,

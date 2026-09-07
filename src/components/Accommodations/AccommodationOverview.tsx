@@ -11,7 +11,7 @@ export default function AccommodationOverview({ accommodation }: Props) {
 
       <div
         dangerouslySetInnerHTML={{
-          __html: accommodation.overview,
+          __html: accommodation.description,
         }}
       />
 

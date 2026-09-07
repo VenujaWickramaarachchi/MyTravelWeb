@@ -25,7 +25,7 @@ export interface Accommodation {
   amenities: string[]
   price: string
 
-  overview: string
+  // overview: string
 
   location: string
   address: string
@@ -40,7 +40,7 @@ export interface Accommodation {
 
   // SEO / AEO
   seoTitle: string
-  seoDescription: string
+  metaDescription: string
   seoKeywords: string
   aeoQuestion: string
   aeoAnswer: string

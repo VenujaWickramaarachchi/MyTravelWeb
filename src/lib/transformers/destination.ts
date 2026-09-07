@@ -46,7 +46,7 @@ export function transformDestination(destination: any) {
     recommendedDuration: destination.acf?.recommended_duration || '',
     destinationType: destination.acf?.destination_type || [],
 
-    mainAttractions: destination.acf?.main_attractions || '',
+    mainAttractions: destination.acf?.main_attractions || [],
     thingsToDo: destination.acf?.things_to_do || '',
     travelTips: destination.acf?.travel_tips || '',
     faqContent: destination.acf?.faq_content || '',

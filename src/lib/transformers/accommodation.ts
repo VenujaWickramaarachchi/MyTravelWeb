@@ -49,7 +49,7 @@ export function transformAccommodation(accommodation: any) {
     amenities: accommodation.acf?.amenities || [],
     price: accommodation.acf?.price_range || '',
 
-    overview: accommodation.acf?.destination_overview || '',
+    // overview: accommodation.acf?.destination_overview || '',
 
     location: accommodation.acf?.location || '',
     address: accommodation.acf?.address || '',
@@ -67,7 +67,7 @@ export function transformAccommodation(accommodation: any) {
     email: accommodation.acf?.email || '',
 
     seoTitle: accommodation.acf?.seo_title || '',
-    seoDescription: accommodation.acf?.seo_description || '',
+    metaDescription: accommodation.acf?.seo_description || '',
     seoKeywords: accommodation.acf?.seo_keywords || '',
     aeoQuestion: accommodation.acf?.aeo_question || '',
     aeoAnswer: accommodation.acf?.aeo_answer || '',
