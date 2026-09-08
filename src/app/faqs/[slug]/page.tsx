@@ -5,6 +5,7 @@ import FAQQuestion from '@/components/FAQs/FAQQuestion'
 import FAQAnswer from '@/components/FAQs/FAQAnswer'
 import FAQRelatedContent from '@/components/FAQs/FAQRelatedContent'
 
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
 import { createBreadcrumbs } from '@/lib/breadcrumbs'
 
@@ -47,23 +48,26 @@ export default async function FAQPage({ params }: FAQPageProps) {
     notFound()
   }
 
-  return (
-    <main>
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'FAQs',
-          'faqs',
-          faq.breadcrumbLabel || faq.question || faq.title,
-        )}
-      />
+  const breadcrumbs = createBreadcrumbs(
+    'FAQs',
+    'faqs',
+    faq.breadcrumbLabel || faq.question || faq.title,
+  )
 
+  return (
+    <main className="min-h-screen bg-paper pb-24">
+      <BreadcrumbSchema items={breadcrumbs} />
       <FAQSchema faq={faq} />
 
-      <FAQQuestion faq={faq} />
+      <div className="max-w-4xl mx-auto px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
 
-      <FAQAnswer faq={faq} />
-
-      <FAQRelatedContent faq={faq} />
+      <div className="max-w-4xl mx-auto px-6 py-10 space-y-12">
+        <FAQQuestion faq={faq} />
+        <FAQAnswer faq={faq} />
+        <FAQRelatedContent faq={faq} />
+      </div>
     </main>
   )
 }

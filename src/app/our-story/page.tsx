@@ -1,5 +1,4 @@
-import Link from 'next/link'
-
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 import OurStoryHero from '@/components/OurStory/OurStoryHero'
 import OurStoryIntroduction from '@/components/OurStory/OurStoryIntroduction'
 import OurStoryStory from '@/components/OurStory/OurStoryStory'
@@ -36,19 +35,29 @@ export default async function OurStoryPage() {
 
   if (!ourStory) {
     return (
-      <main>
-        <section>
-          <h1>Our Story</h1>
-          <p>Our Story content is currently unavailable.</p>
+      <main className="min-h-screen bg-paper flex items-center justify-center py-24">
+        <section className="text-center px-6">
+          <h1 className="text-3xl font-serif font-bold text-ink mb-4">Our Story</h1>
+          <p className="text-ink/70">Our Story content is currently unavailable.</p>
         </section>
       </main>
     )
   }
+
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Our Story', href: '/our-story' },
+  ]
+
   return (
-    <main>
+    <main className="min-h-screen bg-paper">
       <AEOAnswerSchema data={ourStory} />
 
       <OurStoryHero data={ourStory} />
+
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
 
       <OurStoryIntroduction content={ourStory.introduction} />
 
@@ -58,20 +67,22 @@ export default async function OurStoryPage() {
         image={ourStory.storyImage}
       />
 
-      <OurStorySection
-        title={ourStory.philosophyTitle}
-        content={ourStory.philosophyContent}
-      />
+      <div className="divide-y divide-ink/8">
+        <OurStorySection
+          title={ourStory.philosophyTitle}
+          content={ourStory.philosophyContent}
+        />
 
-      <OurStorySection
-        title={ourStory.whyChooseUsTitle}
-        content={ourStory.whyChooseUsContent}
-      />
+        <OurStorySection
+          title={ourStory.whyChooseUsTitle}
+          content={ourStory.whyChooseUsContent}
+        />
 
-      <OurStorySection
-        title={ourStory.approachTitle}
-        content={ourStory.approachContent}
-      />
+        <OurStorySection
+          title={ourStory.approachTitle}
+          content={ourStory.approachContent}
+        />
+      </div>
 
       <AEOContent data={ourStory} />
 

@@ -12,8 +12,8 @@ import TourInclusions from '@/components/Tours/TourInclusions'
 import TourInfo from '@/components/Tours/TourInfo'
 import TourCTA from '@/components/Tours/TourCTA'
 import TourTestimonials from '@/components/Tours/TourTestimonials'
-
 import GallerySection from '@/components/content/Gallery/GallerySection'
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
 import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
 import { createBreadcrumbs } from '@/lib/breadcrumbs'
@@ -58,20 +58,33 @@ export default async function TourPage({ params }: TourPageProps) {
   const tour = await getTour(slug)
 
   if (!tour) {
-    return <div>Tour not found</div>
+    return (
+      <main className='max-w-4xl mx-auto px-4 py-24 text-center space-y-4'>
+        <h1 className='font-serif text-3xl sm:text-4xl text-ink'>Tour Not Found</h1>
+        <p className='text-ink/70'>
+          The tour you are looking for is currently unavailable.
+        </p>
+      </main>
+    )
   }
 
+  const breadcrumbItems = createBreadcrumbs(
+    'Tours',
+    'tours',
+    tour.breadcrumbLabel || tour.title,
+  )
+
   return (
-    <main>
+    <main className='pb-20 space-y-4'>
       <AEOAnswerSchema data={tour} />
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'Tours',
-          'tours',
-          tour.breadcrumbLabel || tour.title,
-        )}
-      />
+      <BreadcrumbSchema items={breadcrumbItems} />
+
       <TourHero tour={tour} />
+
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
+
       <TourQuickDetails tour={tour} />
       <TourOverview tour={tour} />
       <TourHighlights tour={tour} />

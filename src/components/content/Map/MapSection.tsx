@@ -4,6 +4,7 @@ interface Props {
   title?: string
   google_maps_embed?: string
   locationAddress?: string
+  className?: string
 }
 
 export default function MapSection({
@@ -11,32 +12,52 @@ export default function MapSection({
   longitude,
   google_maps_embed,
   locationAddress,
-  title = 'Location',
+  title = 'Location & Map',
+  className = '',
 }: Props) {
-  const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&output=embed`
-
-  const mapEmbed = google_maps_embed
+  const mapUrl = `https://www.google.com/maps?q=${latitude || 7.8731},${longitude || 80.7718}&output=embed`
 
   return (
-    <section>
-      <h2>{title}</h2>
+    <section className={`my-16 sm:my-20 ${className}`}>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6'>
+        <header>
+          <p className='text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep mb-2'>
+            Getting There & Orientation
+          </p>
+          <h2 className='font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-ink'>
+            {title}
+          </h2>
+        </header>
 
-      {mapEmbed ? (
-        <div dangerouslySetInnerHTML={{ __html: mapEmbed }} />
-      ) : (
-        <iframe
-          src={mapUrl}
-          width='100%'
-          height='400'
-          style={{
-            border: 0,
-          }}
-          loading='lazy'
-          allowFullScreen
-        />
-      )}
-      <h2 style={{ color: 'green' }}>Location Address</h2>
-      <p>{locationAddress}</p>
+        <div className='rounded overflow-hidden border border-line bg-paper shadow-xs'>
+          {google_maps_embed ? (
+            <div
+              className='w-full aspect-[16/9] sm:aspect-[21/9] min-h-[350px] [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0'
+              dangerouslySetInnerHTML={{ __html: google_maps_embed }}
+            />
+          ) : (
+            <iframe
+              src={mapUrl}
+              className='w-full aspect-[16/9] sm:aspect-[21/9] min-h-[350px] border-0'
+              loading='lazy'
+              allowFullScreen
+              title={title}
+            />
+          )}
+
+          {locationAddress && (
+            <div className='p-4 sm:p-5 border-t border-line bg-ivory/60 flex items-start gap-2.5 text-sm text-ink/80'>
+              <span className='text-base'>📍</span>
+              <div>
+                <strong className='font-semibold text-ink block text-xs uppercase tracking-wider mb-0.5'>
+                  Location Address
+                </strong>
+                <span>{locationAddress}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </section>
   )
 }

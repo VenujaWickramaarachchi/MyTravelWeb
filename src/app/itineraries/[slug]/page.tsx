@@ -10,6 +10,7 @@ import ItineraryDays from '@/components/Itineraries/ItineraryDays'
 import ItineraryAccommodations from '@/components/Itineraries/ItineraryAccommodations'
 import ItineraryRelatedTours from '@/components/Itineraries/ItineraryRelatedTours'
 import ItineraryCTA from '@/components/Itineraries/ItineraryCTA'
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
 import { generateSEO } from '@/lib/seo'
 
@@ -54,40 +55,44 @@ export default async function ItineraryPage({ params }: Props) {
   const itinerary = await getItinerary(slug)
 
   if (!itinerary) {
-    return <div>Itinerary not found</div>
+    return (
+      <main className='max-w-4xl mx-auto px-4 py-24 text-center space-y-4'>
+        <h1 className='font-serif text-3xl sm:text-4xl text-ink'>
+          Itinerary Not Found
+        </h1>
+        <p className='text-ink/70'>
+          The itinerary you are looking for is currently unavailable.
+        </p>
+      </main>
+    )
   }
 
-  return (
-    <main>
-      <AEOAnswerSchema data={itinerary} />
+  const breadcrumbItems = createBreadcrumbs(
+    'Itineraries',
+    'itineraries',
+    itinerary.breadcrumbLabel || itinerary.title,
+  )
 
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'Itineraries',
-          'itineraries',
-          itinerary.breadcrumbLabel || itinerary.title,
-        )}
-      />
+  return (
+    <main className='pb-20 space-y-4'>
+      <AEOAnswerSchema data={itinerary} />
+      <BreadcrumbSchema items={breadcrumbItems} />
+
       <ItineraryHero itinerary={itinerary} />
 
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
+
       <ItineraryQuickDetails itinerary={itinerary} />
-
       <ItineraryOverview itinerary={itinerary} />
-
       <ItineraryRoute itinerary={itinerary} />
-
       <ItineraryDestinations itinerary={itinerary} />
-
       <ItineraryExperiences itinerary={itinerary} />
-
       <ItineraryDays itinerary={itinerary} />
-
       <ItineraryAccommodations itinerary={itinerary} />
-
       <ItineraryRelatedTours itinerary={itinerary} />
-
       <AEOContent data={itinerary} />
-
       <ItineraryCTA itinerary={itinerary} />
     </main>
   )

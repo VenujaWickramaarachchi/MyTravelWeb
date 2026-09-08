@@ -12,8 +12,8 @@ import TravelGuideTours from '@/components/TravelGuides/TravelGuideTours'
 import TravelGuideItineraries from '@/components/TravelGuides/TravelGuideItineraries'
 import TravelGuideAuthor from '@/components/TravelGuides/TravelGuideAuthor'
 import TravelGuideFAQ from '@/components/TravelGuides/TravelGuideFAQ'
-
 import GallerySection from '@/components/content/Gallery/GallerySection'
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
 import { generateSEO } from '@/lib/seo'
 
@@ -63,50 +63,43 @@ export default async function TravelGuidePage({
     notFound()
   }
 
-  return (
-    <main>
-      <AEOAnswerSchema data={travelGuide} />
+  const breadcrumbItems = createBreadcrumbs(
+    'Travel Guides',
+    'travel-guides',
+    travelGuide.breadcrumbLabel || travelGuide.title,
+  )
 
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'Travel Guides',
-          'travel-guides',
-          travelGuide.breadcrumbLabel || travelGuide.title,
-        )}
-      />
+  return (
+    <main className='pb-20 space-y-4'>
+      <AEOAnswerSchema data={travelGuide} />
+      <BreadcrumbSchema items={breadcrumbItems} />
+
       <TravelGuideHero travelGuide={travelGuide} />
 
-      <TravelGuideOverview travelGuide={travelGuide} />
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       <TravelGuideQuickAnswer travelGuide={travelGuide} />
-
+      <TravelGuideOverview travelGuide={travelGuide} />
       <TravelGuideKeyInformation travelGuide={travelGuide} />
-
       <TravelGuideMainContent travelGuide={travelGuide} />
-
       <GallerySection
         images={travelGuide.galleryImages}
         title='Travel Guide Gallery'
       />
-
       <TravelGuideDestinations
         destinations={travelGuide.relationships.relatedDestinations}
       />
-
       <TravelGuideExperiences
         experiences={travelGuide.relationships.relatedExperiences}
       />
-
       <TravelGuideTours tours={travelGuide.relationships.relatedTours} />
-
       <TravelGuideItineraries
         itineraries={travelGuide.relationships.relatedItineraries}
       />
-
       <TravelGuideAuthor travelGuide={travelGuide} />
-
       <AEOContent data={travelGuide} />
-
       <TravelGuideFAQ travelGuide={travelGuide} />
     </main>
   )
