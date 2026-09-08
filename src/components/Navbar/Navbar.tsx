@@ -26,7 +26,11 @@ export default function Navbar() {
           ))}
         </div>
 
-        <Link href='/contact'>Plan Your Trip</Link>
+        <div>
+          <Link href='/search'>Search</Link>
+
+          <Link href='/contact'>Plan Your Trip</Link>
+        </div>
       </nav>
     </header>
   )

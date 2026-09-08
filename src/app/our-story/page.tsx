@@ -1,6 +1,35 @@
 import Link from 'next/link'
 
+import OurStoryHero from '@/components/OurStory/OurStoryHero'
+import OurStoryIntroduction from '@/components/OurStory/OurStoryIntroduction'
+import OurStoryStory from '@/components/OurStory/OurStoryStory'
+import OurStorySection from '@/components/OurStory/OurStorySection'
+import OurStoryCTA from '@/components/OurStory/OurStoryCTA'
+
 import { getOurStory } from '@/lib/api/our-story'
+
+import { generateSEO } from '@/lib/seo'
+
+import AEOContent from '@/components/SEO/AEOContent'
+import AEOAnswerSchema from '@/components/SEO/AEOAnswerSchema'
+
+export async function generateMetadata() {
+  const ourStory = await getOurStory()
+
+  if (!ourStory) {
+    return {}
+  }
+
+  return generateSEO({
+    seoTitle: ourStory.seoTitle || ourStory.title,
+    metaDescription: ourStory.metaDescription,
+    canonicalUrl: ourStory.canonicalUrl,
+    noIndex: ourStory.noIndex,
+    ogTitle: ourStory.ogTitle,
+    ogDescription: ourStory.ogDescription,
+    socialImage: ourStory.socialImage,
+  })
+}
 
 export default async function OurStoryPage() {
   const ourStory = await getOurStory()
@@ -15,119 +44,38 @@ export default async function OurStoryPage() {
       </main>
     )
   }
-
   return (
     <main>
-      {/* Hero */}
-      <section>
-        <div>
-          <p>Viora Lanka</p>
+      <AEOAnswerSchema data={ourStory} />
 
-          <h1>{ourStory.heroTitle}</h1>
+      <OurStoryHero data={ourStory} />
 
-          {ourStory.heroSubtitle ? <p>{ourStory.heroSubtitle}</p> : null}
+      <OurStoryIntroduction content={ourStory.introduction} />
 
-          {ourStory.heroImage?.url ? (
-            <img
-              src={ourStory.heroImage.url}
-              alt={ourStory.heroImage.alt || ourStory.heroTitle}
-            />
-          ) : null}
-        </div>
-      </section>
+      <OurStoryStory
+        title={ourStory.storyTitle}
+        content={ourStory.storyContent}
+        image={ourStory.storyImage}
+      />
 
-      {/* Introduction */}
-      <section>
-        <div>
-          <p>{ourStory.introduction}</p>
-        </div>
-      </section>
+      <OurStorySection
+        title={ourStory.philosophyTitle}
+        content={ourStory.philosophyContent}
+      />
 
-      {/* Our Story */}
-      <section>
-        <div>
-          <div>
-            <h2>{ourStory.storyTitle}</h2>
+      <OurStorySection
+        title={ourStory.whyChooseUsTitle}
+        content={ourStory.whyChooseUsContent}
+      />
 
-            <div>
-              {ourStory.storyContent
-                .split('\n')
-                .filter(Boolean)
-                .map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-            </div>
-          </div>
+      <OurStorySection
+        title={ourStory.approachTitle}
+        content={ourStory.approachContent}
+      />
 
-          {ourStory.storyImage?.url ? (
-            <img
-              src={ourStory.storyImage.url}
-              alt={ourStory.storyImage.alt || ourStory.storyTitle}
-            />
-          ) : null}
-        </div>
-      </section>
+      <AEOContent data={ourStory} />
 
-      {/* Philosophy */}
-      <section>
-        <div>
-          <h2>{ourStory.philosophyTitle}</h2>
-
-          <div>
-            {ourStory.philosophyContent
-              .split('\n')
-              .filter(Boolean)
-              .map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Viora Lanka */}
-      <section>
-        <div>
-          <h2>{ourStory.whyChooseUsTitle}</h2>
-
-          <div>
-            {ourStory.whyChooseUsContent
-              .split('\n')
-              .filter(Boolean)
-              .map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Approach */}
-      <section>
-        <div>
-          <h2>{ourStory.approachTitle}</h2>
-
-          <div>
-            {ourStory.approachContent
-              .split('\n')
-              .filter(Boolean)
-              .map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section>
-        <div>
-          <h2>{ourStory.ctaTitle}</h2>
-
-          {ourStory.ctaDescription ? <p>{ourStory.ctaDescription}</p> : null}
-
-          {ourStory.ctaButtonText && ourStory.ctaButtonUrl ? (
-            <Link href={ourStory.ctaButtonUrl}>{ourStory.ctaButtonText}</Link>
-          ) : null}
-        </div>
-      </section>
+      <OurStoryCTA data={ourStory} />
     </main>
   )
 }
