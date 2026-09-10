@@ -10,3 +10,8 @@ export interface DestinationFilterParams {
     region?: string
     destinationType?: string
 }
+
+export interface ExperienceFilterParams {
+    region?: string
+    experienceType?: string
+}

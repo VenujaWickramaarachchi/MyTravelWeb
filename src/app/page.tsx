@@ -16,7 +16,7 @@ import SectionHeading from '@/components/Shared/SectionHeading'
 import CTA from '@/components/Shared/CTA'
 
 export default async function HomePage() {
-  const [destinations, tours, experiences, itineraries, travelGuides] =
+  const [destinations, toursResult, experiences, itineraries, travelGuides] =
     await Promise.all([
       getDestinations(),
       getTours(),
@@ -24,6 +24,8 @@ export default async function HomePage() {
       getItineraries(),
       getTravelGuides(),
     ])
+
+  const tours = toursResult.tours
 
   return (
     <main className='space-y-20 sm:space-y-28 pb-20'>
