@@ -1,0 +1,103 @@
+import FilterSelect from './FilterSelect'
+
+import {
+    tourDurationOptions,
+    tourStyleOptions,
+    tourPriceOptions,
+} from '@/lib/filters/tour-filter-options'
+
+import type { TaxonomyTerm } from '@/types/taxonomy'
+
+interface TourFiltersProps {
+    region?: string
+    tourType?: string
+    duration?: string
+    tourStyle?: string
+    price?: string
+    regions: TaxonomyTerm[]
+    tourTypes: TaxonomyTerm[]
+}
+
+export default function TourFilters({
+    region,
+    tourType,
+    duration,
+    tourStyle,
+    price,
+    regions,
+    tourTypes,
+}: TourFiltersProps) {
+    const regionOptions = [
+        { label: 'Any Region', value: '' },
+        ...regions.map((region) => ({
+            label: region.name,
+            value: String(region.id),
+        })),
+    ]
+
+    const tourTypeOptions = [
+        { label: 'Any Tour Type', value: '' },
+        ...tourTypes.map((tourType) => ({
+            label: tourType.name,
+            value: String(tourType.id),
+        })),
+    ]
+
+    return (
+        <form
+            action="/tours"
+            method="get"
+            className="border-y border-line py-6"
+        >
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                <FilterSelect
+                    label="Region"
+                    name="region"
+                    value={region}
+                    options={regionOptions}
+                />
+
+                <FilterSelect
+                    label="Tour Type"
+                    name="tourType"
+                    value={tourType}
+                    options={tourTypeOptions}
+                />
+
+                <FilterSelect
+                    label="Duration"
+                    name="duration"
+                    value={duration}
+                    options={tourDurationOptions}
+                />
+
+                <FilterSelect
+                    label="Tour Style"
+                    name="tourStyle"
+                    value={tourStyle}
+                    options={tourStyleOptions}
+                />
+
+                <FilterSelect
+                    label="Price"
+                    name="price"
+                    value={price}
+                    options={tourPriceOptions}
+                />
+            </div>
+
+            <div className="mt-5 flex items-center justify-between gap-4">
+                <p className="text-sm text-ink/60">
+                    Refine your Sri Lanka tour selection.
+                </p>
+
+                <a
+                    href="/tours"
+                    className="text-xs font-semibold uppercase tracking-[0.16em] text-violet hover:text-violet-deep"
+                >
+                    Clear filters
+                </a>
+            </div>
+        </form>
+    )
+}

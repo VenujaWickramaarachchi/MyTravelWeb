@@ -15,6 +15,7 @@ const navigation = [
   { label: 'Tours', href: '/tours' },
   { label: 'Destinations', href: '/destinations' },
   { label: 'Experiences', href: '/experiences' },
+  { label: 'Attractions', href: '/attractions' },
   { label: 'Travel Guides', href: '/travel-guides' },
   { label: 'About', href: '/our-story' },
   { label: 'Contact', href: '/contact' },
@@ -49,11 +50,10 @@ export default function Navbar({ settings }: NavbarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-2 text-[14px] font-medium transition-colors duration-150 ${
-                    isActive
+                  className={`px-3 py-2 text-[14px] font-medium transition-colors duration-150 ${isActive
                       ? 'text-violet font-semibold border-b-2 border-gold pb-1.5'
                       : 'text-ink/80 hover:text-violet'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </Link>
@@ -168,11 +168,10 @@ export default function Navbar({ settings }: NavbarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2.5 rounded text-base font-medium ${
-                  isActive
+                className={`block px-3 py-2.5 rounded text-base font-medium ${isActive
                     ? 'bg-ivory text-violet font-semibold'
                     : 'text-ink hover:bg-ivory'
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>

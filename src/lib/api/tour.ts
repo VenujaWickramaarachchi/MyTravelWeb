@@ -15,10 +15,55 @@ import { Testimonial } from '@/types/testimonials'
 import { TourItineraryDay } from '@/types/pages/tour-itinerary-day'
 import { TourPage } from '@/types/pages/tour-page'
 
-export async function getTours() {
-  const tours = await fetchAPI('tour?_embed')
 
-  return tours.map(transformTour)
+export interface GetToursParams {
+  page?: number
+  perPage?: number
+  region?: string
+  tourType?: string
+}
+
+export interface PaginatedTours {
+  tours: ReturnType<typeof transformTour>[]
+  total: number
+  totalPages: number
+  currentPage: number
+
+}export async function getTours({
+  page = 1,
+  perPage = 12,
+  region,
+  tourType,
+}: GetToursParams = {}): Promise<PaginatedTours> {
+  const params = new URLSearchParams({
+    _embed: '',
+    page: String(page),
+    per_page: String(perPage),
+  })
+
+  if (region) {
+    params.set('region', region)
+  }
+
+  if (tourType) {
+    params.set('tour-type', tourType)
+  }
+
+  const response = await fetchAPI(
+    `tour?${params.toString()}`,
+    {
+      returnResponse: true,
+    },
+  )
+
+  return {
+    tours: response.data.map(transformTour),
+    total: Number(response.headers.get('X-WP-Total') || 0),
+    totalPages: Number(
+      response.headers.get('X-WP-TotalPages') || 0,
+    ),
+    currentPage: page,
+  }
 }
 
 export async function getTour(slug: string): Promise<TourPage | null> {
@@ -79,8 +124,8 @@ export async function getTour(slug: string): Promise<TourPage | null> {
 
       itineraryId
         ? fetchByIds('itinerary', [itineraryId]).then((items) =>
-            items.length > 0 ? transformItinerary(items[0]) : null,
-          )
+          items.length > 0 ? transformItinerary(items[0]) : null,
+        )
         : Promise.resolve(null),
 
       fetchByIds('itinerary-days', itineraryDayIds).then(async (items) => {
