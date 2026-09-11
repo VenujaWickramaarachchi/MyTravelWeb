@@ -1,40 +1,84 @@
 import { getAttractions } from '@/lib/api/attraction'
-import EntityGrid from '@/components/entities/EntityGrid'
-import AttractionCard from '@/components/entities/Attraction/AttractionCard'
+import {
+  getAttractionTypes,
+  getRegions,
+} from '@/lib/api/taxonomy'
 
-export default async function AttractionsPage() {
-  const attractions = await getAttractions()
+import AttractionFilters from '@/components/entities/Attraction/AttractionFilters'
+import AttractionResults from '@/components/entities/Attraction/AttractionResults'
+
+import { filterAttractions } from '@/lib/filters/attraction-filters'
+
+import type { AttractionFilterParams } from '@/types/filter-types'
+
+interface AttractionsPageProps {
+  searchParams: Promise<AttractionFilterParams>
+}
+
+export default async function AttractionsPage({
+  searchParams,
+}: AttractionsPageProps) {
+  const [
+    regionsResult,
+    attractionTypesResult,
+    attractions,
+  ] = await Promise.all([
+    getRegions().catch(() => []),
+    getAttractionTypes().catch(() => []),
+    getAttractions(),
+  ])
+
+  const filters = await searchParams
+
+  const filteredAttractions = filterAttractions(
+    attractions,
+    filters,
+  )
+
+  const perPage = 12
+
+  const initialAttractions = filteredAttractions.slice(
+    0,
+    perPage,
+  )
+
+  const total = filteredAttractions.length
+
+  const totalPages = Math.ceil(
+    total / perPage,
+  )
 
   return (
-    <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12'>
-      <header className='max-w-3xl space-y-3'>
-        <p className='text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep'>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+      <header className="max-w-3xl space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep">
           Icons & Natural Wonders
         </p>
-        <h1 className='font-serif text-4xl sm:text-5xl font-normal text-ink tracking-tight'>
+
+        <h1 className="font-serif text-4xl sm:text-5xl font-normal text-ink tracking-tight">
           Attractions in Sri Lanka
         </h1>
-        <p className='text-base sm:text-lg text-ink/75 leading-relaxed pt-2'>
+
+        <p className="text-base sm:text-lg text-ink/75 leading-relaxed pt-2">
           From ancient sky-fortresses and sacred cave temples to hidden mountain
           waterfalls and golden coastal promontories, discover Sri Lanka’s most
           celebrated sights.
         </p>
       </header>
 
-      <section>
-        {attractions.length === 0 ? (
-          <div className='p-12 text-center rounded border border-line bg-ivory/50 space-y-2'>
-            <h2 className='font-serif text-xl font-medium text-ink'>No attractions currently available</h2>
-            <p className='text-sm text-ink/70'>We are updating our guide to Sri Lankan attractions. Please check back soon.</p>
-          </div>
-        ) : (
-          <EntityGrid columns={3}>
-            {attractions.map((attraction: any) => (
-              <AttractionCard key={attraction.id} attraction={attraction} />
-            ))}
-          </EntityGrid>
-        )}
-      </section>
+      <AttractionFilters
+        region={filters.region}
+        attractionType={filters.attractionType}
+        regions={regionsResult}
+        attractionTypes={attractionTypesResult}
+      />
+
+      <AttractionResults
+        initialAttractions={initialAttractions}
+        initialTotal={total}
+        initialTotalPages={totalPages}
+        filters={filters}
+      />
     </main>
   )
 }

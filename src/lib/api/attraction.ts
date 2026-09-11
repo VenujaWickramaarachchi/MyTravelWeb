@@ -10,7 +10,9 @@ import { Attraction } from '@/types/attraction'
 import { AttractionPage } from '@/types/pages/attraction-page'
 
 export async function getAttractions(): Promise<Attraction[]> {
-  const attractions = await fetchAPI('attraction?_embed')
+  const attractions = await fetchAPI(
+    'attraction?per_page=100&_embed',
+  )
 
   return attractions.map(transformAttraction)
 }
@@ -45,29 +47,29 @@ export async function getAttraction(
   // Destination
   const destination = attractionData.destination
     ? await fetchByIds('destination', [attractionData.destination]).then(
-        (items) => (items.length > 0 ? transformDestination(items[0]) : null),
-      )
+      (items) => (items.length > 0 ? transformDestination(items[0]) : null),
+    )
     : null
 
   // Related Experiences
   const relatedExperiences = attractionData.relatedExperiences.length
     ? await fetchByIds('experience', attractionData.relatedExperiences).then(
-        (items) => items.map(transformExperience),
-      )
+      (items) => items.map(transformExperience),
+    )
     : []
 
   // Nearby Attractions
   const nearbyAttractions = attractionData.nearbyAttractions.length
     ? await fetchByIds('attraction', attractionData.nearbyAttractions).then(
-        (items) => items.map(transformAttraction),
-      )
+      (items) => items.map(transformAttraction),
+    )
     : []
 
   // Related Tours
   const relatedTours = attractionData.relatedTours.length
     ? await fetchByIds('tour', attractionData.relatedTours).then((items) =>
-        items.map(transformTour),
-      )
+      items.map(transformTour),
+    )
     : []
 
   return {

@@ -2,6 +2,11 @@ export interface FAQ {
   id: number
   title: string
   slug: string
+
+  // Taxonomy
+  faqCategory: number[]
+
+
   question: string
   answer: string
   relatedTour: number | null

@@ -3,6 +3,10 @@ export interface Itinerary {
   title: string
   slug: string
 
+  // Taxonomies
+
+  itineraryLength: number[]
+
   // Content
   shortDescription: string
   heroTitle: string

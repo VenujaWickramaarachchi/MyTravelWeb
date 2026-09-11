@@ -15,3 +15,25 @@ export interface ExperienceFilterParams {
     region?: string
     experienceType?: string
 }
+
+export interface AttractionFilterParams {
+    region?: string
+    attractionType?: string
+}
+export interface AccommodationFilterParams {
+    region?: string
+    accommodationType?: string
+}
+
+export interface ItineraryFilterParams {
+    itineraryLength?: string
+}
+
+export interface TravelGuideFilterParams {
+    travelGuideTopic?: string
+}
+
+export interface FAQFilterParams {
+    faqCategory?: string
+}
+

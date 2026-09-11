@@ -4,6 +4,9 @@ export function transformItinerary(itinerary: any) {
     title: itinerary.title?.rendered || '',
     slug: itinerary.slug || '',
 
+    // Taxonomies
+    itineraryLength: itinerary['itinerary-length'] || [],
+
     // Content
     shortDescription: itinerary.acf?.short_description || '',
     heroTitle: itinerary.acf?.hero_title || '',
