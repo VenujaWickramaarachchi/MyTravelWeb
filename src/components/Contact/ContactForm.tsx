@@ -2,6 +2,12 @@
 
 import { useState } from 'react'
 
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[]
+  }
+}
+
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
@@ -39,8 +45,15 @@ export default function ContactForm() {
       if (!response.ok) {
         throw new Error('Failed to send enquiry')
       }
-
       setSubmitted(true)
+
+      window.dataLayer = window.dataLayer || []
+
+      window.dataLayer.push({
+        event: 'generate_lead',
+        form_name: 'travel_enquiry',
+      })
+
       form.reset()
     } catch (error) {
       console.error(error)
