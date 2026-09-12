@@ -4,8 +4,8 @@ export interface TourFilterParams {
     duration?: string
     tourStyle?: string
     price?: string
+    sort?: string
 }
-
 export interface DestinationFilterParams {
     region?: string
     destinationType?: string
@@ -27,6 +27,7 @@ export interface AccommodationFilterParams {
 
 export interface ItineraryFilterParams {
     itineraryLength?: string
+
 }
 
 export interface TravelGuideFilterParams {

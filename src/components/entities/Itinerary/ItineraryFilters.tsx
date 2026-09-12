@@ -23,6 +23,8 @@ export default function ItineraryFilters({
         })),
     ]
 
+
+
     return (
         <form
             action="/itineraries"
@@ -35,6 +37,7 @@ export default function ItineraryFilters({
                 value={filters.itineraryLength}
                 options={itineraryLengthOptions}
             />
+
 
             <div className="flex items-end">
                 <a

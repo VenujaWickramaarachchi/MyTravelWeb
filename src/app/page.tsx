@@ -15,17 +15,42 @@ import EntityCard from '@/components/entities/EntityCard'
 import SectionHeading from '@/components/Shared/SectionHeading'
 import CTA from '@/components/Shared/CTA'
 
+import type { Destination } from '@/types/destination'
+
 export default async function HomePage() {
   const [destinations, toursResult, experiences, itineraries, travelGuides] =
     await Promise.all([
       getDestinations(),
-      getTours(),
+      getTours({
+        page: 1,
+        perPage: 100,
+      }),
       getExperiences(),
       getItineraries(),
       getTravelGuides(),
     ])
 
   const tours = toursResult.tours
+
+  const featuredDestinations = destinations
+    .filter((destination: Destination) => destination.featuredDestination)
+    .slice(0, 6)
+
+  const featuredTours = tours
+    .filter((tour) => tour.featuredTour)
+    .slice(0, 6)
+
+  const featuredExperiences = experiences
+    .filter((experience) => experience.featuredExperience)
+    .slice(0, 6)
+
+  const featuredItineraries = itineraries
+    .filter((itinerary) => itinerary.featuredItinerary)
+    .slice(0, 6)
+
+  const featuredTravelGuides = travelGuides
+    .filter((guide) => guide.featuredTravelGuide)
+    .slice(0, 6)
 
   return (
     <main className='space-y-20 sm:space-y-28 pb-20'>
@@ -118,19 +143,12 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {destinations.length > 0 ? (
+        {featuredDestinations.length > 0 && (
           <EntityGrid columns={3}>
-            {destinations
-              .filter((destination: any) => destination.featuredDestination)
-              .slice(0, 6)
-              .map((destination: any) => (
-                <DestinationCard key={destination.id} destination={destination} />
-              ))}
+            {featuredDestinations.map((destination: Destination) => (
+              <DestinationCard key={destination.id} destination={destination} />
+            ))}
           </EntityGrid>
-        ) : (
-          <div className='p-8 rounded border border-line bg-paper text-center text-ink/70'>
-            <p>No featured destinations available.</p>
-          </div>
         )}
 
         <div className='mt-8 text-center md:hidden'>
@@ -163,19 +181,12 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {tours.length > 0 ? (
+        {featuredTours.length > 0 && (
           <EntityGrid columns={3}>
-            {tours
-              .filter((tour: any) => tour.featuredTour)
-              .slice(0, 6)
-              .map((tour: any) => (
-                <TourCard key={tour.id} tour={tour} />
-              ))}
+            {featuredTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} />
+            ))}
           </EntityGrid>
-        ) : (
-          <div className='p-8 rounded border border-line bg-paper text-center text-ink/70'>
-            <p>No featured tours available.</p>
-          </div>
         )}
 
         <div className='mt-8 text-center md:hidden'>
@@ -209,19 +220,12 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {experiences.length > 0 ? (
+          {featuredExperiences.length > 0 && (
             <EntityGrid columns={3}>
-              {experiences
-                .filter((experience: any) => experience.featuredExperience)
-                .slice(0, 6)
-                .map((experience: any) => (
-                  <ExperienceCard key={experience.id} experience={experience} />
-                ))}
+              {featuredExperiences.map((experience) => (
+                <ExperienceCard key={experience.id} experience={experience} />
+              ))}
             </EntityGrid>
-          ) : (
-            <div className='p-8 rounded border border-line bg-paper text-center text-ink/70'>
-              <p>No featured experiences available.</p>
-            </div>
           )}
 
           <div className='mt-8 text-center md:hidden'>
@@ -255,19 +259,12 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {itineraries.length > 0 ? (
+        {featuredItineraries.length > 0 && (
           <EntityGrid columns={3}>
-            {itineraries
-              .filter((itinerary: any) => itinerary.featuredItinerary)
-              .slice(0, 6)
-              .map((itinerary: any) => (
-                <ItineraryCard key={itinerary.id} itinerary={itinerary} />
-              ))}
+            {featuredItineraries.map((itinerary) => (
+              <ItineraryCard key={itinerary.id} itinerary={itinerary} />
+            ))}
           </EntityGrid>
-        ) : (
-          <div className='p-8 rounded border border-line bg-paper text-center text-ink/70'>
-            <p>No featured itineraries available.</p>
-          </div>
         )}
 
         <div className='mt-8 text-center md:hidden'>
@@ -300,29 +297,21 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {travelGuides.length > 0 ? (
+        {featuredTravelGuides.length > 0 && (
           <EntityGrid columns={3}>
-            {travelGuides
-              .filter((guide: any) => guide.featuredTravelGuide)
-              .slice(0, 6)
-              .map((guide: any) => (
-                <EntityCard
-                  key={guide.id}
-                  title={guide.title}
-                  slug={guide.slug}
-                  href={`/travel-guides/${guide.slug}`}
-                  image={guide.heroImage}
-                  description={guide.shortDescription}
-                  eyebrow='Travel Guide'
-                />
-              ))}
+            {featuredTravelGuides.map((guide) => (
+              <EntityCard
+                key={guide.id}
+                title={guide.title}
+                slug={guide.slug}
+                href={`/travel-guides/${guide.slug}`}
+                image={guide.heroImage}
+                description={guide.shortDescription}
+                eyebrow='Travel Guide'
+              />
+            ))}
           </EntityGrid>
-        ) : (
-          <div className='p-8 rounded border border-line bg-paper text-center text-ink/70'>
-            <p>No featured travel guides available.</p>
-          </div>
         )}
-
         <div className='mt-8 text-center md:hidden'>
           <Link
             href='/travel-guides'

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { searchContent } from '@/lib/wordpress'
-import SearchResultCard from '@/components/Search/SearchResultCard'
+
+import SearchResults from '@/components/Search/SearchResults'
 import SearchForm from '@/components/Search/SearchForm'
 import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
@@ -14,8 +15,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
 
   const query = q?.trim() || ''
-  const results = query ? await searchContent(query) : []
+  const results = query ? await searchContent(query, 20) : []
 
+  const initialResults = results.slice(0, 12)
+  const total = results.length
+  const totalPages = Math.ceil(total / 12)
   const breadcrumbs = [
     { label: 'Home', href: '/' },
     { label: 'Search', href: '/search' },
@@ -62,9 +66,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 Results for &ldquo;<span className="text-violet">{query}</span>&rdquo;
               </h2>
             </div>
-            <span className="text-sm font-semibold text-ink/70 px-4 py-1.5 rounded-full bg-white border border-ink/8 self-start sm:self-auto">
-              {results.length} {results.length === 1 ? 'item' : 'items'} found
-            </span>
+            <div className="flex items-center gap-4 self-start sm:self-auto">
+              <span className="text-sm font-semibold text-ink/70 px-4 py-1.5 rounded-full bg-white border border-ink/8">
+                {results.length === 1
+                  ? '1 result found'
+                  : `${results.length} results found`}
+              </span>
+
+              <Link
+                href="/search"
+                className="text-sm font-medium text-ink/60 hover:text-violet underline underline-offset-4 transition-colors"
+              >
+                Clear Search
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="text-center py-12 max-w-xl mx-auto space-y-6">
@@ -86,14 +101,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         )}
 
         {results.length > 0 && (
-          <div className="space-y-6">
-            {results.map((result) => (
-              <SearchResultCard
-                key={`${result.type}-${result.id}`}
-                result={result}
-              />
-            ))}
-          </div>
+          <SearchResults
+            initialResults={initialResults}
+            initialTotal={total}
+            initialTotalPages={totalPages}
+            query={query}
+          />
         )}
 
         {query && results.length === 0 && (
@@ -105,7 +118,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               No results found for &ldquo;{query}&rdquo;
             </h3>
             <p className="text-ink/70 leading-relaxed text-sm">
-              We couldn&apos;t find matching tours or destinations for your search. Try checking your spelling, using broader terms, or explore our top suggestions:
+              We couldn&apos;t find anything matching your search. Try checking your spelling,
+              using a broader term, or explore one of our popular searches below.
             </p>
             <div className="flex flex-wrap gap-2 justify-center pt-2">
               {suggestedSearches.map((term) => (

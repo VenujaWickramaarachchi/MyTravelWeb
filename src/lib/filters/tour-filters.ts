@@ -116,10 +116,37 @@ export function filterTours(
     })
 
     return filteredTours.sort((a, b) => {
-        if (a.featuredTour === b.featuredTour) {
-            return 0
-        }
+        switch (filters.sort) {
+            case 'price-asc':
+                return (
+                    (a.priceFrom ?? Number.MAX_SAFE_INTEGER) -
+                    (b.priceFrom ?? Number.MAX_SAFE_INTEGER)
+                )
 
-        return a.featuredTour ? -1 : 1
+            case 'price-desc':
+                return (
+                    (b.priceFrom ?? -1) -
+                    (a.priceFrom ?? -1)
+                )
+
+            case 'duration-asc':
+                return (
+                    (a.durationDays ?? Number.MAX_SAFE_INTEGER) -
+                    (b.durationDays ?? Number.MAX_SAFE_INTEGER)
+                )
+
+            case 'duration-desc':
+                return (
+                    (b.durationDays ?? -1) -
+                    (a.durationDays ?? -1)
+                )
+
+            default:
+                if (a.featuredTour === b.featuredTour) {
+                    return 0
+                }
+
+                return a.featuredTour ? -1 : 1
+        }
     })
 }

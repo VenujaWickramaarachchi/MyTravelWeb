@@ -4,6 +4,7 @@ interface Props {
 
 export default function SearchForm({ initialQuery = '' }: Props) {
   return (
+
     <form action="/search" method="get" className="relative max-w-3xl mx-auto">
       <label htmlFor="search" className="sr-only">
         Search Sri Lanka
@@ -21,6 +22,9 @@ export default function SearchForm({ initialQuery = '' }: Props) {
           name="q"
           type="search"
           defaultValue={initialQuery}
+          minLength={2}
+          required
+          autoComplete="off"
           placeholder="Search tours, destinations, tea estates, safaris..."
           className="w-full bg-transparent px-2 py-3 text-ink text-base md:text-lg placeholder:text-ink/40 focus:outline-none"
         />
@@ -32,6 +36,9 @@ export default function SearchForm({ initialQuery = '' }: Props) {
           Search
         </button>
       </div>
+      <p className="mt-3 text-xs text-ivory/60">
+        Try searching by destination, experience, tour, or travel topic.
+      </p>
     </form>
   )
 }

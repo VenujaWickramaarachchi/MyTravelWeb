@@ -14,6 +14,7 @@ interface TourFiltersProps {
     duration?: string
     tourStyle?: string
     price?: string
+    sort?: string
     regions: TaxonomyTerm[]
     tourTypes: TaxonomyTerm[]
 }
@@ -24,6 +25,7 @@ export default function TourFilters({
     duration,
     tourStyle,
     price,
+    sort,
     regions,
     tourTypes,
 }: TourFiltersProps) {
@@ -43,13 +45,21 @@ export default function TourFilters({
         })),
     ]
 
+    const tourSortOptions = [
+        { label: 'Featured First', value: '' },
+        { label: 'Price: Low to High', value: 'price-asc' },
+        { label: 'Price: High to Low', value: 'price-desc' },
+        { label: 'Duration: Shortest First', value: 'duration-asc' },
+        { label: 'Duration: Longest First', value: 'duration-desc' },
+    ]
+
     return (
         <form
             action="/tours"
             method="get"
             className="border-y border-line py-6"
         >
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
                 <FilterSelect
                     label="Region"
                     name="region"
@@ -83,6 +93,12 @@ export default function TourFilters({
                     name="price"
                     value={price}
                     options={tourPriceOptions}
+                />
+                <FilterSelect
+                    label="Sort"
+                    name="sort"
+                    value={sort}
+                    options={tourSortOptions}
                 />
             </div>
 
