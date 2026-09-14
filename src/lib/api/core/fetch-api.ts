@@ -20,7 +20,6 @@ export async function fetchAPI(
   if (!res.ok) {
     throw new Error(`Failed fetching ${endpoint}`)
   }
-
   const data = await res.json()
 
   if (options.returnResponse) {

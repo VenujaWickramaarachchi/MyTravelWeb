@@ -23,6 +23,20 @@ function normalizeImage(image: any): MediaImage | null {
   }
 }
 
+function getPostObjectIds(value: any): number[] {
+  if (!value) {
+    return []
+  }
+
+  const items = Array.isArray(value) ? value : [value]
+
+  return items
+    .map((item: any) =>
+      typeof item === 'number' ? item : (item?.ID ?? item?.id ?? null),
+    )
+    .filter((id: number | null): id is number => id !== null)
+}
+
 export function transformSiteSettings(settings: any) {
   return {
     siteLogo: normalizeImage(settings.acf?.site_logo),
@@ -80,5 +94,8 @@ export function transformSiteSettings(settings: any) {
     popularSearch7: settings.acf?.popular_search_7 || '',
     popularSearch8: settings.acf?.popular_search_8 || '',
 
+    homepageHeroDestinations: getPostObjectIds(
+      settings.acf?.homepage_hero_destinations,
+    ),
   }
 }

@@ -26,9 +26,17 @@ const navigation = [
 export default function Navbar({ settings }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const isHome = pathname === '/'
+  const isTransparent = isHome && !mobileMenuOpen
 
   return (
-    <header className='sticky top-0 z-50 bg-paper/95 backdrop-blur-md border-b border-line'>
+    <header
+      className={`z-50 transition-colors duration-300 ${
+        isTransparent
+          ? 'absolute top-0 inset-x-0 bg-transparent border-b border-white/10 text-ivory'
+          : 'sticky top-0 bg-paper/95 backdrop-blur-md border-b border-line text-ink'
+      }`}
+    >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-20'>
           {/* Logo */}
@@ -37,7 +45,7 @@ export default function Navbar({ settings }: NavbarProps) {
             className='focus:outline-none focus-visible:ring-2 focus-visible:ring-violet'
             aria-label='Viora Lanka Home'
           >
-            <BrandMark logo={settings?.siteLogo} />
+            <BrandMark logo={settings?.siteLogo} light={isTransparent} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -52,10 +60,15 @@ export default function Navbar({ settings }: NavbarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-2 text-[14px] font-medium transition-colors duration-150 ${isActive
-                    ? 'text-violet font-semibold border-b-2 border-gold pb-1.5'
-                    : 'text-ink/80 hover:text-violet'
-                    }`}
+                  className={`px-3 py-2 text-[14px] font-medium transition-colors duration-150 ${
+                    isActive
+                      ? isTransparent
+                        ? 'text-gold font-semibold border-b-2 border-gold pb-1.5'
+                        : 'text-violet font-semibold border-b-2 border-gold pb-1.5'
+                      : isTransparent
+                        ? 'text-ivory/85 hover:text-ivory'
+                        : 'text-ink/80 hover:text-violet'
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -67,7 +80,11 @@ export default function Navbar({ settings }: NavbarProps) {
           <div className='hidden md:flex items-center space-x-4'>
             <Link
               href='/search'
-              className='p-2 text-ink/70 hover:text-violet transition-colors'
+              className={`p-2 transition-colors ${
+                isTransparent
+                  ? 'text-ivory/80 hover:text-ivory'
+                  : 'text-ink/70 hover:text-violet'
+              }`}
               aria-label='Search'
             >
               <svg
@@ -87,7 +104,11 @@ export default function Navbar({ settings }: NavbarProps) {
 
             <Link
               href='/contact'
-              className='inline-flex items-center px-4 py-2 text-sm font-medium text-ivory bg-violet hover:bg-violet-deep rounded transition-colors duration-150 border border-violet/20 shadow-xs'
+              className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded transition-colors duration-150 shadow-xs ${
+                isTransparent
+                  ? 'bg-gold hover:bg-gold-deep text-ink font-semibold'
+                  : 'text-ivory bg-violet hover:bg-violet-deep border border-violet/20'
+              }`}
             >
               Plan Your Trip
             </Link>
@@ -97,7 +118,11 @@ export default function Navbar({ settings }: NavbarProps) {
           <div className='flex items-center space-x-2 md:hidden'>
             <Link
               href='/search'
-              className='p-2 text-ink/70 hover:text-violet'
+              className={`p-2 transition-colors ${
+                isTransparent
+                  ? 'text-ivory/80 hover:text-ivory'
+                  : 'text-ink/70 hover:text-violet'
+              }`}
               aria-label='Search'
             >
               <svg
@@ -118,7 +143,11 @@ export default function Navbar({ settings }: NavbarProps) {
             <button
               type='button'
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className='p-2 text-ink hover:text-violet focus:outline-none'
+              className={`p-2 focus:outline-none ${
+                isTransparent
+                  ? 'text-ivory hover:text-gold'
+                  : 'text-ink hover:text-violet'
+              }`}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
             >

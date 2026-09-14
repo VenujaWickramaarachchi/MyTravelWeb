@@ -9,7 +9,7 @@ import { getTestimonials } from '@/lib/api/testimonials'
 import { getPartners } from '@/lib/api/partner'
 import { getTrustAwards } from '@/lib/api/trust-award'
 import { getTeamMembers } from '@/lib/api/team-member'
-import { getSiteSettings } from '@/lib/wordpress'
+import { getSiteSettings, getHomepageHeroDestinations } from '@/lib/wordpress'
 
 
 import HomeTeam from '@/components/Home/HomeTeam'
@@ -24,8 +24,10 @@ import EntityCard from '@/components/entities/EntityCard'
 import SectionHeading from '@/components/Shared/SectionHeading'
 import CTA from '@/components/Shared/CTA'
 import HomeTestimonials from '@/components/Home/HomeTestimonials'
+import HomeHero from '@/components/Hero/HomeHero'
 
 import type { Destination } from '@/types/destination'
+import type { HeroItem } from '@/types/hero'
 
 export default async function HomePage() {
   const [
@@ -77,76 +79,96 @@ export default async function HomePage() {
     .filter((guide) => guide.featuredTravelGuide)
     .slice(0, 6)
 
+  // 1. Resolve manually selected hero destinations from Site Settings
+  const selectedHeroIds = siteSettings?.homepageHeroDestinations || []
+  const selectedDestinations =
+    selectedHeroIds.length > 0
+      ? await getHomepageHeroDestinations(selectedHeroIds)
+      : []
+
+  console.log(
+    'HERO ITEMS:',
+    selectedDestinations.map((item) => ({
+      id: item.id,
+      title: item.title,
+      type: item.type,
+      heroImage: item.heroImage?.url,
+      galleryImage: item.galleryImages?.[0]?.url,
+    })),
+  )
+
+  const validSelectedHeroItems = selectedHeroIds.length > 0
+    ? selectedDestinations.filter(
+      (item) =>
+        Boolean(
+          item.heroImage?.url ||
+          item.galleryImages?.[0]?.url,
+        ),
+    )
+    : []
+
+  let heroDestinations: HeroItem[] = []
+
+  if (validSelectedHeroItems.length > 0) {
+    // A. Use manually configured hero items in exact CMS order.
+    heroDestinations = validSelectedHeroItems.slice(0, 6)
+  } else {
+    // B. Fallback remains Destination-only.
+    const featuredWithImages = destinations
+      .filter(
+        (destination: Destination) =>
+          destination.featuredDestination &&
+          Boolean(
+            destination.heroImage?.url ||
+            destination.galleryImages?.[0]?.url,
+          ),
+      )
+      .slice(0, 6)
+
+    if (featuredWithImages.length > 0) {
+      heroDestinations = featuredWithImages.map((destination: Destination) => ({
+        id: destination.id,
+        title: destination.title,
+        slug: destination.slug,
+        heroTitle: destination.heroTitle || destination.title,
+        heroSubTitle:
+          destination.heroSubTitle || destination.description || '',
+        heroImage: destination.heroImage || null,
+        galleryImages: destination.galleryImages || [],
+        location: destination.location || '',
+        type: 'destination',
+      }))
+    } else {
+      heroDestinations = destinations
+        .filter((destination: Destination) =>
+          Boolean(
+            destination.heroImage?.url ||
+            destination.galleryImages?.[0]?.url,
+          ),
+        )
+        .slice(0, 6)
+        .map((destination: Destination) => ({
+          id: destination.id,
+          title: destination.title,
+          slug: destination.slug,
+          heroTitle: destination.heroTitle || destination.title,
+          heroSubTitle:
+            destination.heroSubTitle || destination.description || '',
+          heroImage: destination.heroImage || null,
+          galleryImages: destination.galleryImages || [],
+          location: destination.location || '',
+          type: 'destination',
+        }))
+    }
+  }
+
+
+
+
   return (
     <main className='space-y-20 sm:space-y-28 pb-20'>
-      {/* Hero Section */}
-      <section className='relative bg-violet-deep text-ivory overflow-hidden py-24 sm:py-32 lg:py-36 border-b border-white/10'>
-        {/* Subtle background glow */}
-        <div
-          className='absolute inset-0 opacity-20 pointer-events-none'
-          style={{
-            backgroundImage:
-              'radial-gradient(ellipse at top center, #8B5FBF 0%, transparent 70%)',
-          }}
-          aria-hidden='true'
-        />
-
-        <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <div className='max-w-3.5xl mx-auto space-y-6'>
-            <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs tracking-[0.2em] uppercase font-semibold text-gold'>
-              <span>Ayubowan</span>
-              <span className='text-ivory/60'>•</span>
-              <span>Sri Lanka Tailor-Made</span>
-            </div>
-
-            <h1 className='font-serif text-4xl sm:text-5xl lg:text-6.5xl font-normal leading-[1.12] tracking-tight text-ivory'>
-              Discover the Soul & Splendour of Sri Lanka
-            </h1>
-
-            <p className='text-lg sm:text-xl text-lilac leading-relaxed max-w-2xl mx-auto font-light'>
-              Experience an island of ancient kingdoms, misty tea highlands, wild
-              leopard sanctuaries, and tranquil tropical shores through thoughtfully
-              curated private journeys.
-            </p>
-
-            <div className='pt-4 flex flex-col sm:flex-row items-center justify-center gap-4'>
-              <Link
-                href='/tours'
-                className='w-full sm:w-auto px-8 py-3.5 text-base font-semibold text-ink bg-gold hover:bg-gold-deep rounded transition-colors duration-150 shadow-md text-center'
-              >
-                Explore Handcrafted Tours
-              </Link>
-
-              <Link
-                href='/destinations'
-                className='w-full sm:w-auto px-8 py-3.5 text-base font-medium text-ivory border border-white/25 hover:border-gold hover:text-gold rounded transition-colors duration-150 text-center'
-              >
-                Discover Destinations
-              </Link>
-            </div>
-          </div>
-
-          {/* Key island attributes bar */}
-          <div className='mt-16 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 text-left max-w-4xl mx-auto'>
-            <div>
-              <span className='block text-gold text-lg font-serif font-medium'>8 UNESCO</span>
-              <span className='text-xs text-lilac'>World Heritage Sites</span>
-            </div>
-            <div>
-              <span className='block text-gold text-lg font-serif font-medium'>1,340 km</span>
-              <span className='text-xs text-lilac'>Tropical Coastlines</span>
-            </div>
-            <div>
-              <span className='block text-gold text-lg font-serif font-medium'>26 Parks</span>
-              <span className='text-xs text-lilac'>National Wildlife Reserves</span>
-            </div>
-            <div>
-              <span className='block text-gold text-lg font-serif font-medium'>100% Private</span>
-              <span className='text-xs text-lilac'>Chauffeur-Guided Travel</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Dynamic Hero Section */}
+      <HomeHero destinations={heroDestinations} />
 
       {/* Featured Destinations */}
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>

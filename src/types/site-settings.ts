@@ -39,4 +39,6 @@ export interface SiteSettings {
   popularSearch6: string
   popularSearch7: string
   popularSearch8: string
+
+  homepageHeroDestinations?: number[]
 }
