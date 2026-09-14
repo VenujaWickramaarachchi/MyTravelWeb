@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { searchContent } from '@/lib/wordpress'
+import { searchContent, getSiteSettings } from '@/lib/wordpress'
 
 import SearchResults from '@/components/Search/SearchResults'
 import SearchForm from '@/components/Search/SearchForm'
@@ -15,8 +15,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
 
   const query = q?.trim() || ''
-  const results = query ? await searchContent(query, 20) : []
-
+  const [results, settings] = await Promise.all([
+    query ? searchContent(query, 20) : Promise.resolve([]),
+    getSiteSettings(),
+  ])
   const initialResults = results.slice(0, 12)
   const total = results.length
   const totalPages = Math.ceil(total / 12)
@@ -26,15 +28,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   ]
 
   const suggestedSearches = [
-    'Sigiriya',
-    'Kandy',
-    'Galle Fort',
-    'Ella',
-    'Wildlife Safari',
-    'Tea Plantations',
-    'Mirissa',
-    'Honeymoon',
-  ]
+    settings.popularSearch1,
+    settings.popularSearch2,
+    settings.popularSearch3,
+    settings.popularSearch4,
+    settings.popularSearch5,
+    settings.popularSearch6,
+    settings.popularSearch7,
+    settings.popularSearch8,
+  ].filter(Boolean)
 
   return (
     <main className="min-h-screen bg-paper pb-24">

@@ -9,6 +9,8 @@ import { getTestimonials } from '@/lib/api/testimonials'
 import { getPartners } from '@/lib/api/partner'
 import { getTrustAwards } from '@/lib/api/trust-award'
 import { getTeamMembers } from '@/lib/api/team-member'
+import { getSiteSettings } from '@/lib/wordpress'
+
 
 import HomeTeam from '@/components/Home/HomeTeam'
 import HomeTrustAwards from '@/components/Home/HomeTrustAwards'
@@ -36,6 +38,7 @@ export default async function HomePage() {
     partners,
     trustAwards,
     teamMembers,
+    siteSettings,
   ] = await Promise.all([
     getDestinations(),
     getTours({
@@ -49,6 +52,7 @@ export default async function HomePage() {
     getPartners(),
     getTrustAwards(),
     getTeamMembers(),
+    getSiteSettings()
   ])
 
   const tours = toursResult.tours
@@ -356,11 +360,10 @@ export default async function HomePage() {
       {/* Final Global CTA */}
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <CTA
-          eyebrow='Begin Your Adventure'
-          title='Ready to Explore Sri Lanka?'
-          description="Tell us what kind of journey you're dreaming of — whether a relaxed coastal escape, wildlife exploration, or grand cultural tour — and let us design your tailor-made holiday."
-          buttonText='Plan Your Trip'
-          buttonHref='/contact'
+          title={siteSettings.globalCtaTitle}
+          description={siteSettings.globalCtaDescription}
+          buttonText={siteSettings.globalCtaButton}
+          buttonHref={siteSettings.globalCtaUrl}
         />
       </section>
 

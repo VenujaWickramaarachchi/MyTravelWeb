@@ -30,4 +30,13 @@ export interface SiteSettings {
 
   googleAnalyticsId: string
   googleTagManagerId: string
+
+  popularSearch1: string
+  popularSearch2: string
+  popularSearch3: string
+  popularSearch4: string
+  popularSearch5: string
+  popularSearch6: string
+  popularSearch7: string
+  popularSearch8: string
 }

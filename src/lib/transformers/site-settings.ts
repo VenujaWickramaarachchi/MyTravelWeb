@@ -70,5 +70,15 @@ export function transformSiteSettings(settings: any) {
     googleAnalyticsId: settings.acf?.google_analytics_id || '',
 
     googleTagManagerId: settings.acf?.google_tag_manager_id || '',
+
+    popularSearch1: settings.acf?.popular_search_1 || '',
+    popularSearch2: settings.acf?.popular_search_2 || '',
+    popularSearch3: settings.acf?.popular_search_3 || '',
+    popularSearch4: settings.acf?.popular_search_4 || '',
+    popularSearch5: settings.acf?.popular_search_5 || '',
+    popularSearch6: settings.acf?.popular_search_6 || '',
+    popularSearch7: settings.acf?.popular_search_7 || '',
+    popularSearch8: settings.acf?.popular_search_8 || '',
+
   }
 }
