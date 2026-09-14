@@ -4,8 +4,13 @@ import OurStoryIntroduction from '@/components/OurStory/OurStoryIntroduction'
 import OurStoryStory from '@/components/OurStory/OurStoryStory'
 import OurStorySection from '@/components/OurStory/OurStorySection'
 import OurStoryCTA from '@/components/OurStory/OurStoryCTA'
+import OurStoryTeam from '@/components/OurStory/OurStoryTeam'
+import OurStoryTrustAwards from '@/components/OurStory/OurStoryTrustAwards'
 
 import { getOurStory } from '@/lib/api/our-story'
+import { getTeamMembers } from '@/lib/api/team-member'
+import { getTrustAwards } from '@/lib/api/trust-award'
+
 
 import { generateSEO } from '@/lib/seo'
 
@@ -29,9 +34,12 @@ export async function generateMetadata() {
     socialImage: ourStory.socialImage,
   })
 }
-
 export default async function OurStoryPage() {
-  const ourStory = await getOurStory()
+  const [ourStory, teamMembers, trustAwards] = await Promise.all([
+    getOurStory(),
+    getTeamMembers(),
+    getTrustAwards(),
+  ])
 
   if (!ourStory) {
     return (
@@ -83,6 +91,9 @@ export default async function OurStoryPage() {
           content={ourStory.approachContent}
         />
       </div>
+      <OurStoryTeam teamMembers={teamMembers} />
+
+      <OurStoryTrustAwards trustAwards={trustAwards} />
 
       <AEOContent data={ourStory} />
 

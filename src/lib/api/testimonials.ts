@@ -4,7 +4,7 @@ import { transformTestimonial } from '../transformers/testimonials'
 import { Testimonial } from '@/types/testimonials'
 
 export async function getTestimonials(): Promise<Testimonial[]> {
-  const testimonials = await fetchAPI('testimonial?_embed')
+  const testimonials = await fetchAPI('testimonials?_embed')
 
   return testimonials.map(transformTestimonial)
 }

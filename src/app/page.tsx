@@ -5,7 +5,14 @@ import { getTours } from '@/lib/api/tour'
 import { getExperiences } from '@/lib/api/experience'
 import { getItineraries } from '@/lib/api/itinerary'
 import { getTravelGuides } from '@/lib/api/travel-guide'
+import { getTestimonials } from '@/lib/api/testimonials'
+import { getPartners } from '@/lib/api/partner'
+import { getTrustAwards } from '@/lib/api/trust-award'
+import { getTeamMembers } from '@/lib/api/team-member'
 
+import HomeTeam from '@/components/Home/HomeTeam'
+import HomeTrustAwards from '@/components/Home/HomeTrustAwards'
+import HomePartners from '@/components/Home/HomePartners'
 import EntityGrid from '@/components/entities/EntityGrid'
 import DestinationCard from '@/components/entities/Destination/DestinationCard'
 import TourCard from '@/components/entities/Tour/TourCard'
@@ -14,21 +21,35 @@ import ItineraryCard from '@/components/entities/Itinerary/ItineraryCard'
 import EntityCard from '@/components/entities/EntityCard'
 import SectionHeading from '@/components/Shared/SectionHeading'
 import CTA from '@/components/Shared/CTA'
+import HomeTestimonials from '@/components/Home/HomeTestimonials'
 
 import type { Destination } from '@/types/destination'
 
 export default async function HomePage() {
-  const [destinations, toursResult, experiences, itineraries, travelGuides] =
-    await Promise.all([
-      getDestinations(),
-      getTours({
-        page: 1,
-        perPage: 100,
-      }),
-      getExperiences(),
-      getItineraries(),
-      getTravelGuides(),
-    ])
+  const [
+    destinations,
+    toursResult,
+    experiences,
+    itineraries,
+    travelGuides,
+    testimonials,
+    partners,
+    trustAwards,
+    teamMembers,
+  ] = await Promise.all([
+    getDestinations(),
+    getTours({
+      page: 1,
+      perPage: 100,
+    }),
+    getExperiences(),
+    getItineraries(),
+    getTravelGuides(),
+    getTestimonials(),
+    getPartners(),
+    getTrustAwards(),
+    getTeamMembers(),
+  ])
 
   const tours = toursResult.tours
 
@@ -276,7 +297,8 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
+      {/* Testimonials */}
+      <HomeTestimonials testimonials={testimonials} />
       {/* Featured Travel Guides */}
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
@@ -322,6 +344,15 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Partners */}
+      <HomePartners partners={partners} />
+
+      {/* Trust Awards */}
+      <HomeTrustAwards trustAwards={trustAwards} />
+
+      {/* Team Members */}
+      <HomeTeam teamMembers={teamMembers} />
+
       {/* Final Global CTA */}
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <CTA
@@ -332,6 +363,7 @@ export default async function HomePage() {
           buttonHref='/contact'
         />
       </section>
+
     </main>
   )
 }
