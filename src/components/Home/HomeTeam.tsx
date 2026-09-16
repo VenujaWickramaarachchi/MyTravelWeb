@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { TeamMember } from '@/types/team-member'
 
 interface HomeTeamProps {
@@ -52,29 +53,33 @@ export default function HomeTeam({
 
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {teamMembers.slice(0, 4).map((member) => (
-                    <article key={member.id} className='text-center'>
-                        {member.profileImage?.url ? (
-                            <div className='aspect-[4/5] overflow-hidden rounded bg-ivory mb-4'>
-                                <img
-                                    src={member.profileImage.url}
-                                    alt={member.fullName}
-                                    className='w-full h-full object-cover'
-                                />
-                            </div>
-                        ) : (
-                            <div className='aspect-[4/5] rounded bg-ivory border border-line mb-4 flex items-center justify-center'>
-                                <span className='text-sm text-ink/50'>
-                                    {member.fullName}
-                                </span>
-                            </div>
-                        )}
+                    <article key={member.id} className='group text-center'>
+                        <div className='relative aspect-[4/5] overflow-hidden rounded-[20px] bg-ivory mb-4 shadow-sm hover:shadow-md transition-shadow border border-line/60'>
+                            {member.profileImage?.url ? (
+                                <>
+                                    <Image
+                                        src={member.profileImage.url}
+                                        alt={member.fullName}
+                                        fill
+                                        sizes='(max-width: 768px) 50vw, 25vw'
+                                        loading='lazy'
+                                        className='object-cover object-[center_20%] transition-transform duration-700 ease-luxury group-hover:scale-[1.025]'
+                                    />
+                                    <div className='absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent pointer-events-none' />
+                                </>
+                            ) : (
+                                <div className='w-full h-full flex items-center justify-center text-sm text-ink/50 font-serif'>
+                                    <span>{member.fullName}</span>
+                                </div>
+                            )}
+                        </div>
 
-                        <h3 className='font-serif text-lg text-ink'>
+                        <h3 className='font-serif text-lg text-ink font-medium leading-tight group-hover:text-violet transition-colors'>
                             {member.fullName}
                         </h3>
 
                         {member.position && (
-                            <p className='mt-1 text-xs uppercase tracking-wider text-gold-deep'>
+                            <p className='mt-1 text-[10px] uppercase tracking-[0.16em] font-semibold text-gold-deep'>
                                 {member.position}
                             </p>
                         )}

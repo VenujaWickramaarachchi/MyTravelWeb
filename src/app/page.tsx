@@ -25,6 +25,7 @@ import SectionHeading from '@/components/Shared/SectionHeading'
 import CTA from '@/components/Shared/CTA'
 import HomeTestimonials from '@/components/Home/HomeTestimonials'
 import HomeHero from '@/components/Hero/HomeHero'
+import HomeEntityCarousel from '@/components/Home/HomeEntityCarousel'
 
 import type { Destination } from '@/types/destination'
 import type { HeroItem } from '@/types/hero'
@@ -86,16 +87,7 @@ export default async function HomePage() {
       ? await getHomepageHeroDestinations(selectedHeroIds)
       : []
 
-  console.log(
-    'HERO ITEMS:',
-    selectedDestinations.map((item) => ({
-      id: item.id,
-      title: item.title,
-      type: item.type,
-      heroImage: item.heroImage?.url,
-      galleryImage: item.galleryImages?.[0]?.url,
-    })),
-  )
+
 
   const validSelectedHeroItems = selectedHeroIds.length > 0
     ? selectedDestinations.filter(
@@ -190,13 +182,19 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {featuredDestinations.length > 0 && (
+        {featuredDestinations.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured destinations carousel">
+            {featuredDestinations.map((destination: Destination) => (
+              <DestinationCard key={destination.id} destination={destination} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredDestinations.length > 0 ? (
           <EntityGrid columns={3}>
             {featuredDestinations.map((destination: Destination) => (
-              <DestinationCard key={destination.id} destination={destination} />
+              <DestinationCard key={destination.id} destination={destination} density='compact' />
             ))}
           </EntityGrid>
-        )}
+        ) : null}
 
         <div className='mt-8 text-center md:hidden'>
           <Link
@@ -228,13 +226,19 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {featuredTours.length > 0 && (
+        {featuredTours.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured tours carousel">
+            {featuredTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredTours.length > 0 ? (
           <EntityGrid columns={3}>
             {featuredTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
+              <TourCard key={tour.id} tour={tour} density='compact' />
             ))}
           </EntityGrid>
-        )}
+        ) : null}
 
         <div className='mt-8 text-center md:hidden'>
           <Link
@@ -267,13 +271,19 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {featuredExperiences.length > 0 && (
+          {featuredExperiences.length >= 4 ? (
+            <HomeEntityCarousel ariaLabel="Featured experiences carousel">
+              {featuredExperiences.map((experience) => (
+                <ExperienceCard key={experience.id} experience={experience} density='compact' />
+              ))}
+            </HomeEntityCarousel>
+          ) : featuredExperiences.length > 0 ? (
             <EntityGrid columns={3}>
               {featuredExperiences.map((experience) => (
-                <ExperienceCard key={experience.id} experience={experience} />
+                <ExperienceCard key={experience.id} experience={experience} density='compact' />
               ))}
             </EntityGrid>
-          )}
+          ) : null}
 
           <div className='mt-8 text-center md:hidden'>
             <Link
@@ -306,13 +316,19 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {featuredItineraries.length > 0 && (
+        {featuredItineraries.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured itineraries carousel">
+            {featuredItineraries.map((itinerary) => (
+              <ItineraryCard key={itinerary.id} itinerary={itinerary} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredItineraries.length > 0 ? (
           <EntityGrid columns={3}>
             {featuredItineraries.map((itinerary) => (
-              <ItineraryCard key={itinerary.id} itinerary={itinerary} />
+              <ItineraryCard key={itinerary.id} itinerary={itinerary} density='compact' />
             ))}
           </EntityGrid>
-        )}
+        ) : null}
 
         <div className='mt-8 text-center md:hidden'>
           <Link
@@ -345,7 +361,22 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {featuredTravelGuides.length > 0 && (
+        {featuredTravelGuides.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured travel guides carousel">
+            {featuredTravelGuides.map((guide) => (
+              <EntityCard
+                key={guide.id}
+                title={guide.title}
+                slug={guide.slug}
+                href={`/travel-guides/${guide.slug}`}
+                image={guide.heroImage}
+                description={guide.shortDescription}
+                eyebrow='Travel Guide'
+                density='compact'
+              />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredTravelGuides.length > 0 ? (
           <EntityGrid columns={3}>
             {featuredTravelGuides.map((guide) => (
               <EntityCard
@@ -356,10 +387,11 @@ export default async function HomePage() {
                 image={guide.heroImage}
                 description={guide.shortDescription}
                 eyebrow='Travel Guide'
+                density='compact'
               />
             ))}
           </EntityGrid>
-        )}
+        ) : null}
         <div className='mt-8 text-center md:hidden'>
           <Link
             href='/travel-guides'

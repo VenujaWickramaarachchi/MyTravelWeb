@@ -1,92 +1,175 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Tour } from '@/types/tour'
+import {
+  ClockDurationIcon,
+  SparkStarIcon,
+  ArrowRightIcon,
+} from '@/components/Shared/CardIcons'
 
 interface Props {
   tour: Tour
+  density?: 'standard' | 'compact'
 }
 
-export default function TourCard({ tour }: Props) {
+export default function TourCard({ tour, density = 'standard' }: Props) {
+  const isCompact = density === 'compact'
+
   const cleanDescription =
-    tour.shortDescription?.replace(/<[^>]*>?/gm, '') || ''
+    tour.shortDescription?.replace(/<[^>]*>?/gm, '').trim() || ''
+
+  const imageUrl =
+    tour.heroImage?.url ||
+    tour.galleryImages?.[0]?.url ||
+    tour.socialImage?.url ||
+    (typeof tour.heroImage === 'string' ? tour.heroImage : null)
+
+  const sideLabel = tour.tourStyle
+    ? `${tour.tourStyle.toUpperCase()} TOUR`
+    : 'TAILOR-MADE TOUR'
+
+  const durationLabel =
+    tour.durationDays || tour.durationNights
+      ? `${tour.durationDays ? `${tour.durationDays} Days` : ''}${
+          tour.durationDays && tour.durationNights ? ' / ' : ''
+        }${tour.durationNights ? `${tour.durationNights} Nights` : ''}`
+      : null
 
   return (
-    <article className='group flex flex-col h-full bg-paper rounded border border-line overflow-hidden hover:border-violet/40 transition-colors duration-200'>
-      <Link href={`/tours/${tour.slug}`} className='flex flex-col h-full'>
-        {/* Image */}
-        <div className='relative aspect-[16/10] w-full overflow-hidden bg-ivory'>
-          {tour.heroImage?.url ? (
-            <img
-              src={tour.heroImage.url}
-              alt={tour.heroImage.alt || tour.title}
-              className='w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300'
+    <article className='h-full'>
+      <Link
+        href={`/tours/${tour.slug}`}
+        className={`group card-editorial h-full aspect-[4/5] min-h-0 w-full select-none text-left ${
+          isCompact ? 'card-compact' : ''
+        }`}
+      >
+        {/* Full-Bleed Photography Surface */}
+        <div className='absolute inset-0 z-0 overflow-hidden bg-ivory'>
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={tour.heroImage?.alt || tour.title}
+              fill
+              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
               loading='lazy'
+              className='object-cover object-[center_35%] transition-transform duration-700 ease-luxury group-hover:scale-[1.025]'
             />
           ) : (
-            <div className='w-full h-full flex items-center justify-center bg-ivory text-ink/30 font-serif'>
+            <div className='absolute inset-0 bg-violet-deep flex items-center justify-center text-ivory/40 font-serif'>
               <span>{tour.title}</span>
             </div>
           )}
+        </div>
 
-          {/* Duration Badge */}
-          {(tour.durationDays || tour.durationNights) && (
-            <span className='absolute top-3 left-3 bg-paper/90 backdrop-blur-xs text-ink px-2.5 py-1 text-xs font-semibold rounded border border-line uppercase tracking-wider'>
-              {tour.durationDays ? `${tour.durationDays} Days` : ''}
-              {tour.durationNights ? ` / ${tour.durationNights} Nights` : ''}
-            </span>
-          )}
+        {/* Multi-Stop Cinematic Scrims */}
+        <div className='absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent pointer-events-none z-10' />
+        <div className='card-scrim-dark z-10' />
 
-          {/* Style badge if present */}
-          {tour.tourStyle && (
-            <span className='absolute bottom-3 right-3 bg-violet/90 text-ivory px-2 py-0.5 text-[11px] font-medium rounded'>
-              {tour.tourStyle}
+        {/* Mobile Horizontal Brand Strip (< md) */}
+        <div className='md:hidden relative z-20 flex items-center justify-between px-4 py-2 bg-violet-deep/85 backdrop-blur-sm border-b border-white/10'>
+          <span className='text-[10px] font-semibold tracking-[0.2em] text-white/90 uppercase truncate max-w-[70%]'>
+            {sideLabel}
+          </span>
+          {tour.featuredTour && (
+            <span className='inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.16em] font-bold text-gold'>
+              <SparkStarIcon size={11} className='text-gold' />
+              Featured
             </span>
           )}
         </div>
 
-        {/* Content */}
-        <div className='p-5 sm:p-6 flex flex-col flex-1'>
-          <span className='text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-deep mb-2'>
-            Tailor-Made Tour
-          </span>
-
-          <h3 className='font-serif text-xl sm:text-2xl font-medium text-ink group-hover:text-violet transition-colors leading-snug mb-2.5'>
-            {tour.title}
-          </h3>
-
-          {cleanDescription && (
-            <p className='text-sm text-ink/75 leading-relaxed line-clamp-3 mb-5 flex-1'>
-              {cleanDescription}
-            </p>
-          )}
-
-          {/* Price & Action */}
-          <div className='pt-3 mt-auto border-t border-line/60 flex items-center justify-between'>
-            {tour.priceFrom ? (
-              <div className='flex flex-col'>
-                <span className='text-[10px] uppercase tracking-wider text-ink/60 font-medium'>
-                  From
+        {/* Main Card Body with Asymmetrical Desktop Layout */}
+        <div className='relative z-20 flex flex-1 min-h-0 w-full'>
+          {/* Left / Primary Content Area */}
+          <div
+            className={`flex flex-col justify-between flex-1 min-w-0 ${
+              isCompact ? 'p-3 sm:p-3.5' : 'p-3.5 sm:p-4'
+            }`}
+          >
+            {/* Top Row: Editorial Badge & Category (Desktop/Tablet) */}
+            <div className='hidden md:flex items-center justify-between gap-2'>
+              {tour.featuredTour ? (
+                <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-white/20 bg-black/40 backdrop-blur-md text-[9px] uppercase tracking-[0.2em] font-semibold text-gold'>
+                  <SparkStarIcon size={10} className='text-gold' />
+                  Signature Tour
                 </span>
-                <span className='text-base font-bold text-gold-deep font-sans'>
-                  {tour.currency || '$'} {tour.priceFrom}
+              ) : (
+                <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-white/15 bg-black/30 backdrop-blur-xs text-[9px] uppercase tracking-[0.18em] font-medium text-gold'>
+                  Private Journey
+                </span>
+              )}
+            </div>
+
+            {/* Bottom Content Stack: Glass Info + Pricing + Typography + Pill CTA */}
+            <div
+              className={`mt-auto ${
+                isCompact
+                  ? 'pt-2 space-y-2 sm:space-y-2.5'
+                  : 'pt-2.5 space-y-2 sm:space-y-2.5'
+              }`}
+            >
+              {/* Floating Glass Information Panel */}
+              {(durationLabel || tour.tourStyle || tour.priceFrom) && (
+                <div className='card-glass p-2.5 sm:p-3 space-y-1.5'>
+                  <div className='flex items-center justify-between gap-2'>
+                    {durationLabel && (
+                      <div className='flex items-center gap-1.5 text-white/90 truncate'>
+                        <ClockDurationIcon className='text-gold shrink-0' size={12} />
+                        <span className='text-xs sm:text-[13px] font-medium truncate'>
+                          {durationLabel}
+                        </span>
+                      </div>
+                    )}
+
+                    {tour.tourStyle && (
+                      <span className='text-[10px] uppercase tracking-wider text-lilac font-medium shrink-0'>
+                        {tour.tourStyle}
+                      </span>
+                    )}
+                  </div>
+
+                  {tour.priceFrom && (
+                    <div className='flex items-baseline justify-between pt-1.5 border-t border-white/10'>
+                      <span className='card-meta-label'>
+                        From
+                      </span>
+                      <span className='card-meta-number'>
+                        {tour.currency || '$'} {Number(tour.priceFrom).toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Title & Optional Description */}
+              <div>
+                <h3 className='card-editorial-title line-clamp-2'>
+                  {tour.title}
+                </h3>
+
+                {!isCompact && cleanDescription && (
+                  <p className='mt-1 text-xs text-white/75 leading-relaxed line-clamp-1 font-light'>
+                    {cleanDescription}
+                  </p>
+                )}
+              </div>
+
+              {/* Floating Pill CTA */}
+              <div className='card-pill-cta w-full'>
+                <span>View Tour</span>
+                <span className='cta-arrow'>
+                  <ArrowRightIcon size={13} />
                 </span>
               </div>
-            ) : (
-              <span className='text-xs text-ink/60 italic'>Custom pricing</span>
-            )}
-
-            <span className='inline-flex items-center text-xs font-semibold text-violet group-hover:text-gold-deep transition-colors uppercase tracking-wider'>
-              <span>View Tour</span>
-              <svg
-                className='w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                strokeWidth={2}
-              >
-                <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
-              </svg>
-            </span>
+            </div>
           </div>
+
+          {/* Right Asymmetrical Vertical Side Panel (Desktop & Tablet: ≥ md) */}
+          <aside className='hidden md:flex card-side-panel'>
+            <span className='card-side-label'>
+              {sideLabel}
+            </span>
+          </aside>
         </div>
       </Link>
     </article>

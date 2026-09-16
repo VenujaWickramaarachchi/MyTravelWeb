@@ -14,6 +14,9 @@
   --font-serif: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-manrope), system-ui, -apple-system, sans-serif;
 
+  /* Desktop Fluid Container Scale */
+  --container-7xl: 90vw;
+
   /* Brand Colors (Preserving all existing utility bindings) */
   --color-violet-deep: #3B0F6B;
   --color-violet: #5B1E96;
@@ -132,8 +135,8 @@
   --section-space-xl: clamp(6.5rem, 10vw, 9rem);    /* 104-144px */
 
   /* Global Container Widths & Reading Measure */
-  --container-max: 1320px;
-  --container-wide: 1440px;
+  --container-max: 90vw;
+  --container-wide: 90vw;
   --container-narrow: 960px;
   --editorial-measure: 65ch;
 
@@ -366,6 +369,11 @@ h1, h2, h3, h4, .font-display {
   .container-wide {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  /* Desktop Container Width Override — 90vw Fluid Measure */
+  .max-w-7xl {
+    max-width: 90vw;
   }
 }
 
@@ -620,7 +628,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* --------------------------------------------------------------------------
-   10. CARD PRIMITIVES (Foundations for Future Redesign)
+   10. CARD PRIMITIVES (Viora Lanka Luxury Editorial System)
    -------------------------------------------------------------------------- */
 .card {
   position: relative;
@@ -643,6 +651,215 @@ h1, h2, h3, h4, .font-display {
   border-color: rgba(91, 30, 150, 0.35);
   box-shadow: var(--shadow-md);
   transform: translateY(-4px);
+}
+
+/* Premium Editorial Portrait Card Shell */
+.card-editorial {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--color-ink);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: box-shadow var(--duration-micro) var(--ease-luxury),
+              border-color var(--duration-micro) var(--ease-luxury),
+              transform var(--duration-micro) var(--ease-luxury);
+}
+
+.card-editorial:hover {
+  border-color: rgba(217, 166, 46, 0.35);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+.card-editorial:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* Glass Information Panel with Non-Blur Fallback */
+.card-glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 12px;
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .card-glass {
+    background: rgba(43, 14, 69, 0.88);
+  }
+}
+
+/* Multi-Stop Cinematic Scrim */
+.card-scrim-dark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(11, 11, 12, 0.95) 0%,
+    rgba(11, 11, 12, 0.72) 34%,
+    rgba(11, 11, 12, 0.22) 65%,
+    transparent 85%
+  );
+}
+
+/* Asymmetrical Vertical Side Panel - Compact Proportions */
+.card-side-panel {
+  width: clamp(38px, 11%, 46px);
+  background-color: rgba(59, 15, 107, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+@media (max-width: 1023px) {
+  .card-side-panel {
+    width: clamp(34px, 10%, 40px);
+  }
+}
+
+.card-side-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 280px;
+}
+
+/* Floating Dark Glass Pill CTA */
+.card-pill-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(0.6875rem, 0.78vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color var(--duration-micro) var(--ease-luxury),
+              border-color var(--duration-micro) var(--ease-luxury),
+              color var(--duration-micro) var(--ease-luxury);
+}
+
+.group:hover .card-pill-cta {
+  background: rgba(0, 0, 0, 0.65);
+  border-color: rgba(217, 166, 46, 0.60);
+  color: var(--color-gold);
+}
+
+.card-pill-cta .cta-arrow {
+  transition: transform var(--duration-micro) var(--ease-luxury);
+}
+
+.group:hover .card-pill-cta .cta-arrow {
+  transform: translateX(3px);
+}
+
+/* Fluid Editorial Typography Utilities - Unified Across All Entities */
+.card-editorial-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.25vw, 1.28rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #FFFFFF;
+  transition: color var(--duration-micro) var(--ease-luxury);
+}
+
+.group:hover .card-editorial-title {
+  color: var(--color-gold-soft);
+}
+
+.card-meta-label {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(0.6rem, 0.72vw, 0.65rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.card-meta-value {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.card-meta-number {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+/* --------------------------------------------------------------------------
+   HOMEPAGE EDITORIAL CAROUSEL PRIMITIVES
+   -------------------------------------------------------------------------- */
+.carousel-viewport {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.carousel-snap-container,
+.carousel-smooth-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-snap-container {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.carousel-smooth-container {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.carousel-snap-container::-webkit-scrollbar,
+.carousel-smooth-container::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-snap-container {
+    scroll-behavior: auto;
+  }
+}
+
+.carousel-snap-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }
 
 /* --------------------------------------------------------------------------

@@ -38,10 +38,6 @@ export async function getHomepageHeroDestinations(
     fetchByIds('attraction', postIds),
     fetchByIds('experience', postIds),
   ])
-  console.log('HERO POST IDS:', postIds)
-  console.log('HERO DESTINATIONS:', destinations.map((item: Destination) => item.id))
-  console.log('HERO ATTRACTIONS:', attractions.map((item: Attraction) => item.id))
-  console.log('HERO EXPERIENCES:', experiences.map((item: Experience) => item.id))
 
   const heroItems: HeroItem[] = [
     ...destinations.map((item: Destination) => {
