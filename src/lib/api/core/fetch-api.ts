@@ -1,4 +1,4 @@
-const WORDPRESS_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL
+const WORDPRESS_URL = (process.env.NEXT_PUBLIC_WORDPRESS_URL || '').replace(/\/$/, '')
 
 interface FetchAPIOptions {
   returnResponse?: boolean
