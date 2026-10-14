@@ -14,34 +14,23 @@ export async function getAttractions(): Promise<Attraction[]> {
     'attraction?per_page=100&_embed',
   )
 
-  return attractions.map(transformAttraction)
+  return (Array.isArray(attractions) ? attractions : []).map(
+    transformAttraction,
+  )
 }
 
 export async function getAttraction(
   slug: string,
 ): Promise<AttractionPage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/attraction?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`attraction?slug=${slug}&_embed`)
+    const attraction = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!attraction) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching attraction: ${slug}`)
-  }
-
-  const data = await res.json()
-  const attraction = data[0]
-
-  if (!attraction) {
-    return null
-  }
-
-  const attractionData = transformAttraction(attraction)
+    const attractionData = transformAttraction(attraction)
 
   // Destination
   // Destination
@@ -82,4 +71,8 @@ export async function getAttraction(
       relatedTours,
     },
   }
+} catch (error) {
+  console.warn(`[getAttraction] Error fetching attraction ${slug}:`, error)
+  return null
+}
 }

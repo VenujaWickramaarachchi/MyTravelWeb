@@ -6,7 +6,9 @@ import { Testimonial } from '@/types/testimonials'
 export async function getTestimonials(): Promise<Testimonial[]> {
   const testimonials = await fetchAPI('testimonials?_embed')
 
-  return testimonials.map(transformTestimonial)
+  return (Array.isArray(testimonials) ? testimonials : []).map(
+    transformTestimonial,
+  )
 }
 
 export async function getTestimonialsForTour(
@@ -16,5 +18,7 @@ export async function getTestimonialsForTour(
     `testimonial?meta_key=related_tour&meta_value=${tourId}&_embed`,
   )
 
-  return testimonials.map(transformTestimonial)
+  return (Array.isArray(testimonials) ? testimonials : []).map(
+    transformTestimonial,
+  )
 }

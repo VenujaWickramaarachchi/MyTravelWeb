@@ -18,34 +18,23 @@ export async function getItineraries(): Promise<Itinerary[]> {
     'itinerary?per_page=100&_embed',
   )
 
-  return itineraries.map(transformItinerary)
+  return (Array.isArray(itineraries) ? itineraries : []).map(
+    transformItinerary,
+  )
 }
 
 export async function getItinerary(
   slug: string,
 ): Promise<ItineraryPage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/itinerary?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`itinerary?slug=${slug}&_embed`)
+    const itinerary = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!itinerary) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching itinerary: ${slug}`)
-  }
-
-  const data = await res.json()
-  const itinerary = data[0]
-
-  if (!itinerary) {
-    return null
-  }
-
-  const itineraryData = transformItinerary(itinerary)
+    const itineraryData = transformItinerary(itinerary)
   const allItineraryDays = await fetchAPI('itinerary-days?_embed')
 
   const itineraryDays = allItineraryDays
@@ -125,4 +114,8 @@ export async function getItinerary(
       itineraryDays: resolvedItineraryDays,
     },
   }
+} catch (error) {
+  console.warn(`[getItinerary] Error fetching itinerary ${slug}:`, error)
+  return null
+}
 }

@@ -9,7 +9,7 @@ export interface CookiePolicy {
 export async function getCookiePolicy(): Promise<CookiePolicy | null> {
   const pages = await fetchAPI('pages?slug=cookie-policy')
 
-  const page = pages[0]
+  const page = Array.isArray(pages) ? pages[0] : null
 
   if (!page) {
     return null

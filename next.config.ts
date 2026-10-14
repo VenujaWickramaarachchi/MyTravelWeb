@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "vioralanka.com",
         pathname: "/wp-content/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "cms.vioralanka.com",
+        pathname: "/wp-content/uploads/**",
+      },
     ],
   },
 };

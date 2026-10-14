@@ -16,34 +16,23 @@ export async function getTravelGuides(): Promise<TravelGuide[]> {
     'travel-guide?per_page=100&_embed',
   )
 
-  return travelGuides.map(transformTravelGuide)
+  return (Array.isArray(travelGuides) ? travelGuides : []).map(
+    transformTravelGuide,
+  )
 }
 
 export async function getTravelGuide(
   slug: string,
 ): Promise<TravelGuidePage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/travel-guide?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`travel-guide?slug=${slug}&_embed`)
+    const travelGuide = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!travelGuide) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching travel guide: ${slug}`)
-  }
-
-  const data = await res.json()
-  const travelGuide = data[0]
-
-  if (!travelGuide) {
-    return null
-  }
-
-  const travelGuideData = transformTravelGuide(travelGuide)
+    const travelGuideData = transformTravelGuide(travelGuide)
 
   const [
     relatedDestinations,
@@ -86,4 +75,8 @@ export async function getTravelGuide(
       relatedItineraries,
     },
   }
+} catch (error) {
+  console.warn(`[getTravelGuide] Error fetching travel guide ${slug}:`, error)
+  return null
+}
 }

@@ -7,7 +7,7 @@ import { TeamMember } from '@/types/team-member'
 export async function getTeamMembers(): Promise<TeamMember[]> {
   const teamMembers = await fetchAPI('team-member?_embed')
 
-  return teamMembers
+  return (Array.isArray(teamMembers) ? teamMembers : [])
     .map(transformTeamMember)
     .sort(
       (a: TeamMember, b: TeamMember) =>
@@ -16,26 +16,17 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 }
 
 export async function getTeamMember(slug: string): Promise<TeamMember | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/team-member?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`team-member?slug=${slug}&_embed`)
+    const teamMember = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!teamMember) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching team member: ${slug}`)
-  }
-
-  const data = await res.json()
-  const teamMember = data[0]
-
-  if (!teamMember) {
+    return transformTeamMember(teamMember)
+  } catch (error) {
+    console.warn(`[getTeamMember] Error fetching team member ${slug}:`, error)
     return null
   }
-
-  return transformTeamMember(teamMember)
 }

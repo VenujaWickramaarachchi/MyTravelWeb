@@ -15,15 +15,18 @@ import type { Attraction } from '@/types/attraction'
 import type { Experience } from '@/types/experience'
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const pages = await fetchAPI('pages?slug=site-settings&_embed')
+  try {
+    const pages = await fetchAPI('pages?slug=site-settings&_embed')
+    const settings = Array.isArray(pages) ? pages[0] : null
 
-  const settings = pages[0]
-
-  if (!settings) {
-    throw new Error('Site Settings page not found')
+    if (settings) {
+      return transformSiteSettings(settings)
+    }
+  } catch (error) {
+    console.warn('[getSiteSettings] Error fetching site settings:', error)
   }
 
-  return transformSiteSettings(settings)
+  return transformSiteSettings({})
 }
 
 export async function getHomepageHeroDestinations(

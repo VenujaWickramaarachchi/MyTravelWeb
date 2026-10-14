@@ -12,55 +12,48 @@ export async function getExperiences(): Promise<Experience[]> {
   const experiences = await fetchAPI(
     'experience?per_page=100&_embed',
   )
-  return experiences.map(transformExperience)
+  return (Array.isArray(experiences) ? experiences : []).map(
+    transformExperience,
+  )
 }
 
 export async function getExperience(
   slug: string,
 ): Promise<ExperiencePage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/experience?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`experience?slug=${slug}&_embed`)
+    const experience = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!experience) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching experience: ${slug}`)
-  }
+    const experienceData = transformExperience(experience)
 
-  const data = await res.json()
-  const experience = data[0]
+    // Related Destinations
+    const destinations = experienceData.destinations.length
+      ? await fetchByIds('destination', experienceData.destinations).then(
+        (items) => items.map(transformDestination),
+      )
+      : []
 
-  if (!experience) {
+    // Related Tours
+    const relatedTours = experienceData.relatedTours.length
+      ? await fetchByIds('tour', experienceData.relatedTours).then((items) =>
+        items.map(transformTour),
+      )
+      : []
+
+    return {
+      ...experienceData,
+
+      relationships: {
+        destinations,
+        relatedTours,
+      },
+    }
+  } catch (error) {
+    console.warn(`[getExperience] Error fetching experience ${slug}:`, error)
     return null
-  }
-
-  const experienceData = transformExperience(experience)
-
-  // Related Destinations
-  const destinations = experienceData.destinations.length
-    ? await fetchByIds('destination', experienceData.destinations).then(
-      (items) => items.map(transformDestination),
-    )
-    : []
-
-  // Related Tours
-  const relatedTours = experienceData.relatedTours.length
-    ? await fetchByIds('tour', experienceData.relatedTours).then((items) =>
-      items.map(transformTour),
-    )
-    : []
-
-  return {
-    ...experienceData,
-
-    relationships: {
-      destinations,
-      relatedTours,
-    },
   }
 }
