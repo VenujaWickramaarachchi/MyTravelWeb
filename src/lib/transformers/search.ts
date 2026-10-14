@@ -11,13 +11,18 @@ interface SearchInput {
   }
   type: string
   featured_media?: number
+  acf?: {
+    hero_image?: {
+      url?: string
+      alt?: string
+    } | null
+  }
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url?: string
     }>
   }
 }
-
 function getSearchBasePath(type: SearchResult['type']): string {
   const paths: Record<SearchResult['type'], string> = {
     tour: 'tours',
@@ -44,6 +49,9 @@ export function transformSearchResult(
     type,
     excerpt: item.excerpt?.rendered || '',
     url: `/${getSearchBasePath(type)}/${item.slug}`,
-    image: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+    image:
+      item._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+      item.acf?.hero_image?.url ||
+      null,
   }
 }

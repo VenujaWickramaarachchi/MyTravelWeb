@@ -8,14 +8,13 @@ import AccommodationAmenities from '@/components/Accommodations/AccommodationAme
 import AccommodationPrice from '@/components/Accommodations/AccommodationPrice'
 import AccommodationDestination from '@/components/Accommodations/AccommodationDestination'
 import AccommodationContact from '@/components/Accommodations/AccommodationContact'
-
 import GallerySection from '@/components/content/Gallery/GallerySection'
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
 import { generateSEO } from '@/lib/seo'
 
 import AccommodationAEO from '@/components/SEO/AccommodationAEO'
 import AccommodationAEOAnswerSchema from '@/components/SEO/AccommodationAEOAnswerSchema'
-
 import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
 import { createBreadcrumbs } from '@/lib/breadcrumbs'
 
@@ -56,36 +55,33 @@ export default async function AccommodationPage({
     notFound()
   }
 
-  return (
-    <main>
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'Accommodations',
-          'accommodations',
-          accommodation.title,
-        )}
-      />
+  const breadcrumbItems = createBreadcrumbs(
+    'Accommodations',
+    'accommodations',
+    accommodation.title,
+  )
 
+  return (
+    <main className='pb-20 space-y-4'>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <AccommodationAEOAnswerSchema data={accommodation} />
+
       <AccommodationHero accommodation={accommodation} />
 
-      <AccommodationOverview accommodation={accommodation} />
-
-      <AccommodationAEO accommodation={accommodation} />
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       <AccommodationDetails accommodation={accommodation} />
-
+      <AccommodationOverview accommodation={accommodation} />
+      <AccommodationAEO accommodation={accommodation} />
       <AccommodationAmenities accommodation={accommodation} />
-
       <AccommodationPrice accommodation={accommodation} />
-
       <GallerySection
         images={accommodation.galleryImages}
         title='Accommodation Gallery'
       />
-
       <AccommodationDestination accommodation={accommodation} />
-
       <AccommodationContact accommodation={accommodation} />
     </main>
   )

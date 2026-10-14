@@ -15,7 +15,7 @@ const SITE_URL = 'https://vioralanka.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [
-    tours,
+    toursResult,
     destinations,
     experiences,
     attractions,
@@ -33,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getFAQs(),
     getTravelGuides(),
   ])
+  const tours = toursResult.tours
 
   const staticPages: MetadataRoute.Sitemap = [
     {

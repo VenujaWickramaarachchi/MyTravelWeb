@@ -1,44 +1,81 @@
 import { getAccommodations } from '@/lib/api/accommodation'
-import EntityCard from '@/components/entities/EntityCard'
-import EntityGrid from '@/components/entities/EntityGrid'
+import {
+  getAccommodationTypes,
+  getRegions,
+} from '@/lib/api/taxonomy'
 
-export default async function AccommodationsPage() {
-  const accommodations = await getAccommodations()
+import AccommodationFilters from '@/components/entities/Accommodation/AccommodationFilters'
+import AccommodationResults from '@/components/entities/Accommodation/AccommodationResults'
+
+import { filterAccommodations } from '@/lib/filters/accommodation-filters'
+
+import type { AccommodationFilterParams } from '@/types/filter-types'
+
+interface AccommodationsPageProps {
+  searchParams: Promise<AccommodationFilterParams>
+}
+
+export default async function AccommodationsPage({
+  searchParams,
+}: AccommodationsPageProps) {
+  const [
+    regionsResult,
+    accommodationTypesResult,
+    accommodations,
+  ] = await Promise.all([
+    getRegions().catch(() => []),
+    getAccommodationTypes().catch(() => []),
+    getAccommodations(),
+  ])
+
+  const filters = await searchParams
+
+  const filteredAccommodations = filterAccommodations(
+    accommodations,
+    filters,
+  )
+
+  const perPage = 12
+
+  const initialAccommodations =
+    filteredAccommodations.slice(0, perPage)
+
+  const total = filteredAccommodations.length
+
+  const totalPages = Math.ceil(
+    total / perPage,
+  )
 
   return (
-    <main>
-      <section>
-        <div>
-          <h1>Accommodations</h1>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+      <header className="max-w-3xl space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-amethyst">
+          Curated Places to Stay
+        </p>
 
-          <p>
-            Find places to stay across Sri Lanka, from luxury resorts and
-            boutique hotels to comfortable stays close to the island's
-            highlights.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-serif text-4xl sm:text-5xl font-normal text-ink tracking-tight">
+          Boutique Stays & Resorts in Sri Lanka
+        </h1>
 
-      <section>
-        <div>
-          {accommodations.length === 0 ? (
-            <p>No accommodations available.</p>
-          ) : (
-            <EntityGrid>
-              {accommodations.map((accommodation: any) => (
-                <EntityCard
-                  key={accommodation.id}
-                  title={accommodation.title}
-                  slug={accommodation.slug}
-                  href={`/accommodations/${accommodation.slug}`}
-                  image={accommodation.heroImage}
-                  description={accommodation.description}
-                />
-              ))}
-            </EntityGrid>
-          )}
-        </div>
-      </section>
+        <p className="text-base sm:text-lg text-ink/75 leading-relaxed pt-2">
+          From colonial tea planter bungalows and beachfront boutique villas to luxury safari
+          lodges and eco-resorts tucked inside rain forests.
+        </p>
+      </header>
+
+      <AccommodationFilters
+        region={filters.region}
+        accommodationType={filters.accommodationType}
+        regions={regionsResult}
+        accommodationTypes={accommodationTypesResult}
+      />
+
+      <AccommodationResults
+        initialAccommodations={initialAccommodations}
+        initialTotal={total}
+        initialTotalPages={totalPages}
+        filters={filters}
+      />
     </main>
   )
 }

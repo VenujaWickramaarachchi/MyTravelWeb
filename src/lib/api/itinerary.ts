@@ -14,7 +14,10 @@ import { ItineraryPage } from '@/types/pages/itinerary-page'
 import { ItineraryDayPage } from '@/types/pages/itinerary-day-page'
 
 export async function getItineraries(): Promise<Itinerary[]> {
-  const itineraries = await fetchAPI('itinerary?_embed')
+  const itineraries = await fetchAPI(
+    'itinerary?per_page=100&_embed',
+  )
+
   return itineraries.map(transformItinerary)
 }
 
@@ -57,20 +60,20 @@ export async function getItinerary(
       const [placesVisited, experiences, accommodation] = await Promise.all([
         day.placesVisited.length
           ? fetchByIds('destination', day.placesVisited).then((items) =>
-              items.map(transformDestination),
-            )
+            items.map(transformDestination),
+          )
           : [],
 
         day.experiences.length
           ? fetchByIds('experience', day.experiences).then((items) =>
-              items.map(transformExperience),
-            )
+            items.map(transformExperience),
+          )
           : [],
 
         day.accommodation
           ? fetchByIds('accommodation', [day.accommodation]).then((items) =>
-              items.length > 0 ? transformAccommodation(items[0]) : null,
-            )
+            items.length > 0 ? transformAccommodation(items[0]) : null,
+          )
           : null,
       ])
 
@@ -89,27 +92,27 @@ export async function getItinerary(
     await Promise.all([
       itineraryData.destinations.length
         ? fetchByIds('destination', itineraryData.destinations).then((items) =>
-            items.map(transformDestination),
-          )
+          items.map(transformDestination),
+        )
         : [],
 
       itineraryData.experiences.length
         ? fetchByIds('experience', itineraryData.experiences).then((items) =>
-            items.map(transformExperience),
-          )
+          items.map(transformExperience),
+        )
         : [],
 
       itineraryData.relatedTours.length
         ? fetchByIds('tour', itineraryData.relatedTours).then((items) =>
-            items.map(transformTour),
-          )
+          items.map(transformTour),
+        )
         : [],
 
       itineraryData.accommodationSuggestions.length
         ? fetchByIds(
-            'accommodation',
-            itineraryData.accommodationSuggestions,
-          ).then((items) => items.map(transformAccommodation))
+          'accommodation',
+          itineraryData.accommodationSuggestions,
+        ).then((items) => items.map(transformAccommodation))
         : [],
     ])
   return {

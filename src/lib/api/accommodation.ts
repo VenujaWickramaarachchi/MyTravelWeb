@@ -9,7 +9,9 @@ import { Accommodation } from '@/types/accommodation'
 import { AccommodationPage } from '@/types/pages/accommodation-page'
 
 export async function getAccommodations(): Promise<Accommodation[]> {
-  const accommodations = await fetchAPI('accommodation?_embed')
+  const accommodations = await fetchAPI(
+    'accommodation?per_page=100&_embed',
+  )
 
   return accommodations.map(transformAccommodation)
 }
@@ -44,8 +46,8 @@ export async function getAccommodation(
 
   const destination = destinationId
     ? await fetchByIds('destination', [destinationId]).then((items) =>
-        items.length > 0 ? transformDestination(items[0]) : null,
-      )
+      items.length > 0 ? transformDestination(items[0]) : null,
+    )
     : null
 
   return {

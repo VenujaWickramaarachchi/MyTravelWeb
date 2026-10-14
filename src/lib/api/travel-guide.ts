@@ -12,7 +12,9 @@ import { TravelGuide } from '@/types/travel-guide'
 import { TravelGuidePage } from '@/types/pages/travel-guide-page'
 
 export async function getTravelGuides(): Promise<TravelGuide[]> {
-  const travelGuides = await fetchAPI('travel-guide?_embed')
+  const travelGuides = await fetchAPI(
+    'travel-guide?per_page=100&_embed',
+  )
 
   return travelGuides.map(transformTravelGuide)
 }
@@ -51,26 +53,26 @@ export async function getTravelGuide(
   ] = await Promise.all([
     travelGuideData.relatedDestinations.length
       ? fetchByIds('destination', travelGuideData.relatedDestinations).then(
-          (items) => items.map(transformDestination),
-        )
+        (items) => items.map(transformDestination),
+      )
       : Promise.resolve([]),
 
     travelGuideData.relatedExperiences.length
       ? fetchByIds('experience', travelGuideData.relatedExperiences).then(
-          (items) => items.map(transformExperience),
-        )
+        (items) => items.map(transformExperience),
+      )
       : Promise.resolve([]),
 
     travelGuideData.relatedTours.length
       ? fetchByIds('tour', travelGuideData.relatedTours).then((items) =>
-          items.map(transformTour),
-        )
+        items.map(transformTour),
+      )
       : Promise.resolve([]),
 
     travelGuideData.relatedItineraries.length
       ? fetchByIds('itinerary', travelGuideData.relatedItineraries).then(
-          (items) => items.map(transformItinerary),
-        )
+        (items) => items.map(transformItinerary),
+      )
       : Promise.resolve([]),
   ])
 

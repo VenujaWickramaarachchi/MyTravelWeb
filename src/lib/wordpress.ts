@@ -37,7 +37,7 @@ export { getTestimonials, getTestimonialsForTour } from './api/testimonials'
 export { getTrustAwards } from './api/trust-award'
 
 // Site Settings
-export { getSiteSettings } from './api/site-settings'
+export { getSiteSettings, getHomepageHeroDestinations } from './api/site-settings'
 
 // search settings
 export { searchContent } from './api/search'

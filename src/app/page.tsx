@@ -5,234 +5,422 @@ import { getTours } from '@/lib/api/tour'
 import { getExperiences } from '@/lib/api/experience'
 import { getItineraries } from '@/lib/api/itinerary'
 import { getTravelGuides } from '@/lib/api/travel-guide'
+import { getTestimonials } from '@/lib/api/testimonials'
+import { getPartners } from '@/lib/api/partner'
+import { getTrustAwards } from '@/lib/api/trust-award'
+import { getTeamMembers } from '@/lib/api/team-member'
+import { getSiteSettings, getHomepageHeroDestinations } from '@/lib/wordpress'
 
-import EntityCard from '@/components/entities/EntityCard'
+
+import HomeTeam from '@/components/Home/HomeTeam'
+import HomeTrustAwards from '@/components/Home/HomeTrustAwards'
+import HomePartners from '@/components/Home/HomePartners'
 import EntityGrid from '@/components/entities/EntityGrid'
+import DestinationCard from '@/components/entities/Destination/DestinationCard'
+import TourCard from '@/components/entities/Tour/TourCard'
+import ExperienceCard from '@/components/entities/Experience/ExperienceCard'
+import ItineraryCard from '@/components/entities/Itinerary/ItineraryCard'
+import EntityCard from '@/components/entities/EntityCard'
+import SectionHeading from '@/components/Shared/SectionHeading'
+import CTA from '@/components/Shared/CTA'
+import HomeTestimonials from '@/components/Home/HomeTestimonials'
+import HomeHero from '@/components/Hero/HomeHero'
+import HomeEntityCarousel from '@/components/Home/HomeEntityCarousel'
+
+import type { Destination } from '@/types/destination'
+import type { HeroItem } from '@/types/hero'
 
 export default async function HomePage() {
-  const [destinations, tours, experiences, itineraries, travelGuides] =
-    await Promise.all([
-      getDestinations(),
-      getTours(),
-      getExperiences(),
-      getItineraries(),
-      getTravelGuides(),
-    ])
+  const [
+    destinations,
+    toursResult,
+    experiences,
+    itineraries,
+    travelGuides,
+    testimonials,
+    partners,
+    trustAwards,
+    teamMembers,
+    siteSettings,
+  ] = await Promise.all([
+    getDestinations(),
+    getTours({
+      page: 1,
+      perPage: 100,
+    }),
+    getExperiences(),
+    getItineraries(),
+    getTravelGuides(),
+    getTestimonials(),
+    getPartners(),
+    getTrustAwards(),
+    getTeamMembers(),
+    getSiteSettings()
+  ])
+
+  const tours = toursResult.tours
+
+  const featuredDestinations = destinations
+    .filter((destination: Destination) => destination.featuredDestination)
+    .slice(0, 6)
+
+  const featuredTours = tours
+    .filter((tour) => tour.featuredTour)
+    .slice(0, 6)
+
+  const featuredExperiences = experiences
+    .filter((experience) => experience.featuredExperience)
+    .slice(0, 6)
+
+  const featuredItineraries = itineraries
+    .filter((itinerary) => itinerary.featuredItinerary)
+    .slice(0, 6)
+
+  const featuredTravelGuides = travelGuides
+    .filter((guide) => guide.featuredTravelGuide)
+    .slice(0, 6)
+
+  // 1. Resolve manually selected hero destinations from Site Settings
+  const selectedHeroIds = siteSettings?.homepageHeroDestinations || []
+  const selectedDestinations =
+    selectedHeroIds.length > 0
+      ? await getHomepageHeroDestinations(selectedHeroIds)
+      : []
+
+
+
+  const validSelectedHeroItems = selectedHeroIds.length > 0
+    ? selectedDestinations.filter(
+      (item) =>
+        Boolean(
+          item.heroImage?.url ||
+          item.galleryImages?.[0]?.url,
+        ),
+    )
+    : []
+
+  let heroDestinations: HeroItem[] = []
+
+  if (validSelectedHeroItems.length > 0) {
+    // A. Use manually configured hero items in exact CMS order.
+    heroDestinations = validSelectedHeroItems.slice(0, 6)
+  } else {
+    // B. Fallback remains Destination-only.
+    const featuredWithImages = destinations
+      .filter(
+        (destination: Destination) =>
+          destination.featuredDestination &&
+          Boolean(
+            destination.heroImage?.url ||
+            destination.galleryImages?.[0]?.url,
+          ),
+      )
+      .slice(0, 6)
+
+    if (featuredWithImages.length > 0) {
+      heroDestinations = featuredWithImages.map((destination: Destination) => ({
+        id: destination.id,
+        title: destination.title,
+        slug: destination.slug,
+        heroTitle: destination.heroTitle || destination.title,
+        heroSubTitle:
+          destination.heroSubTitle || destination.description || '',
+        heroImage: destination.heroImage || null,
+        galleryImages: destination.galleryImages || [],
+        location: destination.location || '',
+        type: 'destination',
+      }))
+    } else {
+      heroDestinations = destinations
+        .filter((destination: Destination) =>
+          Boolean(
+            destination.heroImage?.url ||
+            destination.galleryImages?.[0]?.url,
+          ),
+        )
+        .slice(0, 6)
+        .map((destination: Destination) => ({
+          id: destination.id,
+          title: destination.title,
+          slug: destination.slug,
+          heroTitle: destination.heroTitle || destination.title,
+          heroSubTitle:
+            destination.heroSubTitle || destination.description || '',
+          heroImage: destination.heroImage || null,
+          galleryImages: destination.galleryImages || [],
+          location: destination.location || '',
+          type: 'destination',
+        }))
+    }
+  }
+
+
+
 
   return (
-    <main>
-      {/* Hero */}
-      <section>
-        <div>
-          <p>Welcome to Sri Lanka</p>
+    <main className='space-y-20 sm:space-y-28 pb-20'>
+      {/* Dynamic Hero Section */}
+      <HomeHero destinations={heroDestinations} />
 
-          <h1>Discover the beauty of Sri Lanka</h1>
+      {/* Featured Destinations */}
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
+          <SectionHeading
+            eyebrow='Curated Island Regions'
+            title="Sri Lanka's Defining Destinations"
+            description='From sun-drenched southern coves and sacred ancient ruins to emerald tea estates in the central hills.'
+            className='mb-0!'
+          />
+          <Link
+            href='/destinations'
+            className='hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-violet hover:text-gold-deep uppercase tracking-wider transition-colors pt-4 md:pt-0'
+          >
+            <span>All Destinations</span>
+            <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+            </svg>
+          </Link>
+        </div>
 
-          <p>
-            Explore unforgettable destinations, authentic experiences, carefully
-            designed tours, and inspiring journeys across the island.
-          </p>
+        {featuredDestinations.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured destinations carousel">
+            {featuredDestinations.map((destination: Destination) => (
+              <DestinationCard key={destination.id} destination={destination} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredDestinations.length > 0 ? (
+          <EntityGrid columns={3}>
+            {featuredDestinations.map((destination: Destination) => (
+              <DestinationCard key={destination.id} destination={destination} density='compact' />
+            ))}
+          </EntityGrid>
+        ) : null}
 
-          <div>
-            <Link href='/tours'>Explore Tours</Link>
+        <div className='mt-8 text-center md:hidden'>
+          <Link
+            href='/destinations'
+            className='inline-flex items-center px-6 py-2.5 text-sm font-medium text-violet border border-violet/30 rounded'
+          >
+            View All Destinations
+          </Link>
+        </div>
+      </section>
 
-            <Link href='/destinations'>Discover Destinations</Link>
+      {/* Featured Tours */}
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
+          <SectionHeading
+            eyebrow='Thoughtfully Designed Routes'
+            title='Featured Sri Lanka Tours'
+            description='Private, chauffeur-guided holidays balanced with authentic culture, boutique stays, and wildlife safaris.'
+            className='mb-0!'
+          />
+          <Link
+            href='/tours'
+            className='hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-violet hover:text-gold-deep uppercase tracking-wider transition-colors pt-4 md:pt-0'
+          >
+            <span>View All Tours</span>
+            <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+            </svg>
+          </Link>
+        </div>
+
+        {featuredTours.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured tours carousel">
+            {featuredTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredTours.length > 0 ? (
+          <EntityGrid columns={3}>
+            {featuredTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} density='compact' />
+            ))}
+          </EntityGrid>
+        ) : null}
+
+        <div className='mt-8 text-center md:hidden'>
+          <Link
+            href='/tours'
+            className='inline-flex items-center px-6 py-2.5 text-sm font-medium text-violet border border-violet/30 rounded'
+          >
+            View All Tours
+          </Link>
+        </div>
+      </section>
+
+      {/* Featured Experiences */}
+      <section className='bg-ivory/50 py-16 sm:py-20 border-y border-line'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
+            <SectionHeading
+              eyebrow='Unforgettable Encounters'
+              title='Moments That Make the Journey'
+              description='Immerse yourself in authentic island life with experiences that connect you with nature, heritage, and local communities.'
+              className='mb-0!'
+            />
+            <Link
+              href='/experiences'
+              className='hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-violet hover:text-gold-deep uppercase tracking-wider transition-colors pt-4 md:pt-0'
+            >
+              <span>Explore All Experiences</span>
+              <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+              </svg>
+            </Link>
+          </div>
+
+          {featuredExperiences.length >= 4 ? (
+            <HomeEntityCarousel ariaLabel="Featured experiences carousel">
+              {featuredExperiences.map((experience) => (
+                <ExperienceCard key={experience.id} experience={experience} density='compact' />
+              ))}
+            </HomeEntityCarousel>
+          ) : featuredExperiences.length > 0 ? (
+            <EntityGrid columns={3}>
+              {featuredExperiences.map((experience) => (
+                <ExperienceCard key={experience.id} experience={experience} density='compact' />
+              ))}
+            </EntityGrid>
+          ) : null}
+
+          <div className='mt-8 text-center md:hidden'>
+            <Link
+              href='/experiences'
+              className='inline-flex items-center px-6 py-2.5 text-sm font-medium text-violet border border-violet/30 rounded'
+            >
+              Explore Experiences
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Destinations */}
-      <section>
-        <div>
-          <p>Explore the island</p>
+      {/* Featured Itineraries */}
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
+          <SectionHeading
+            eyebrow='Plan Your Journey'
+            title='Curated Travel Itineraries'
+            description='Ready-to-book and customizable travel itineraries designed around Sri Lanka’s most inspiring destinations.'
+            className='mb-0!'
+          />
+          <Link
+            href='/itineraries'
+            className='hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-violet hover:text-gold-deep uppercase tracking-wider transition-colors pt-4 md:pt-0'
+          >
+            <span>All Itineraries</span>
+            <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+            </svg>
+          </Link>
+        </div>
 
-          <h2>Discover Sri Lanka's destinations</h2>
+        {featuredItineraries.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured itineraries carousel">
+            {featuredItineraries.map((itinerary) => (
+              <ItineraryCard key={itinerary.id} itinerary={itinerary} density='compact' />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredItineraries.length > 0 ? (
+          <EntityGrid columns={3}>
+            {featuredItineraries.map((itinerary) => (
+              <ItineraryCard key={itinerary.id} itinerary={itinerary} density='compact' />
+            ))}
+          </EntityGrid>
+        ) : null}
 
-          <p>
-            From tropical beaches and ancient cities to misty mountains and
-            wildlife-rich landscapes, discover places worth experiencing.
-          </p>
+        <div className='mt-8 text-center md:hidden'>
+          <Link
+            href='/itineraries'
+            className='inline-flex items-center px-6 py-2.5 text-sm font-medium text-violet border border-violet/30 rounded'
+          >
+            Explore Itineraries
+          </Link>
+        </div>
+      </section>
+      {/* Testimonials */}
+      <HomeTestimonials testimonials={testimonials} />
+      {/* Featured Travel Guides */}
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col md:flex-row md:items-end justify-between mb-10'>
+          <SectionHeading
+            eyebrow='Expert Island Insights'
+            title='Travel Guides & Inspiration'
+            description='Practical timing advice, regional secrets, and inspiring articles from our Sri Lankan destination specialists.'
+            className='mb-0!'
+          />
+          <Link
+            href='/travel-guides'
+            className='hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-violet hover:text-gold-deep uppercase tracking-wider transition-colors pt-4 md:pt-0'
+          >
+            <span>Read All Guides</span>
+            <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+            </svg>
+          </Link>
+        </div>
 
-          {destinations.length > 0 ? (
-            <EntityGrid>
-              {destinations
-                .filter((destination: any) => destination.featuredDestination)
-                .slice(0, 6)
-                .map((destination: any) => (
-                  <EntityCard
-                    key={destination.id}
-                    title={destination.title}
-                    slug={destination.slug}
-                    href={`/destinations/${destination.slug}`}
-                    image={destination.heroImage}
-                    description={destination.description}
-                  />
-                ))}
-            </EntityGrid>
-          ) : (
-            <p>No destinations available.</p>
-          )}
-
-          <Link href='/destinations'>View All Destinations</Link>
+        {featuredTravelGuides.length >= 4 ? (
+          <HomeEntityCarousel ariaLabel="Featured travel guides carousel">
+            {featuredTravelGuides.map((guide) => (
+              <EntityCard
+                key={guide.id}
+                title={guide.title}
+                slug={guide.slug}
+                href={`/travel-guides/${guide.slug}`}
+                image={guide.heroImage}
+                description={guide.shortDescription}
+                eyebrow='Travel Guide'
+                density='compact'
+              />
+            ))}
+          </HomeEntityCarousel>
+        ) : featuredTravelGuides.length > 0 ? (
+          <EntityGrid columns={3}>
+            {featuredTravelGuides.map((guide) => (
+              <EntityCard
+                key={guide.id}
+                title={guide.title}
+                slug={guide.slug}
+                href={`/travel-guides/${guide.slug}`}
+                image={guide.heroImage}
+                description={guide.shortDescription}
+                eyebrow='Travel Guide'
+                density='compact'
+              />
+            ))}
+          </EntityGrid>
+        ) : null}
+        <div className='mt-8 text-center md:hidden'>
+          <Link
+            href='/travel-guides'
+            className='inline-flex items-center px-6 py-2.5 text-sm font-medium text-violet border border-violet/30 rounded'
+          >
+            Read Travel Guides
+          </Link>
         </div>
       </section>
 
-      {/* Tours */}
-      <section>
-        <div>
-          <p>Travel your way</p>
+      {/* Partners */}
+      <HomePartners partners={partners} />
 
-          <h2>Explore our tours</h2>
+      {/* Trust Awards */}
+      <HomeTrustAwards trustAwards={trustAwards} />
 
-          <p>
-            Find thoughtfully planned journeys designed to help you experience
-            the best of Sri Lanka.
-          </p>
+      {/* Team Members */}
+      <HomeTeam teamMembers={teamMembers} />
 
-          {tours.length > 0 ? (
-            <EntityGrid>
-              {tours
-                .filter((tour: any) => tour.featuredTour)
-                .slice(0, 6)
-                .map((tour: any) => (
-                  <EntityCard
-                    key={tour.id}
-                    title={tour.title}
-                    slug={tour.slug}
-                    href={`/tours/${tour.slug}`}
-                    image={tour.heroImage}
-                    description={tour.shortDescription}
-                  />
-                ))}
-            </EntityGrid>
-          ) : (
-            <p>No tours available.</p>
-          )}
-
-          <Link href='/tours'>View All Tours</Link>
-        </div>
+      {/* Final Global CTA */}
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <CTA
+          title={siteSettings.globalCtaTitle}
+          description={siteSettings.globalCtaDescription}
+          buttonText={siteSettings.globalCtaButton}
+          buttonHref={siteSettings.globalCtaUrl}
+        />
       </section>
 
-      {/* Experiences */}
-      <section>
-        <div>
-          <p>Experience Sri Lanka</p>
-
-          <h2>Moments that make the journey</h2>
-
-          <p>
-            Discover authentic experiences that bring Sri Lanka's culture,
-            nature, food, adventure, and people closer to you.
-          </p>
-
-          {experiences.length > 0 ? (
-            <EntityGrid>
-              {experiences
-                .filter((experience: any) => experience.featuredExperience)
-                .slice(0, 6)
-                .map((experience: any) => (
-                  <EntityCard
-                    key={experience.id}
-                    title={experience.title}
-                    slug={experience.slug}
-                    href={`/experiences/${experience.slug}`}
-                    image={experience.heroImage}
-                    description={experience.shortDescription}
-                  />
-                ))}
-            </EntityGrid>
-          ) : (
-            <p>No experiences are available</p>
-          )}
-          <Link href='/experiences'>Explore Experiences</Link>
-        </div>
-      </section>
-
-      {/* Itineraries */}
-      <section>
-        <div>
-          <p>Plan your journey</p>
-
-          <h2>Travel with an itinerary that fits you</h2>
-
-          <p>
-            Explore ready-made Sri Lanka itineraries created around
-            destinations, experiences, and unforgettable moments.
-          </p>
-
-          {itineraries.length > 0 ? (
-            <EntityGrid>
-              {itineraries
-                .filter((itinerary: any) => itinerary.featuredItinerary)
-                .slice(0, 6)
-                .map((itinerary: any) => (
-                  <EntityCard
-                    key={itinerary.id}
-                    title={itinerary.title}
-                    slug={itinerary.slug}
-                    href={`/itineraries/${itinerary.slug}`}
-                    image={itinerary.heroImage}
-                    description={itinerary.shortDescription}
-                  />
-                ))}
-            </EntityGrid>
-          ) : (
-            <p>No itineraries available</p>
-          )}
-
-          <Link href='/itineraries'>Explore Itineraries</Link>
-        </div>
-      </section>
-
-      {/* Travel Guides */}
-      <section>
-        <div>
-          <p>Travel inspiration</p>
-
-          <h2>Travel guides & inspiration</h2>
-
-          <p>
-            Get useful ideas, travel tips, and inspiration for planning your Sri
-            Lankan adventure.
-          </p>
-
-          {travelGuides.length > 0 ? (
-            <EntityGrid>
-              {travelGuides
-                .filter((guide: any) => guide.featuredTravelGuide)
-                .slice(0, 6)
-                .map((guide: any) => (
-                  <EntityCard
-                    key={guide.id}
-                    title={guide.title}
-                    slug={guide.slug}
-                    href={`/travel-guides/${guide.slug}`}
-                    image={guide.heroImage}
-                    description={guide.shortDescription}
-                  />
-                ))}
-            </EntityGrid>
-          ) : (
-            <p>No travel guides are available</p>
-          )}
-
-          <Link href='/travel-guides'>Read Travel Guides</Link>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section>
-        <div>
-          <h2>Ready to explore Sri Lanka?</h2>
-
-          <p>
-            Tell us what kind of journey you're dreaming of and start planning
-            your Sri Lankan adventure.
-          </p>
-
-          <Link href='/contact'>Plan Your Trip</Link>
-        </div>
-      </section>
     </main>
   )
 }

@@ -1,9 +1,14 @@
-import { getFAQs } from '@/lib/wordpress'
+import { getFAQs } from '@/lib/api/faq'
+import { getFAQCategories } from '@/lib/api/taxonomy'
+import { filterFAQs } from '@/lib/filters/faq-filters'
 
-import FAQItem from '@/components/content/FAQ/FAQItem'
+import FAQFilters from '@/components/entities/FAQs/FAQFilters'
+import FAQResults from '@/components/entities/FAQs/FAQResults'
 import FAQListSchema from '@/components/SEO/FAQListSchema'
 
 import { generateSEO } from '@/lib/seo'
+
+import type { FAQFilterParams } from '@/types/filter-types'
 
 export async function generateMetadata() {
   return generateSEO({
@@ -14,20 +19,58 @@ export async function generateMetadata() {
   })
 }
 
-export default async function FAQsPage() {
-  const faqs = await getFAQs()
+interface FAQsPageProps {
+  searchParams: Promise<FAQFilterParams>
+}
+
+export default async function FAQsPage({
+  searchParams,
+}: FAQsPageProps) {
+  const filters = await searchParams
+
+  const [faqs, faqCategories] = await Promise.all([
+    getFAQs(),
+    getFAQCategories().catch(() => []),
+  ])
+
+  const filteredFAQs = filterFAQs(faqs, filters)
+
+  const initialFAQs = filteredFAQs.slice(0, 12)
+
+  const total = filteredFAQs.length
+  const totalPages = Math.ceil(total / 12)
 
   return (
-    <main>
-      <FAQListSchema faqs={faqs} />
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+      <FAQListSchema faqs={filteredFAQs} />
 
-      <h1>Frequently Asked Questions</h1>
+      <header className="space-y-3 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep">
+          Planning Assistance
+        </p>
 
-      <section>
-        {faqs.map((faq) => (
-          <FAQItem key={faq.id} faq={faq} />
-        ))}
-      </section>
+        <h1 className="font-serif text-4xl sm:text-5xl font-normal text-ink tracking-tight">
+          Frequently Asked Questions
+        </h1>
+
+        <p className="text-base sm:text-lg text-ink/75 leading-relaxed pt-2 max-w-2xl mx-auto">
+          Find clear answers to essential questions about Sri Lanka entry rules,
+          best seasons, travel logistics, safety, visa requirements, and private
+          tour planning.
+        </p>
+      </header>
+
+      <FAQFilters
+        filters={filters}
+        faqCategories={faqCategories}
+      />
+
+      <FAQResults
+        initialFAQs={initialFAQs}
+        initialTotal={total}
+        initialTotalPages={totalPages}
+        filters={filters}
+      />
     </main>
   )
 }

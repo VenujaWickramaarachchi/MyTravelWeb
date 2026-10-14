@@ -9,8 +9,9 @@ import { Experience } from '@/types/experience'
 import { ExperiencePage } from '@/types/pages/experience-page'
 
 export async function getExperiences(): Promise<Experience[]> {
-  const experiences = await fetchAPI('experience?_embed')
-
+  const experiences = await fetchAPI(
+    'experience?per_page=100&_embed',
+  )
   return experiences.map(transformExperience)
 }
 
@@ -43,15 +44,15 @@ export async function getExperience(
   // Related Destinations
   const destinations = experienceData.destinations.length
     ? await fetchByIds('destination', experienceData.destinations).then(
-        (items) => items.map(transformDestination),
-      )
+      (items) => items.map(transformDestination),
+    )
     : []
 
   // Related Tours
   const relatedTours = experienceData.relatedTours.length
     ? await fetchByIds('tour', experienceData.relatedTours).then((items) =>
-        items.map(transformTour),
-      )
+      items.map(transformTour),
+    )
     : []
 
   return {

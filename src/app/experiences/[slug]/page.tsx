@@ -11,8 +11,8 @@ import ExperienceDestinations from '@/components/Experiences/ExperienceDestinati
 import ExperienceRelatedTours from '@/components/Experiences/ExperienceRelatedTours'
 import ExperienceImportantInformation from '@/components/Experiences/ExperienceImportantInformation'
 import ExperienceFAQ from '@/components/Experiences/ExperienceFAQ'
-
 import GallerySection from '@/components/content/Gallery/GallerySection'
+import Breadcrumbs from '@/components/Shared/Breadcrumbs'
 
 import { generateSEO } from '@/lib/seo'
 
@@ -60,44 +60,38 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound()
   }
 
-  return (
-    <main>
-      <AEOAnswerSchema data={experience} />
+  const breadcrumbItems = createBreadcrumbs(
+    'Experiences',
+    'experiences',
+    experience.breadcrumbLabel || experience.title,
+  )
 
-      <BreadcrumbSchema
-        items={createBreadcrumbs(
-          'Experiences',
-          'experiences',
-          experience.breadcrumbLabel || experience.title,
-        )}
-      />
+  return (
+    <main className='pb-20 space-y-4'>
+      <AEOAnswerSchema data={experience} />
+      <BreadcrumbSchema items={breadcrumbItems} />
+
       <ExperienceHero experience={experience} />
 
-      <ExperienceOverview experience={experience} />
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       <ExperienceDetails experience={experience} />
-
+      <ExperienceOverview experience={experience} />
       <ExperienceWhatToExpect experience={experience} />
-
       <ExperienceWhoIsItFor experience={experience} />
-
       <ExperienceHighlights experience={experience} />
-
       <GallerySection
         images={experience.galleryImages}
         title='Experience Gallery'
       />
-
       <ExperienceDestinations
         destinations={experience.relationships.destinations}
       />
-
       <ExperienceRelatedTours tours={experience.relationships.relatedTours} />
-
       <ExperienceImportantInformation experience={experience} />
-
       <AEOContent data={experience} />
-
       <ExperienceFAQ experience={experience} />
     </main>
   )

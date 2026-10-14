@@ -1,43 +1,64 @@
 import { getTravelGuides } from '@/lib/api/travel-guide'
-import EntityCard from '@/components/entities/EntityCard'
-import EntityGrid from '@/components/entities/EntityGrid'
+import { getTravelGuideTopics } from '@/lib/api/taxonomy'
+import { filterTravelGuides } from '@/lib/filters/travel-guide-filters'
 
-export default async function TravelGuidesPage() {
-  const travelGuides = await getTravelGuides()
+import TravelGuideFilters from '@/components/entities/TravelGuides/TravelGuideFilters'
+import TravelGuideResults from '@/components/entities/TravelGuides/TravelGuideResults'
+
+import type { TravelGuideFilterParams } from '@/types/filter-types'
+
+interface TravelGuidesPageProps {
+  searchParams: Promise<TravelGuideFilterParams>
+}
+
+export default async function TravelGuidesPage({
+  searchParams,
+}: TravelGuidesPageProps) {
+  const filters = await searchParams
+
+  const [travelGuides, travelGuideTopics] = await Promise.all([
+    getTravelGuides(),
+    getTravelGuideTopics().catch(() => []),
+  ])
+
+  const filteredTravelGuides = filterTravelGuides(
+    travelGuides,
+    filters,
+  )
+
+  const initialTravelGuides = filteredTravelGuides.slice(0, 12)
+
+  const total = filteredTravelGuides.length
+  const totalPages = Math.ceil(total / 12)
 
   return (
-    <main>
-      <section>
-        <div>
-          <h1>Travel Guides</h1>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+      <header className="max-w-3xl space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep">
+          Island Knowledge & Perspectives
+        </p>
 
-          <p>
-            Get useful Sri Lanka travel guides, tips, ideas, and inspiration to
-            help you plan a memorable journey around the island.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-serif text-4xl sm:text-5xl font-normal text-ink tracking-tight">
+          Sri Lanka Travel Guides & Inspiration
+        </h1>
 
-      <section>
-        <div>
-          {travelGuides.length === 0 ? (
-            <p>No travel guides available.</p>
-          ) : (
-            <EntityGrid>
-              {travelGuides.map((guide: any) => (
-                <EntityCard
-                  key={guide.id}
-                  title={guide.title}
-                  slug={guide.slug}
-                  href={`/travel-guides/${guide.slug}`}
-                  image={guide.heroImage}
-                  description={guide.description}
-                />
-              ))}
-            </EntityGrid>
-          )}
-        </div>
-      </section>
+        <p className="text-base sm:text-lg text-ink/75 leading-relaxed pt-2">
+          In-depth guides, practical advice, regional recommendations, and insider travel
+          notes to help you prepare for an unforgettable Sri Lankan adventure.
+        </p>
+      </header>
+
+      <TravelGuideFilters
+        filters={filters}
+        travelGuideTopics={travelGuideTopics}
+      />
+
+      <TravelGuideResults
+        initialTravelGuides={initialTravelGuides}
+        initialTotal={total}
+        initialTotalPages={totalPages}
+        filters={filters}
+      />
     </main>
   )
 }

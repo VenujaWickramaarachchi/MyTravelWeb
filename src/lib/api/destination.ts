@@ -24,11 +24,31 @@ function getPostObjectIds(value: any): number[] {
 }
 
 export async function getDestinations() {
-  const destinations = await fetchAPI('destination?per_page=100&_embed')
+  const destinations = await fetchAPI(
+    'destination?per_page=100&_embed',
+  )
 
   return destinations.map(transformDestination)
 }
 
+export async function getDestinationTypes() {
+  const destinations = await getDestinations()
+
+  const types = destinations.flatMap(
+    (destination: any) => destination.destinationType || [],
+  )
+
+  return Array.from(
+    new Set(
+      types
+        .map((type: unknown) => String(type).trim())
+        .filter(Boolean),
+    ),
+  ).map((type) => ({
+    name: type,
+    value: type,
+  }))
+}
 export async function getDestination(
   slug: string,
 ): Promise<DestinationPage | null> {
