@@ -28,7 +28,9 @@ export async function getDestinations() {
     'destination?per_page=100&_embed',
   )
 
-  return destinations.map(transformDestination)
+  return (Array.isArray(destinations) ? destinations : []).map(
+    transformDestination,
+  )
 }
 
 export async function getDestinationTypes() {
@@ -52,28 +54,15 @@ export async function getDestinationTypes() {
 export async function getDestination(
   slug: string,
 ): Promise<DestinationPage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/destination?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`destination?slug=${slug}&_embed`)
+    const destination = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!destination) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching destination: ${slug}`)
-  }
-
-  const data = await res.json()
-  const destination = data[0]
-
-  if (!destination) {
-    return null
-  }
-
-  const destinationData = transformDestination(destination)
+    const destinationData = transformDestination(destination)
 
   // ACF Post Object relationships
   const accommodationIds = getPostObjectIds(
@@ -126,4 +115,8 @@ export async function getDestination(
       mainAttractions: relatedAttractions,
     },
   }
+} catch (error) {
+  console.warn(`[getDestination] Error fetching destination ${slug}:`, error)
+  return null
+}
 }

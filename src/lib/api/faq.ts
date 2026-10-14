@@ -14,32 +14,19 @@ export async function getFAQs(): Promise<FAQ[]> {
     'faq?per_page=100&_embed',
   )
 
-  return faqs.map(transformFAQ)
+  return (Array.isArray(faqs) ? faqs : []).map(transformFAQ)
 }
 
 export async function getFAQ(slug: string): Promise<FAQPage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/faq?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`faq?slug=${slug}&_embed`)
+    const faq = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!faq) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching FAQ: ${slug}`)
-  }
-
-  const data = await res.json()
-  const faq = data[0]
-
-  if (!faq) {
-    return null
-  }
-
-  const faqData = transformFAQ(faq)
+    const faqData = transformFAQ(faq)
 
   const [relatedTour, relatedDestination, relatedExperience] =
     await Promise.all([
@@ -71,4 +58,8 @@ export async function getFAQ(slug: string): Promise<FAQPage | null> {
       relatedExperience,
     },
   }
+} catch (error) {
+  console.warn(`[getFAQ] Error fetching FAQ ${slug}:`, error)
+  return null
+}
 }

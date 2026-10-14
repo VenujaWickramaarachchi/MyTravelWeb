@@ -7,7 +7,7 @@ import { Partner } from '@/types/partner'
 export async function getPartners(): Promise<Partner[]> {
   const partners = await fetchAPI('partner?_embed')
 
-  return partners
+  return (Array.isArray(partners) ? partners : [])
     .map(transformPartner)
     .sort(
       (a: Partner, b: Partner) =>
@@ -16,26 +16,17 @@ export async function getPartners(): Promise<Partner[]> {
 }
 
 export async function getPartner(slug: string): Promise<Partner | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/partner?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`partner?slug=${slug}&_embed`)
+    const partner = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!partner) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching partner: ${slug}`)
-  }
-
-  const data = await res.json()
-  const partner = data[0]
-
-  if (!partner) {
+    return transformPartner(partner)
+  } catch (error) {
+    console.warn(`[getPartner] Error fetching partner ${slug}:`, error)
     return null
   }
-
-  return transformPartner(partner)
 }

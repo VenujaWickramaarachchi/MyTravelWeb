@@ -57,38 +57,27 @@ export interface PaginatedTours {
   )
 
   return {
-    tours: response.data.map(transformTour),
-    total: Number(response.headers.get('X-WP-Total') || 0),
+    tours: Array.isArray(response?.data)
+      ? response.data.map(transformTour)
+      : [],
+    total: Number(response?.headers?.get?.('X-WP-Total') || 0),
     totalPages: Number(
-      response.headers.get('X-WP-TotalPages') || 0,
+      response?.headers?.get?.('X-WP-TotalPages') || 0,
     ),
     currentPage: page,
   }
 }
 
 export async function getTour(slug: string): Promise<TourPage | null> {
-  const url =
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
-    `/wp-json/wp/v2/tour?slug=${slug}&_embed`
+  try {
+    const data = await fetchAPI(`tour?slug=${slug}&_embed`)
+    const tour = Array.isArray(data) ? data[0] : null
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 60,
-    },
-  })
+    if (!tour) {
+      return null
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed fetching tour: ${slug}`)
-  }
-
-  const data = await res.json()
-  const tour = data[0]
-
-  if (!tour) {
-    return null
-  }
-
-  const tourData = transformTour(tour)
+    const tourData = transformTour(tour)
 
   // Relationship IDs from ACF
   const destinationIds = tour.acf?.destinations || []
@@ -183,4 +172,8 @@ export async function getTour(slug: string): Promise<TourPage | null> {
       testimonials,
     },
   }
+} catch (error) {
+  console.warn(`[getTour] Error fetching tour ${slug}:`, error)
+  return null
+}
 }

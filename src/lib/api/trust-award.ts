@@ -7,7 +7,7 @@ import { TrustAward } from '@/types/trust-award'
 export async function getTrustAwards(): Promise<TrustAward[]> {
   const trustAwards = await fetchAPI('trust_award?_embed')
 
-  return trustAwards
+  return (Array.isArray(trustAwards) ? trustAwards : [])
     .map(transformTrustAward)
     .sort(
       (a: TrustAward, b: TrustAward) =>

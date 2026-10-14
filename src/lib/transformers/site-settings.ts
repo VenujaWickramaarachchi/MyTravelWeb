@@ -38,64 +38,65 @@ function getPostObjectIds(value: any): number[] {
 }
 
 export function transformSiteSettings(settings: any) {
+  const acf = settings?.acf || {}
   return {
-    siteLogo: normalizeImage(settings.acf?.site_logo),
+    siteLogo: normalizeImage(acf.site_logo),
 
-    footerLogo: normalizeImage(settings.acf?.footer_logo),
+    footerLogo: normalizeImage(acf.footer_logo),
 
-    favicon: normalizeImage(settings.acf?.favicon),
+    favicon: normalizeImage(acf.favicon),
 
-    phone: settings.acf?.phone || '',
+    phone: acf.phone || '',
 
-    whatsapp: settings.acf?.whatsapp || '',
+    whatsapp: acf.whatsapp || '',
 
-    email: settings.acf?.email || '',
+    email: acf.email || '',
 
-    businessAddress: settings.acf?.business_address || '',
+    businessAddress: acf.business_address || '',
 
-    facebookUrl: settings.acf?.facebook_url || '',
+    facebookUrl: acf.facebook_url || '',
 
-    instagramUrl: settings.acf?.instagram_url || '',
+    instagramUrl: acf.instagram_url || '',
 
-    youtubeUrl: settings.acf?.youtube_url || '',
+    youtubeUrl: acf.youtube_url || '',
 
-    tiktokUrl: settings.acf?.tiktok_url || '',
+    tiktokUrl: acf.tiktok_url || '',
 
-    globalCtaTitle: settings.acf?.global_cta_title || '',
+    globalCtaTitle: acf.global_cta_title || '',
 
-    globalCtaDescription: settings.acf?.global_cta_description || '',
+    globalCtaDescription: acf.global_cta_description || '',
 
-    globalCtaButton: settings.acf?.global_cta_button || '',
+    globalCtaButton: acf.global_cta_button || '',
 
-    globalCtaUrl: settings.acf?.global_cta_url || '',
+    globalCtaUrl: acf.global_cta_url || '',
 
-    defaultSeoTitle: settings.acf?.default_seo_title || '',
+    defaultSeoTitle: acf.default_seo_title || '',
 
-    defaultMetaDescription: settings.acf?.default_meta_description || '',
+    defaultMetaDescription: acf.default_meta_description || '',
 
-    defaultSocialImage: normalizeImage(settings.acf?.default_social_image),
+    defaultSocialImage: normalizeImage(acf.default_social_image),
 
-    footerHeading: settings.acf?.footer_heading || '',
+    footerHeading: acf.footer_heading || '',
 
-    footerDescription: settings.acf?.footer_description || '',
+    footerDescription: acf.footer_description || '',
 
-    copyrightText: settings.acf?.copyright_text || '',
+    copyrightText: acf.copyright_text || '',
 
-    googleAnalyticsId: settings.acf?.google_analytics_id || '',
+    googleAnalyticsId: acf.google_analytics_id || '',
 
-    googleTagManagerId: settings.acf?.google_tag_manager_id || '',
+    googleTagManagerId: acf.google_tag_manager_id || '',
 
-    popularSearch1: settings.acf?.popular_search_1 || '',
-    popularSearch2: settings.acf?.popular_search_2 || '',
-    popularSearch3: settings.acf?.popular_search_3 || '',
-    popularSearch4: settings.acf?.popular_search_4 || '',
-    popularSearch5: settings.acf?.popular_search_5 || '',
-    popularSearch6: settings.acf?.popular_search_6 || '',
-    popularSearch7: settings.acf?.popular_search_7 || '',
-    popularSearch8: settings.acf?.popular_search_8 || '',
+    popularSearch1: acf.popular_search_1 || '',
+    popularSearch2: acf.popular_search_2 || '',
+    popularSearch3: acf.popular_search_3 || '',
+    popularSearch4: acf.popular_search_4 || '',
+    popularSearch5: acf.popular_search_5 || '',
+    popularSearch6: acf.popular_search_6 || '',
+    popularSearch7: acf.popular_search_7 || '',
+    popularSearch8: acf.popular_search_8 || '',
 
     homepageHeroDestinations: getPostObjectIds(
-      settings.acf?.homepage_hero_destinations,
+      acf.homepage_hero_destinations,
     ),
   }
 }
