@@ -3,6 +3,8 @@ export interface TourFilterParams {
     tourType?: string
     duration?: string
     tourStyle?: string
+    tourTheme?: string
+
     price?: string
     sort?: string
 }

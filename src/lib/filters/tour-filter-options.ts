@@ -10,12 +10,9 @@ export const tourDurationOptions = [
 
 export const tourStyleOptions = [
     { label: 'All Styles', value: '' },
-    { label: 'Private', value: 'Private' },
+    { label: 'Essential', value: 'Essential' },
+    { label: 'Signature', value: 'Signature' },
     { label: 'Luxury', value: 'Luxury' },
-    { label: 'Family', value: 'Family' },
-    { label: 'Adventure', value: 'Adventure' },
-    { label: 'Cultural', value: 'Cultural' },
-    { label: 'Relaxed', value: 'Relaxed' },
 ]
 
 export const tourPriceOptions = [
@@ -25,4 +22,19 @@ export const tourPriceOptions = [
     { label: '$1,000 – $1,999', value: '1000-1999' },
     { label: '$2,000 – $3,499', value: '2000-3499' },
     { label: '$3,500+', value: '3500-plus' },
+]
+
+export const tourThemeOptions = [
+    { label: 'All Themes', value: '' },
+    { label: 'Classic / Highlights', value: 'Classic / Highlights' },
+    { label: 'Culture & Heritage', value: 'Culture & Heritage' },
+    { label: 'Wildlife & Safari', value: 'Wildlife & Safari' },
+    { label: 'Hill Country & Tea', value: 'Hill Country & Tea' },
+    { label: 'Beach & Coast', value: 'Beach & Coast' },
+    { label: 'Honeymoon & Romance', value: 'Honeymoon & Romance' },
+    { label: 'Family', value: 'Family' },
+    { label: 'Ayurveda & Wellness', value: 'Ayurveda & Wellness' },
+    { label: 'Adventure & Trekking', value: 'Adventure & Trekking' },
+    { label: 'Ramayana Trail', value: 'Ramayana Trail' },
+    { label: 'Special Interest', value: 'Special Interest' },
 ]

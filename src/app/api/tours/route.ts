@@ -12,6 +12,7 @@ export async function GET(request: Request) {
         tourType: searchParams.get('tourType') || undefined,
         duration: searchParams.get('duration') || undefined,
         tourStyle: searchParams.get('tourStyle') || undefined,
+        tourTheme: searchParams.get('tourTheme') || undefined,
         price: searchParams.get('price') || undefined,
     }
 

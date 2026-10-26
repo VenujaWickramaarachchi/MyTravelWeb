@@ -62,7 +62,9 @@ export default function TourResults({
             if (filters.tourStyle) {
                 params.set('tourStyle', filters.tourStyle)
             }
-
+            if (filters.tourTheme) {
+                params.set('tourTheme', filters.tourTheme)
+            }
             if (filters.price) {
                 params.set('price', filters.price)
             }

@@ -78,6 +78,21 @@ function matchesTourStyle(
     )
 }
 
+function matchesTourTheme(
+    tourTheme: string,
+    selectedTheme: string | undefined,
+): boolean {
+    if (!selectedTheme) {
+        return true
+    }
+
+    return (
+        tourTheme.trim().toLowerCase() ===
+        selectedTheme.trim().toLowerCase()
+    )
+}
+
+
 export function filterTours(
     tours: Tour[],
     filters: TourFilterParams,
@@ -101,6 +116,11 @@ export function filterTours(
             filters.tourStyle,
         )
 
+        const matchesTheme = matchesTourTheme(
+            tour.tourTheme,
+            filters.tourTheme,
+        )
+
         const matchesPriceRange = matchesPrice(
             tour.priceFrom,
             filters.price,
@@ -111,6 +131,7 @@ export function filterTours(
             matchesTourType &&
             matchesTourDuration &&
             matchesStyle &&
+            matchesTheme &&
             matchesPriceRange
         )
     })

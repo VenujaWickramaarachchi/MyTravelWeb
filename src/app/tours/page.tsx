@@ -70,6 +70,7 @@ export default async function ToursPage({
         tourType={filters.tourType}
         duration={filters.duration}
         tourStyle={filters.tourStyle}
+        tourTheme={filters.tourTheme}
         price={filters.price}
         sort={filters.sort}
         regions={regionsResult}

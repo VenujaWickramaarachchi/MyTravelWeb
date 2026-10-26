@@ -24,6 +24,7 @@ export interface Tour {
   priceDescription: string
   groupSize: string
   tourStyle: string
+  tourTheme: string
   bestTimeToTravel: string
 
   // Content

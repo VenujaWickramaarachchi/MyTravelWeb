@@ -4,6 +4,7 @@ import {
     tourDurationOptions,
     tourStyleOptions,
     tourPriceOptions,
+    tourThemeOptions
 } from '@/lib/filters/tour-filter-options'
 
 import type { TaxonomyTerm } from '@/types/taxonomy'
@@ -13,6 +14,7 @@ interface TourFiltersProps {
     tourType?: string
     duration?: string
     tourStyle?: string
+    tourTheme?: string
     price?: string
     sort?: string
     regions: TaxonomyTerm[]
@@ -24,6 +26,7 @@ export default function TourFilters({
     tourType,
     duration,
     tourStyle,
+    tourTheme,
     price,
     sort,
     regions,
@@ -59,7 +62,7 @@ export default function TourFilters({
             method="get"
             className="border-y border-line py-6"
         >
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
                 <FilterSelect
                     label="Region"
                     name="region"
@@ -86,6 +89,13 @@ export default function TourFilters({
                     name="tourStyle"
                     value={tourStyle}
                     options={tourStyleOptions}
+                />
+
+                <FilterSelect
+                    label="Tour Theme"
+                    name="tourTheme"
+                    value={tourTheme}
+                    options={tourThemeOptions}
                 />
 
                 <FilterSelect

@@ -68,6 +68,7 @@ export function transformTour(tour: any) {
     priceDescription: tour.acf?.price_description || '',
     groupSize: tour.acf?.group_size || '',
     tourStyle: tour.acf?.tour_style || '',
+    tourTheme: tour.acf?.tour_theme || '',
     bestTimeToTravel: tour.acf?.best_time_to_travel || '',
 
     // Content
