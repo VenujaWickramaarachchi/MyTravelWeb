@@ -286,3 +286,42 @@ export function LuggagePackIcon({ className = 'w-4 h-4', size = 16 }: IconProps)
     </svg>
   )
 }
+
+export function CheckIcon({ className = 'w-4 h-4', size = 16 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      className={className}
+      aria-hidden='true'
+    >
+      <polyline points='20 6 9 17 4 12' />
+    </svg>
+  )
+}
+
+export function ShieldTrustIcon({ className = 'w-4 h-4', size = 16 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      className={className}
+      aria-hidden='true'
+    >
+      <path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' />
+      <polyline points='9 12 11 14 15 10' />
+    </svg>
+  )
+}

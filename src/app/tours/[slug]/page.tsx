@@ -1,19 +1,21 @@
 import { getTour } from '@/lib/wordpress'
 
-import TourHero from '@/components/Tours/TourHero'
-import TourQuickDetails from '@/components/Tours/TourQuickDetails'
+import TourHeroGrid from '@/components/Tours/TourHeroGrid'
+import TourHeader from '@/components/Tours/TourHeader'
+import TourSidebar from '@/components/Tours/TourSidebar'
 import TourOverview from '@/components/Tours/TourOverview'
 import TourHighlights from '@/components/Tours/TourHighlights'
-import TourDestinations from '@/components/Tours/TourDestinations'
-import TourExperiences from '@/components/Tours/TourExperiences'
 import TourItinerary from '@/components/Tours/TourItinerary'
-import TourAccommodations from '@/components/Tours/TourAccommodations'
 import TourInclusions from '@/components/Tours/TourInclusions'
 import TourInfo from '@/components/Tours/TourInfo'
-import TourCTA from '@/components/Tours/TourCTA'
+import TourAccordionFAQs from '@/components/Tours/TourAccordionFAQs'
+
+import TourDestinations from '@/components/Tours/TourDestinations'
+import TourExperiences from '@/components/Tours/TourExperiences'
+import TourItineraryCard from '@/components/Tours/TourItineraryCard'
+import TourAccommodations from '@/components/Tours/TourAccommodations'
 import TourTestimonials from '@/components/Tours/TourTestimonials'
-import GallerySection from '@/components/content/Gallery/GallerySection'
-import Breadcrumbs from '@/components/Shared/Breadcrumbs'
+import TourCTA from '@/components/Tours/TourCTA'
 
 import BreadcrumbSchema from '@/components/SEO/BreadCrumbSchema'
 import { createBreadcrumbs } from '@/lib/breadcrumbs'
@@ -75,28 +77,82 @@ export default async function TourPage({ params }: TourPageProps) {
   )
 
   return (
-    <main className='pb-20 space-y-4'>
+    <main className='pb-24 bg-page text-ink'>
       <AEOAnswerSchema data={tour} />
       <BreadcrumbSchema items={breadcrumbItems} />
 
-      <TourHero tour={tour} />
+      {/* 1. Hero Masonry Image Grid (Edge-to-Edge on mobile, luxury mosaic on desktop) */}
+      <TourHeroGrid tour={tour} />
 
+      {/* 2. Main Page Container */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <Breadcrumbs items={breadcrumbItems} />
+        {/* Header: Breadcrumbs, Eyebrow, H1 Title & Quick Facts Bar */}
+        <TourHeader tour={tour} breadcrumbItems={breadcrumbItems} />
+
+        {/* Mobile / Tablet Booking CTA Banner (Visible only on < lg screens below Quick Facts) */}
+        <TourSidebar tour={tour} mode='tablet-banner' />
+
+        {/* ==============================================================
+            3. TWO-COLUMN DESKTOP ARCHITECTURE (70 / 30 Split)
+            Left: Narrative, Itinerary, Inclusions, and FAQ Accordions
+            Right: Sticky Trip Planning & CTA Card
+            ============================================================== */}
+        <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 xl:gap-16 items-start mt-6 sm:mt-10 lg:mt-12'>
+          {/* Main Narrative Column (~70% width, 8 of 12 columns) */}
+          <div className='lg:col-span-8 space-y-8 sm:space-y-12 lg:space-y-16 min-w-0'>
+            {/* 1. Tour Overview Narrative */}
+            <TourOverview tour={tour} />
+
+            {/* 2. Tour Highlights (Clean 2-Column Checklist) */}
+            <TourHighlights tour={tour} />
+
+            {/* 3. Detailed Day-by-Day Journey (Interactive Accordions with Inline Thumbnails) */}
+            <TourItinerary tour={tour} />
+
+            {/* 4. Inclusions & Exclusions */}
+            <TourInclusions tour={tour} />
+
+            {/* 5. Seasonal Advice */}
+            <TourInfo tour={tour} />
+
+            {/* 6. Sleek Accordion Dropdown FAQs (Matched to Destination Page) */}
+            <TourAccordionFAQs content={tour.faqContent} tourTitle={tour.title} />
+
+            {/* Machine-Readable Semantic Content for Search Engines */}
+            <div className='sr-only' aria-hidden='true'>
+              <AEOContent data={tour} />
+            </div>
+          </div>
+
+          {/* Sticky Booking Sidebar (~30% width, 4 of 12 columns) */}
+          <div className='hidden lg:block lg:col-span-4 sticky top-24'>
+            <TourSidebar tour={tour} mode='sticky' />
+          </div>
+        </div>
       </div>
 
-      <TourQuickDetails tour={tour} />
-      <TourOverview tour={tour} />
-      <TourHighlights tour={tour} />
-      <GallerySection images={tour.galleryImages} title='Tour Gallery' />
-      <TourDestinations tour={tour} />
-      <TourExperiences tour={tour} />
-      <TourItinerary tour={tour} />
-      <TourAccommodations tour={tour} />
-      <TourInclusions tour={tour} />
-      <TourInfo tour={tour} />
-      <TourTestimonials tour={tour} />
-      <AEOContent data={tour} />
+      {/* ==============================================================
+          4. FULL-WIDTH RELATIONSHIP SHOWCASES
+          Featuring unified luxury editorial card designs matching the Destination Page
+          ============================================================== */}
+      <div className='mt-12 sm:mt-20 lg:mt-24 space-y-12 sm:space-y-20 lg:space-y-24'>
+        {/* Destinations Visited on This Tour (Full-Bleed Cards) */}
+        <TourDestinations tour={tour} />
+
+        {/* Included Experiences on This Tour (Full-Bleed Cards) */}
+        <TourExperiences tour={tour} />
+
+        {/* Featured Itinerary Route Card */}
+        <TourItineraryCard tour={tour} />
+
+        {/* Handpicked Accommodations & Boutique Stays (Full-Bleed Cards) */}
+        <TourAccommodations tour={tour} />
+
+        {/* Guest Reflections & Testimonials */}
+        <TourTestimonials tour={tour} />
+      </div>
+
+      {/* 5. Final Inspirational CTA Banner */}
       <TourCTA tour={tour} />
     </main>
   )
