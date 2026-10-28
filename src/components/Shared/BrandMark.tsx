@@ -19,7 +19,7 @@ export default function BrandMark({
         <img
           src={logo.url}
           alt={logo.alt || 'Viora Lanka'}
-          className='h-24 w-auto object-contain'
+          className='h-21 w-auto object-contain m-3'
         />
       </div>
     )

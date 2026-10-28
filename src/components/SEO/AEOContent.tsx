@@ -18,7 +18,7 @@ export default function AEOContent({ data }: Props) {
     : []
 
   return (
-    <section>
+    <section className='sr-only' aria-hidden='true'>
       {data.featuredAnswer && (
         <div>
           <h2>Quick Answer</h2>
