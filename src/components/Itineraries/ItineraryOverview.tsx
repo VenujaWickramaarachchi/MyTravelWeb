@@ -14,24 +14,22 @@ export default function ItineraryOverview({
   }
 
   return (
-    <section className={`my-16 sm:my-20 ${className}`}>
-      <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6'>
-        <header>
-          <p className='text-xs font-semibold uppercase tracking-[0.22em] text-violet mb-2'>
-            The Route Concept
-          </p>
-          <h2 className='font-serif text-3xl sm:text-4xl font-normal text-ink'>
-            Itinerary Overview
-          </h2>
-        </header>
+    <section className={`space-y-4 pt-2 ${className}`}>
+      <header>
+        <span className='text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep block mb-1.5'>
+          The Route Concept
+        </span>
+        <h2 className='font-serif text-2xl md:text-3xl lg:text-4xl font-normal text-ink tracking-tight leading-tight -ml-[2px]'>
+          Itinerary Overview
+        </h2>
+      </header>
 
-        <div
-          className='prose-editorial'
-          dangerouslySetInnerHTML={{
-            __html: itinerary.itineraryOverview,
-          }}
-        />
-      </div>
+      <div
+        className='prose-editorial text-[15px] sm:text-base leading-relaxed text-ink/80 font-light'
+        dangerouslySetInnerHTML={{
+          __html: itinerary.itineraryOverview,
+        }}
+      />
     </section>
   )
 }
