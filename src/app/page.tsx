@@ -227,9 +227,9 @@ export default async function HomePage() {
         </div>
 
         {featuredTours.length >= 4 ? (
-          <HomeEntityCarousel ariaLabel="Featured tours carousel">
+          <HomeEntityCarousel ariaLabel="Featured tours carousel" aspectRatio="4/3">
             {featuredTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} density='compact' />
+              <TourCard key={tour.id} tour={tour} density='compact' aspectRatio='4/3' />
             ))}
           </HomeEntityCarousel>
         ) : featuredTours.length > 0 ? (

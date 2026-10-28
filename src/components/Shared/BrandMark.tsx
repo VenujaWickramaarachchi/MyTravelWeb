@@ -19,7 +19,7 @@ export default function BrandMark({
         <img
           src={logo.url}
           alt={logo.alt || 'Viora Lanka'}
-          className='h-9 w-auto object-contain'
+          className='h-24 w-auto object-contain'
         />
       </div>
     )
@@ -62,17 +62,15 @@ export default function BrandMark({
       </svg>
       <div className='flex flex-col'>
         <span
-          className={`font-serif text-xl tracking-tight leading-none ${
-            light ? 'text-ivory' : 'text-ink'
-          }`}
+          className={`font-serif text-xl tracking-tight leading-none ${light ? 'text-ivory' : 'text-ink'
+            }`}
         >
           Viora Lanka
         </span>
         {showTagline && (
           <span
-            className={`text-[10px] tracking-[0.25em] uppercase font-sans mt-0.5 font-medium ${
-              light ? 'text-lilac' : 'text-gold-deep'
-            }`}
+            className={`text-[10px] tracking-[0.25em] uppercase font-sans mt-0.5 font-medium ${light ? 'text-lilac' : 'text-gold-deep'
+              }`}
           >
             Journeys
           </span>

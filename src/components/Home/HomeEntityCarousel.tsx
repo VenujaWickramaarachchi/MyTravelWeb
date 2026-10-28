@@ -5,11 +5,13 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 interface HomeEntityCarouselProps {
   children: React.ReactNode
   ariaLabel?: string
+  aspectRatio?: '4/3' | '1/1' | '4/5'
 }
 
 export default function HomeEntityCarousel({
   children,
   ariaLabel = 'Editorial card carousel',
+  aspectRatio = '4/3',
 }: HomeEntityCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const isHoveredRef = useRef(false)
@@ -241,14 +243,23 @@ export default function HomeEntityCarousel({
         className='carousel-smooth-container flex gap-4 sm:gap-5 lg:gap-6 pb-4 pt-1 px-1 -mx-1 select-none focus:outline-none'
         tabIndex={0}
       >
-        {renderedItems.map((child, idx) => (
-          <div
-            key={`carousel-item-${idx}`}
-            className='carousel-snap-item w-[clamp(280px,84vw,370px)] sm:w-[clamp(290px,43vw,360px)] lg:w-[clamp(300px,28vw,360px)] xl:w-[clamp(310px,21vw,360px)] aspect-[4/5] h-auto min-h-0 shrink-0'
-          >
-            {child}
-          </div>
-        ))}
+        {renderedItems.map((child, idx) => {
+          const aspectClass =
+            aspectRatio === '4/3'
+              ? 'aspect-[4/3]'
+              : aspectRatio === '1/1'
+              ? 'aspect-square'
+              : 'aspect-[4/5]'
+
+          return (
+            <div
+              key={`carousel-item-${idx}`}
+              className={`carousel-snap-item w-[clamp(280px,84vw,370px)] sm:w-[clamp(290px,43vw,360px)] lg:w-[clamp(300px,28vw,360px)] xl:w-[clamp(310px,21vw,360px)] ${aspectClass} h-auto min-h-0 shrink-0`}
+            >
+              {child}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
