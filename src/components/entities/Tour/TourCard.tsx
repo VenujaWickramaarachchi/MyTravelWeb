@@ -24,24 +24,20 @@ export default function TourCard({ tour, density = 'standard' }: Props) {
     tour.socialImage?.url ||
     (typeof tour.heroImage === 'string' ? tour.heroImage : null)
 
-  const sideLabel = tour.tourStyle
-    ? `${tour.tourStyle.toUpperCase()} TOUR`
-    : 'TAILOR-MADE TOUR'
+  const sideLabel = typeof tour.tourStyle === 'string' ? tour.tourStyle.toUpperCase() : tour.tourStyle
 
   const durationLabel =
     tour.durationDays || tour.durationNights
-      ? `${tour.durationDays ? `${tour.durationDays} Days` : ''}${
-          tour.durationDays && tour.durationNights ? ' / ' : ''
-        }${tour.durationNights ? `${tour.durationNights} Nights` : ''}`
+      ? `${tour.durationDays ? `${tour.durationDays} Days` : ''}${tour.durationDays && tour.durationNights ? ' / ' : ''
+      }${tour.durationNights ? `${tour.durationNights} Nights` : ''}`
       : null
 
   return (
     <article className='h-full'>
       <Link
         href={`/tours/${tour.slug}`}
-        className={`group card-editorial h-full aspect-[4/5] min-h-0 w-full select-none text-left ${
-          isCompact ? 'card-compact' : ''
-        }`}
+        className={`group card-editorial h-full aspect-[4/5] min-h-0 w-full select-none text-left ${isCompact ? 'card-compact' : ''
+          }`}
       >
         {/* Full-Bleed Photography Surface */}
         <div className='absolute inset-0 z-0 overflow-hidden bg-ivory'>
@@ -82,9 +78,8 @@ export default function TourCard({ tour, density = 'standard' }: Props) {
         <div className='relative z-20 flex flex-1 min-h-0 w-full'>
           {/* Left / Primary Content Area */}
           <div
-            className={`flex flex-col justify-between flex-1 min-w-0 ${
-              isCompact ? 'p-3 sm:p-3.5' : 'p-3.5 sm:p-4'
-            }`}
+            className={`flex flex-col justify-between flex-1 min-w-0 ${isCompact ? 'p-3 sm:p-3.5' : 'p-3.5 sm:p-4'
+              }`}
           >
             {/* Top Row: Editorial Badge & Category (Desktop/Tablet) */}
             <div className='hidden md:flex items-center justify-between gap-2'>
@@ -102,11 +97,10 @@ export default function TourCard({ tour, density = 'standard' }: Props) {
 
             {/* Bottom Content Stack: Glass Info + Pricing + Typography + Pill CTA */}
             <div
-              className={`mt-auto ${
-                isCompact
-                  ? 'pt-2 space-y-2 sm:space-y-2.5'
-                  : 'pt-2.5 space-y-2 sm:space-y-2.5'
-              }`}
+              className={`mt-auto ${isCompact
+                ? 'pt-2 space-y-2 sm:space-y-2.5'
+                : 'pt-2.5 space-y-2 sm:space-y-2.5'
+                }`}
             >
               {/* Floating Glass Information Panel */}
               {(durationLabel || tour.tourStyle || tour.priceFrom) && (
@@ -130,9 +124,9 @@ export default function TourCard({ tour, density = 'standard' }: Props) {
 
                   {tour.priceFrom && (
                     <div className='flex items-baseline justify-between pt-1.5 border-t border-white/10'>
-                      <span className='card-meta-label'>
+                      {/* <span className='card-meta-label'>
                         From
-                      </span>
+                      </span> */}
                       <span className='card-meta-number'>
                         {tour.currency || '$'} {Number(tour.priceFrom).toLocaleString()}
                       </span>
@@ -165,11 +159,11 @@ export default function TourCard({ tour, density = 'standard' }: Props) {
           </div>
 
           {/* Right Asymmetrical Vertical Side Panel (Desktop & Tablet: ≥ md) */}
-          <aside className='hidden md:flex card-side-panel'>
+          {/* <aside className='hidden md:flex card-side-panel'>
             <span className='card-side-label'>
               {sideLabel}
             </span>
-          </aside>
+          </aside> */}
         </div>
       </Link>
     </article>

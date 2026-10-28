@@ -21,9 +21,8 @@ export default function AttractionCard({ attraction, density = 'standard' }: Pro
     <article className='h-full'>
       <Link
         href={`/attractions/${attraction.slug}`}
-        className={`group card-editorial h-full aspect-[4/5] min-h-0 w-full select-none text-left ${
-          isCompact ? 'card-compact' : ''
-        }`}
+        className={`group card-editorial h-full aspect-[4/5] min-h-0 w-full select-none text-left ${isCompact ? 'card-compact' : ''
+          }`}
       >
         {/* Full-Bleed Photography Surface */}
         <div className='absolute inset-0 z-0 overflow-hidden bg-ivory'>
@@ -58,9 +57,8 @@ export default function AttractionCard({ attraction, density = 'standard' }: Pro
         <div className='relative z-20 flex flex-1 min-h-0 w-full'>
           {/* Left / Primary Content Area */}
           <div
-            className={`flex flex-col justify-between flex-1 min-w-0 ${
-              isCompact ? 'p-3 sm:p-3.5' : 'p-3.5 sm:p-4'
-            }`}
+            className={`flex flex-col justify-between flex-1 min-w-0 ${isCompact ? 'p-3 sm:p-3.5' : 'p-3.5 sm:p-4'
+              }`}
           >
             {/* Top Row: Category (Desktop/Tablet) */}
             <div className='hidden md:flex items-center gap-2'>
@@ -71,11 +69,10 @@ export default function AttractionCard({ attraction, density = 'standard' }: Pro
 
             {/* Bottom Content Stack: Typography + Pill CTA */}
             <div
-              className={`mt-auto ${
-                isCompact
+              className={`mt-auto ${isCompact
                   ? 'pt-2 space-y-2 sm:space-y-2.5'
                   : 'pt-2.5 space-y-2 sm:space-y-2.5'
-              }`}
+                }`}
             >
               <div>
                 <h3 className='card-editorial-title line-clamp-2'>
@@ -100,11 +97,11 @@ export default function AttractionCard({ attraction, density = 'standard' }: Pro
           </div>
 
           {/* Right Asymmetrical Vertical Side Panel (Desktop & Tablet: ≥ md) */}
-          <aside className='hidden md:flex card-side-panel'>
+          {/* <aside className='hidden md:flex card-side-panel'>
             <span className='card-side-label'>
               LANDMARK
             </span>
-          </aside>
+          </aside> */}
         </div>
       </Link>
     </article>

@@ -129,10 +129,14 @@
   --z-modal: 100;
 
   /* Fluid Section Spacing System */
-  --section-space-sm: clamp(2.5rem, 4vw, 3.5rem);   /* 40-56px */
-  --section-space-md: clamp(4rem, 6vw, 5.5rem);     /* 64-88px */
-  --section-space-lg: clamp(5rem, 8vw, 7rem);       /* 80-112px */
-  --section-space-xl: clamp(6.5rem, 10vw, 9rem);    /* 104-144px */
+  --section-space-sm: clamp(2.5rem, 4vw, 3.5rem);
+  /* 40-56px */
+  --section-space-md: clamp(4rem, 6vw, 5.5rem);
+  /* 64-88px */
+  --section-space-lg: clamp(5rem, 8vw, 7rem);
+  /* 80-112px */
+  --section-space-xl: clamp(6.5rem, 10vw, 9rem);
+  /* 104-144px */
 
   /* Global Container Widths & Reading Measure */
   --container-max: 90vw;
@@ -141,21 +145,33 @@
   --editorial-measure: 65ch;
 
   /* Restrained & Responsive Typographic Scale */
-  --text-display-xl: clamp(2.25rem, 4.5vw, 3.5rem);   /* 36px - 56px */
-  --text-display-lg: clamp(1.85rem, 3.5vw, 2.75rem);  /* 30px - 44px */
-  --text-display-md: clamp(1.5rem, 2.5vw, 2.15rem);   /* 24px - 34px */
+  --text-display-xl: clamp(2.25rem, 4.5vw, 3.5rem);
+  /* 36px - 56px */
+  --text-display-lg: clamp(1.85rem, 3.5vw, 2.75rem);
+  /* 30px - 44px */
+  --text-display-md: clamp(1.5rem, 2.5vw, 2.15rem);
+  /* 24px - 34px */
 
-  --text-heading-xl: clamp(1.35rem, 2vw, 1.75rem);    /* 22px - 28px */
-  --text-heading-lg: clamp(1.2rem, 1.5vw, 1.45rem);   /* 19px - 23px */
-  --text-heading-md: 1.15rem;                         /* 18px */
-  --text-heading-sm: 1rem;                            /* 16px */
+  --text-heading-xl: clamp(1.35rem, 2vw, 1.75rem);
+  /* 22px - 28px */
+  --text-heading-lg: clamp(1.2rem, 1.5vw, 1.45rem);
+  /* 19px - 23px */
+  --text-heading-md: 1.15rem;
+  /* 18px */
+  --text-heading-sm: 1rem;
+  /* 16px */
 
-  --text-body-lg: 1.125rem;                           /* 18px */
-  --text-body-md: 1rem;                               /* 16px */
-  --text-body-sm: 0.875rem;                           /* 14px */
+  --text-body-lg: 1.125rem;
+  /* 18px */
+  --text-body-md: 1rem;
+  /* 16px */
+  --text-body-sm: 0.875rem;
+  /* 14px */
 
-  --text-label: 0.75rem;                              /* 12px */
-  --text-caption: 0.6875rem;                          /* 11px */
+  --text-label: 0.75rem;
+  /* 12px */
+  --text-caption: 0.6875rem;
+  /* 11px */
 
   /* Focus & Accessibility State */
   --focus-ring: 0 0 0 3px rgba(139, 95, 191, 0.18);
@@ -202,7 +218,11 @@ body {
 }
 
 /* Typography styles — Existing heading inheritance preserved */
-h1, h2, h3, h4, .font-display {
+h1,
+h2,
+h3,
+h4,
+.font-display {
   font-family: var(--font-fraunces), Georgia, serif;
   letter-spacing: -0.015em;
   font-feature-settings: 'cv01' on, 'cv02' on;
@@ -471,8 +491,8 @@ h1, h2, h3, h4, .font-display {
   font-weight: 600;
   letter-spacing: 0.015em;
   transition: transform var(--duration-micro) var(--ease-luxury),
-              background-color var(--duration-micro) var(--ease-luxury),
-              box-shadow var(--duration-micro) var(--ease-luxury);
+    background-color var(--duration-micro) var(--ease-luxury),
+    box-shadow var(--duration-micro) var(--ease-luxury);
   cursor: pointer;
   text-decoration: none;
 }
@@ -513,8 +533,8 @@ h1, h2, h3, h4, .font-display {
   font-weight: 500;
   letter-spacing: 0.01em;
   transition: border-color var(--duration-micro) var(--ease-luxury),
-              color var(--duration-micro) var(--ease-luxury),
-              background-color var(--duration-micro) var(--ease-luxury);
+    color var(--duration-micro) var(--ease-luxury),
+    background-color var(--duration-micro) var(--ease-luxury);
   cursor: pointer;
   text-decoration: none;
 }
@@ -542,7 +562,7 @@ h1, h2, h3, h4, .font-display {
   font-weight: 500;
   letter-spacing: 0.01em;
   transition: border-color var(--duration-micro) var(--ease-luxury),
-              color var(--duration-micro) var(--ease-luxury);
+    color var(--duration-micro) var(--ease-luxury);
   cursor: pointer;
   text-decoration: none;
 }
@@ -639,8 +659,8 @@ h1, h2, h3, h4, .font-display {
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: border-color var(--duration-micro) var(--ease-luxury),
-              box-shadow var(--duration-micro) var(--ease-luxury),
-              transform var(--duration-micro) var(--ease-luxury);
+    box-shadow var(--duration-micro) var(--ease-luxury),
+    transform var(--duration-micro) var(--ease-luxury);
 }
 
 .card-elevated {
@@ -664,8 +684,8 @@ h1, h2, h3, h4, .font-display {
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(255, 255, 255, 0.14);
   transition: box-shadow var(--duration-micro) var(--ease-luxury),
-              border-color var(--duration-micro) var(--ease-luxury),
-              transform var(--duration-micro) var(--ease-luxury);
+    border-color var(--duration-micro) var(--ease-luxury),
+    transform var(--duration-micro) var(--ease-luxury);
 }
 
 .card-editorial:hover {
@@ -699,17 +719,15 @@ h1, h2, h3, h4, .font-display {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgba(11, 11, 12, 0.95) 0%,
-    rgba(11, 11, 12, 0.72) 34%,
-    rgba(11, 11, 12, 0.22) 65%,
-    transparent 85%
-  );
+  background: linear-gradient(to top,
+      rgba(11, 11, 12, 0.95) 0%,
+      rgba(11, 11, 12, 0.72) 34%,
+      rgba(11, 11, 12, 0.22) 65%,
+      transparent 85%);
 }
 
 /* Asymmetrical Vertical Side Panel - Compact Proportions */
-.card-side-panel {
+/* .card-side-panel {
   width: clamp(38px, 11%, 46px);
   background-color: rgba(59, 15, 107, 0.92);
   backdrop-filter: blur(8px);
@@ -720,14 +738,15 @@ h1, h2, h3, h4, .font-display {
   justify-content: center;
   flex-shrink: 0;
   user-select: none;
-}
+} */
 
-@media (max-width: 1023px) {
+/* @media (max-width: 1023px) {
   .card-side-panel {
     width: clamp(34px, 10%, 40px);
   }
-}
+} */
 
+/* 
 .card-side-label {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
@@ -741,7 +760,7 @@ h1, h2, h3, h4, .font-display {
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 280px;
-}
+} */
 
 /* Floating Dark Glass Pill CTA */
 .card-pill-cta {
@@ -762,8 +781,8 @@ h1, h2, h3, h4, .font-display {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: background-color var(--duration-micro) var(--ease-luxury),
-              border-color var(--duration-micro) var(--ease-luxury),
-              color var(--duration-micro) var(--ease-luxury);
+    border-color var(--duration-micro) var(--ease-luxury),
+    color var(--duration-micro) var(--ease-luxury);
 }
 
 .group:hover .card-pill-cta {
@@ -925,7 +944,7 @@ h1, h2, h3, h4, .font-display {
   font-family: var(--font-manrope), system-ui, sans-serif;
   font-size: 0.9375rem;
   transition: border-color var(--duration-micro) var(--ease-luxury),
-              box-shadow var(--duration-micro) var(--ease-luxury);
+    box-shadow var(--duration-micro) var(--ease-luxury);
 }
 
 .form-input::placeholder,
@@ -961,7 +980,7 @@ h1, h2, h3, h4, .font-display {
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transition: background-color var(--nav-transition),
-              border-color var(--nav-transition);
+    border-color var(--nav-transition);
 }
 
 .nav-solid {
@@ -970,7 +989,7 @@ h1, h2, h3, h4, .font-display {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-default);
   transition: background-color var(--nav-transition),
-              border-color var(--nav-transition);
+    border-color var(--nav-transition);
 }
 
 .footer-dark {
