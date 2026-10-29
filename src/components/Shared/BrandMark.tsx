@@ -15,11 +15,11 @@ export default function BrandMark({
 }: BrandMarkProps) {
   if (logo?.url) {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className={`flex items-center gap-3 shrink-0 ${className}`}>
         <img
           src={logo.url}
           alt={logo.alt || 'Viora Lanka'}
-          className='h-21 w-auto object-contain m-3'
+          className='h-9 sm:h-11 md:h-12 lg:h-14 xl:h-16 w-auto object-contain my-auto shrink-0 transition-all duration-300'
         />
       </div>
     )
@@ -27,9 +27,9 @@ export default function BrandMark({
 
   // 5-petal compass flower mark with gold destination center
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-3 shrink-0 ${className}`}>
       <svg
-        className='w-8 h-8 flex-shrink-0'
+        className='w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0'
         viewBox='0 0 48 48'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -62,15 +62,17 @@ export default function BrandMark({
       </svg>
       <div className='flex flex-col'>
         <span
-          className={`font-serif text-xl tracking-tight leading-none ${light ? 'text-ivory' : 'text-ink'
-            }`}
+          className={`font-serif text-lg sm:text-xl tracking-tight leading-none ${
+            light ? 'text-ivory' : 'text-ink'
+          }`}
         >
           Viora Lanka
         </span>
         {showTagline && (
           <span
-            className={`text-[10px] tracking-[0.25em] uppercase font-sans mt-0.5 font-medium ${light ? 'text-lilac' : 'text-gold-deep'
-              }`}
+            className={`text-[9px] sm:text-[10px] tracking-[0.25em] uppercase font-sans mt-0.5 font-medium ${
+              light ? 'text-lilac' : 'text-gold-deep'
+            }`}
           >
             Journeys
           </span>

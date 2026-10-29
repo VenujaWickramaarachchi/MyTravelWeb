@@ -38,18 +38,18 @@ export default function Navbar({ settings }: NavbarProps) {
       }`}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='flex items-center justify-between h-20'>
-          {/* Logo */}
+        <div className='flex items-center justify-between h-16 sm:h-20'>
+          {/* Logo - shrink-0 prevents flexbox from collapsing the logo at tablet widths */}
           <Link
             href='/'
-            className='focus:outline-none focus-visible:ring-2 focus-visible:ring-violet'
+            className='shrink-0 flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-violet'
             aria-label='Viora Lanka Home'
           >
             <BrandMark logo={settings?.siteLogo} light={isTransparent} />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className='hidden md:flex items-center space-x-1 lg:space-x-6'>
+          {/* Desktop Navigation (Visible on xl: 1280px+ where all 10 links fit comfortably) */}
+          <nav className='hidden xl:flex items-center space-x-1 2xl:space-x-4'>
             {navigation.map((item) => {
               const isActive =
                 item.href === '/'
@@ -76,8 +76,8 @@ export default function Navbar({ settings }: NavbarProps) {
             })}
           </nav>
 
-          {/* Actions: Search & Plan Your Trip */}
-          <div className='hidden md:flex items-center space-x-4'>
+          {/* Actions: Search & Plan Your Trip (Visible on desktop) */}
+          <div className='hidden xl:flex items-center space-x-4 shrink-0'>
             <Link
               href='/search'
               className={`p-2 transition-colors ${
@@ -114,8 +114,8 @@ export default function Navbar({ settings }: NavbarProps) {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className='flex items-center space-x-2 md:hidden'>
+          {/* Mobile & Tablet menu actions (< 1280px) */}
+          <div className='flex items-center space-x-2 xl:hidden shrink-0'>
             <Link
               href='/search'
               className={`p-2 transition-colors ${
@@ -185,9 +185,9 @@ export default function Navbar({ settings }: NavbarProps) {
         </div>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile & Tablet Drawer */}
       {mobileMenuOpen && (
-        <div className='md:hidden bg-paper border-b border-line px-4 pt-2 pb-6 space-y-1 shadow-lg'>
+        <div className='xl:hidden bg-paper border-b border-line px-4 pt-2 pb-6 space-y-1 shadow-lg'>
           {navigation.map((item) => {
             const isActive =
               item.href === '/'
@@ -199,10 +199,11 @@ export default function Navbar({ settings }: NavbarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2.5 rounded text-base font-medium ${isActive
-                  ? 'bg-ivory text-violet font-semibold'
-                  : 'text-ink hover:bg-ivory'
-                  }`}
+                className={`block px-3 py-2.5 rounded text-base font-medium ${
+                  isActive
+                    ? 'bg-ivory text-violet font-semibold'
+                    : 'text-ink hover:bg-ivory'
+                }`}
               >
                 {item.label}
               </Link>

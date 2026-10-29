@@ -1,6 +1,6 @@
+import type { Attraction } from '@/types/attraction'
 import AttractionCard from '@/components/entities/Attraction/AttractionCard'
-import EntityGrid from '@/components/entities/EntityGrid'
-import { Attraction } from '@/types/attraction'
+import { BespokeLotusIcon } from '@/components/Shared/CardIcons'
 
 interface Props {
   attractions: Attraction[]
@@ -15,23 +15,38 @@ export default function AttractionNearbyAttractions({
     return null
   }
 
+  // Display up to 4 refined nearby landmarks
+  const itemsToDisplay = attractions.slice(0, 4)
+
   return (
-    <section className={`my-16 sm:my-20 ${className}`}>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8'>
-        <header>
-          <p className='text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep mb-2'>
+    <section className={`space-y-4 sm:space-y-6 ${className}`}>
+      {/* Section Header with Strict Global Typography */}
+      <header className='space-y-1 sm:space-y-1.5'>
+        <div className='flex items-center gap-2 text-gold-deep'>
+          <BespokeLotusIcon className='w-3.5 h-3.5 text-gold' />
+          <p className='text-xs font-semibold uppercase tracking-widest text-gold-deep'>
             In The Area
           </p>
-          <h2 className='font-serif text-3xl sm:text-4xl font-normal text-ink'>
-            Nearby Attractions
-          </h2>
-        </header>
+        </div>
+        <h2 className='font-serif text-2xl md:text-3xl lg:text-4xl font-normal text-ink tracking-tight leading-tight -ml-[2px]'>
+          Nearby Attractions to Explore
+        </h2>
+        <p className='text-[15px] sm:text-base text-ink/75 leading-relaxed font-light max-w-2xl'>
+          Complementary regional landmarks and cultural sites situated within easy reach.
+        </p>
+      </header>
 
-        <EntityGrid columns={3}>
-          {attractions.map((attraction) => (
-            <AttractionCard key={attraction.id} attraction={attraction} />
-          ))}
-        </EntityGrid>
+      {/* Refined Row of Image-Based Cards for the Left Column (~70% width) */}
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-1'>
+        {itemsToDisplay.map((attraction) => (
+          <div key={attraction.id} className='h-[280px] sm:h-[300px]'>
+            <AttractionCard
+              attraction={attraction}
+              density='compact'
+              aspectRatio='4/3'
+            />
+          </div>
+        ))}
       </div>
     </section>
   )
