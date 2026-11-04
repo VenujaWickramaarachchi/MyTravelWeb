@@ -51,10 +51,11 @@ export default function DestinationAccordionFAQs({
   destinationTitle = 'this Destination',
   className = '',
 }: Props) {
+  const [openIndexes, setOpenIndexes] = useState<number[]>([0]) // First item open by default
+
   if (!content) return null
 
   const faqs = parseFaqContent(content)
-  const [openIndexes, setOpenIndexes] = useState<number[]>([0]) // First item open by default
 
   const toggleFAQ = (index: number) => {
     setOpenIndexes((prev) =>

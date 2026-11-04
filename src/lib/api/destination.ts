@@ -51,6 +51,7 @@ export async function getDestinationTypes() {
     value: type,
   }))
 }
+
 export async function getDestination(
   slug: string,
 ): Promise<DestinationPage | null> {
@@ -64,59 +65,83 @@ export async function getDestination(
 
     const destinationData = transformDestination(destination)
 
-  // ACF Post Object relationships
-  const accommodationIds = getPostObjectIds(
-    destination.acf?.featured_accommodations,
-  )
+    // ACF Post Object relationships
+    const accommodationIds = getPostObjectIds(
+      destination.acf?.featured_accommodations,
+    )
 
-  const nearbyIds = getPostObjectIds(destination.acf?.nearby_destinations)
+    const nearbyIds = getPostObjectIds(destination.acf?.nearby_destinations)
 
-  const tourIds = getPostObjectIds(destination.acf?.related_tours)
+    const tourIds = getPostObjectIds(destination.acf?.related_tours)
 
-  const experienceIds = getPostObjectIds(destination.acf?.experiences)
+    const experienceIds = getPostObjectIds(destination.acf?.experiences)
 
-  const mainAttractionIds = getPostObjectIds(destination.acf?.main_attractions)
+    const mainAttractionIds = getPostObjectIds(destination.acf?.main_attractions)
 
-  // Fetch relationships
-  const [
-    accommodations,
-    nearbyDestinations,
-    relatedTours,
-    experiences,
-    relatedAttractions,
-  ] = await Promise.all([
-    fetchByIds('accommodation', accommodationIds).then((items) =>
-      items.map(transformAccommodation),
-    ),
-
-    fetchByIds('destination', nearbyIds).then((items) =>
-      items.map(transformDestination),
-    ),
-
-    fetchByIds('tour', tourIds).then((items) => items.map(transformTour)),
-
-    fetchByIds('experience', experienceIds).then((items) =>
-      items.map(transformExperience),
-    ),
-
-    fetchByIds('attraction', mainAttractionIds).then((items) =>
-      items.map(transformAttraction),
-    ),
-  ])
-
-  return {
-    ...destinationData,
-
-    relationships: {
+    // Fetch relationships
+    const [
       accommodations,
       nearbyDestinations,
-      relatedTours,
+      allToursRaw,
       experiences,
-      mainAttractions: relatedAttractions,
-    },
+      relatedAttractions,
+    ] = await Promise.all([
+      fetchByIds('accommodation', accommodationIds).then((items) =>
+        items.map(transformAccommodation),
+      ),
+
+      fetchByIds('destination', nearbyIds).then((items) =>
+        items.map(transformDestination),
+      ),
+
+      fetchAPI('tour?per_page=100&_embed').catch(() => []),
+
+      fetchByIds('experience', experienceIds).then((items) =>
+        items.map(transformExperience),
+      ),
+
+      fetchByIds('attraction', mainAttractionIds).then((items) =>
+        items.map(transformAttraction),
+      ),
+    ])
+
+    // In tours, related destinations are posted in tour.acf.destinations.
+    // Find all tours that feature this destination ID, or are explicitly linked in destination.acf.related_tours.
+    const matchingTours = (Array.isArray(allToursRaw) ? allToursRaw : [])
+      .filter((tourItem: any) => {
+        const tourDestIds = getPostObjectIds(tourItem.acf?.destinations)
+        return (
+          tourDestIds.includes(destination.id) ||
+          tourIds.includes(tourItem.id)
+        )
+      })
+      .map(transformTour)
+
+    let relatedTours = matchingTours
+    if (tourIds.length > 0) {
+      const existingTourIds = new Set(relatedTours.map((t) => t.id))
+      const missingTourIds = tourIds.filter((id) => !existingTourIds.has(id))
+      if (missingTourIds.length > 0) {
+        const extraTours = await fetchByIds('tour', missingTourIds).then((items) =>
+          items.map(transformTour),
+        )
+        relatedTours = [...relatedTours, ...extraTours]
+      }
+    }
+
+    return {
+      ...destinationData,
+
+      relationships: {
+        accommodations,
+        nearbyDestinations,
+        relatedTours,
+        experiences,
+        mainAttractions: relatedAttractions,
+      },
+    }
+  } catch (error) {
+    console.warn(`[getDestination] Error fetching destination ${slug}:`, error)
+    return null
   }
-} catch (error) {
-  console.warn(`[getDestination] Error fetching destination ${slug}:`, error)
-  return null
-}
 }
